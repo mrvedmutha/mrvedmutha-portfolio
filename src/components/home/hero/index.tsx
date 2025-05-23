@@ -13,7 +13,6 @@ export default function Hero() {
   const [skillIndex, setSkillIndex] = React.useState(0);
   const [showSkill, setShowSkill] = React.useState("");
   const [typing, setTyping] = React.useState(true);
-  const [hovered, setHovered] = React.useState(false);
 
   // Typing and erasing effect for skills
   React.useEffect(() => {
@@ -40,7 +39,7 @@ export default function Hero() {
       }
     }
     return () => clearTimeout(timeout);
-  }, [showSkill, typing, skillIndex, skills]);
+  }, [showSkill, typing, skillIndex]);
 
   return (
     <section className="w-full max-w-7xl mx-auto px-4 py-16 flex flex-col md:flex-row items-center justify-between gap-8 min-h-[60vh]">

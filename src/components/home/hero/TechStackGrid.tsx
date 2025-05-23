@@ -1,6 +1,7 @@
 "use client";
 import React, { useMemo } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 const logos = [
   { src: "/assets/home/logo/tech-stack-softwares/png/html5.png", alt: "HTML5" },
@@ -122,13 +123,15 @@ export default function TechStackGrid() {
             }}
             className="relative flex flex-col items-center group"
           >
-            <img
+            <Image
               src={logo.src}
               alt={logo.alt}
               width={56}
               height={56}
               className="bg-white rounded-lg shadow p-2 transition-transform duration-200 cursor-pointer"
               draggable={false}
+              unoptimized
+              priority
             />
             <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 px-2 py-1 bg-background/90 text-xs rounded shadow border border-border z-10 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 whitespace-nowrap">
               {logo.alt}
