@@ -10,15 +10,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Menu, Sun, Moon } from "lucide-react";
-
-const NAV_LINKS = [
-  { label: "Skills", href: "#skills" },
-  { label: "Experience", href: "#experience" },
-  { label: "Education", href: "#education" },
-  { label: "Projects", href: "#projects" },
-  { label: "Socials", href: "#socials" },
-  { label: "Blog", href: "#blog" },
-];
+import { NavigationLinks } from "@/context/constants/navigation";
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -44,7 +36,7 @@ export default function Navbar() {
         </div>
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-6">
-          {NAV_LINKS.map((link) => (
+          {NavigationLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
@@ -103,7 +95,7 @@ export default function Navbar() {
               <Input placeholder="Search..." className="rounded-full w-full" />
             </div>
             <div className="flex flex-col items-center justify-center gap-8 mt-8">
-              {NAV_LINKS.map((link) => (
+              {NavigationLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}

@@ -5,141 +5,95 @@ alwaysApply: false
 ---
 # Context Structure Guidelines
 
-This rule defines how to organize and structure context-related code in the project.
+This rule defines how to organize and structure context-related code in the project. **All TypeScript interfaces and types must be written in `./src/types`, with subfolders as needed.**
 
 ## Directory Structure
 
 ```
-src/context/
-├── constants/           # Constant values used across contexts
-│   ├── navigation.ts   # Navigation-related constants
-│   └── theme.ts        # Theme-related constants
-├── types/              # TypeScript types for context data
-│   └── index.ts        # Export all types
-└── providers/          # Context providers
-    └── index.ts        # Export all providers
+src/
+├── context/
+│   ├── constants/           # Constant values used across contexts
+│   │   ├── navigation.ts
+│   │   └── theme.ts
+│   └── providers/           # Context providers
+│       └── index.ts
+├── types/                   # All TypeScript interfaces and types
+│   ├── context/             # (Optional) Subfolder for context-related types
+│   │   ├── navigation.ts
+│   │   └── theme.ts
+│   └── index.ts             # Export all types
 ```
 
 ## Constant Files Structure
 
-1. Place all constant arrays, objects, and values in dedicated files under `context/constants/`:
+- Place all constant arrays, objects, and values in dedicated files under `context/constants/`.
+- **Do not define types or interfaces in the constants files.**
+- **Exported constant variable names must use PascalCase (e.g., NavigationLinks). Do not use SNAKE_CASE.**
 
 ```typescript
 // Good Example - src/context/constants/navigation.ts
-export const navigation = [
-  { name: "Skills", href: "#skills" },
-  { name: "Experience", href: "#experience" },
-  { name: "Education", href: "#education" },
+export const NavigationLinks = [
+  { label: "Skills", href: "#skills" },
+  { label: "Experience", href: "#experience" },
+  { label: "Education", href: "#education" },
 ] as const;
-
-// Bad Example - Avoid placing directly in components
-function Component() {
-  const navigation = [
-    { name: "Skills", href: "#skills" },
-    // ...
-  ];
-}
 ```
 
 ## Type Definitions
 
-1. Define types for your constants in `context/types/`:
+- **All TypeScript interfaces and types must be placed in the `src/types` directory.**
+- Create a subfolder (e.g., `context/`) if you need to organize types by feature or context.
+- **Do not define interfaces or types directly in context, constants, or provider files.**
 
 ```typescript
-// src/context/types/navigation.ts
-export interface NavigationItem {
-  name: string;
+// src/types/context/navigation.ts
+export interface NavigationLink {
+  label: string;
   href: string;
 }
 
-export type Navigation = NavigationItem[];
+export type NavigationLinkArray = NavigationLink[];
 ```
 
 ## Context Providers
 
-1. Create context providers in `context/providers/`:
+- Create context providers in `context/providers/`.
+- Import types from `src/types` as needed.
 
 ```typescript
 // src/context/providers/navigation-provider.tsx
 import { createContext, useContext } from 'react';
-import { navigation } from '../constants/navigation';
-import type { Navigation } from '../types';
+import { NavigationLinks } from '../constants/navigation';
+import type { NavigationLink } from '@/types/context/navigation';
 
-const NavigationContext = createContext<Navigation>(navigation);
+const NavigationContext = createContext<NavigationLink[]>(NavigationLinks);
 
-export const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <NavigationContext.Provider value={navigation}>
-      {children}
-    </NavigationContext.Provider>
-  );
-};
+export const NavigationProvider = ({ children }: { children: React.ReactNode }) => (
+  <NavigationContext.Provider value={NavigationLinks}>
+    {children}
+  </NavigationContext.Provider>
+);
 
 export const useNavigation = () => useContext(NavigationContext);
 ```
 
 ## Best Practices
 
-1. Constants:
-   - Use `as const` for readonly arrays
-   - Export constants as named exports
-   - Group related constants in the same file
-   - Use descriptive names that indicate purpose
-
-2. Types:
-   - Create interfaces for complex objects
-   - Use type for unions or simple types
-   - Export all types from types/index.ts
-
-3. Providers:
-   - Create custom hooks for accessing context
-   - Export providers and hooks as named exports
-   - Combine multiple providers using a composition pattern
-
-## Usage Example
-
-```typescript
-// src/context/index.ts
-export * from './constants/navigation';
-export * from './types';
-export * from './providers';
-
-// In your component
-import { useNavigation } from '@/context';
-
-export function Navigation() {
-  const navigation = useNavigation();
-  return (
-    <nav>
-      {navigation.map((item) => (
-        <a key={item.name} href={item.href}>
-          {item.name}
-        </a>
-      ))}
-    </nav>
-  );
-}
-```
+- Use `as const` for readonly arrays in constants.
+- Export constants and types as named exports.
+- Group related constants and types in the same file or subfolder.
+- Use descriptive names for all exports.
 
 ## File Naming Conventions
 
-1. Use kebab-case for file names:
-   - navigation-provider.tsx
-   - theme-constants.ts
-   - auth-types.ts
+- Use **kebab-case** for file names: `navigation-provider.tsx`, `theme-constants.ts`, `navigation.ts`.
+- Use **PascalCase** for context names, provider components, and exported constant variable names: `NavigationContext`, `NavigationProvider`, `NavigationLinks`.
+- Use **camelCase** for variables, custom hooks, and function names: `useNavigation`.
 
-2. Use PascalCase for:
-   - Context names (NavigationContext)
-   - Provider components (NavigationProvider)
-   - Type/Interface names (NavigationItem)
+## Summary
 
-3. Use camelCase for:
-   - Variables
-   - Custom hooks (useNavigation)
-   - Function names
-
-Remember:
-- Always export constants from dedicated files
-- Keep providers simple and focused
-- Use TypeScript for better type safety
-- Document complex context structures
+- **All TypeScript interfaces and types must be in `src/types` (with subfolders as needed).**
+- Constants go in `src/context/constants/` and must use PascalCase for exported variable names.
+- Providers go in `src/context/providers/`.
+- Import types from `src/types` in your context and provider files.
+- Keep your codebase organized, maintainable, and type-safe.
