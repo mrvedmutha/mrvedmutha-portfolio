@@ -1,0 +1,66 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Cursor Rules Index
+
+This file serves as the entry point and guide to all Cursor rules for this project.
+
+## What are Cursor Rules?
+Cursor rules are project-specific guidelines and documentation to help maintain code quality, consistency, and best practices. They are written in markdown with frontmatter and stored in `.cursor/rules/`.
+
+## How to Access Rules
+- All rules are located in `.cursor/rules/`.
+- Each rule is a separate `.mdc` file, named in kebab-case and descriptive of its purpose.
+- [`cursor-rules.mdc`](mdc:cursor-rules.mdc) documents how to write new cursor rules.
+- This `index.mdc` file is only an index and has no relation to the rule-writing process.
+- To view a rule, open the corresponding `.mdc` file in this directory.
+
+## List of Rules
+
+### Project Structure & File Organization
+- [`code-files-structure.mdc`](mdc:code-files-structure.mdc): Mandatory structure for all types, props, models, schemas, and components.
+- [`media-asset-guidelines.mdc`](mdc:media-asset-guidelines.mdc): How to organize and use media assets.
+- [`import-guidelines.mdc`](mdc:import-guidelines.mdc): Import path conventions and best practices.
+
+### Type System & Schema
+- [`typescript-types.mdc`](mdc:typescript-types.mdc): TypeScript type definitions and organization.
+- [`enum-guidelines.mdc`](mdc:enum-guidelines.mdc): Enum creation, naming, and usage.
+- [`schemas-structure.mdc`](mdc:schemas-structure.mdc): Structure and best practices for Zod validation schemas.
+- [`schema-guidelines.mdc`](mdc:schema-guidelines.mdc): MongoDB schema design and best practices.
+- [`model-guidelines.mdc`](mdc:model-guidelines.mdc): MongoDB model implementation and organization.
+
+### API & Data Handling
+- [`api-structure.mdc`](mdc:api-structure.mdc): API route implementation and structure.
+- [`form-handling.mdc`](mdc:form-handling.mdc): Form handling with React Hook Form and Zod.
+- [`context-structure.mdc`](mdc:context-structure.mdc): How to organize and structure context-related code.
+
+### UI & Components
+- [`ui-components.mdc`](mdc:ui-components.mdc): How to write, structure, and maintain UI components (shadcn/ui, Tailwind CSS, directory structure, and package usage rules).
+
+### Development Practices
+- [`git-guidelines.mdc`](mdc:git-guidelines.mdc): Git commit, checkpoint, and branch management guidelines.
+- [`todo-guidelines.mdc`](mdc:todo-guidelines.mdc): How to write and comment TODOs and manage console logs.
+
+### Authentication
+- [`auth-guidelines.mdc`](mdc:auth-guidelines.mdc): NextAuth authentication setup and usage.
+
+### Meta Rules
+- [`cursor-rules.mdc`](mdc:cursor-rules.mdc): How to write and structure new cursor rules (start here if you want to add or edit rules).
+- This [`index.mdc`](mdc:index.mdc): The master index for all cursor rules.
+
+## How to Use This Documentation
+1. If you want to write or edit rules, refer to [`cursor-rules.mdc`](mdc:cursor-rules.mdc) for the format and requirements.
+2. Browse other `.mdc` files in this directory for specific guidelines.
+3. Follow the instructions and examples in each rule to ensure your code and contributions align with project standards.
+
+## Adding or Updating Rules
+- To add a new rule, follow the format in [`cursor-rules.mdc`](mdc:cursor-rules.mdc).
+- Place new rule files in `.cursor/rules/`.
+- Update this `index.mdc` file to include your new rule.
+- When updating a rule, ensure this index reflects any changes in rule names or purposes.
+
+---
+
+*Keep this index updated as you add new rules to the project.*

@@ -1,0 +1,314 @@
+---
+description: How to write ans structure typescript interfaces and props
+globs: 
+alwaysApply: false
+---
+# TypeScript Type Definitions Guidelines
+
+This document outlines the standards and best practices for creating and organizing TypeScript types in our project.
+
+## Directory Structure
+
+```
+src/
+├── enums/                    # Application enums
+│   ├── ui.enums.ts          # UI-related enums
+│   └── common.enums.ts      # Common/shared enums
+└── types/
+    ├── api/                 # API-related types
+    │   ├── requests/       # Request types
+    │   │   └── auth/
+    │   │       ├── login.types.ts
+    │   │       └── register.types.ts
+    │   └── responses/      # Response types
+    │       └── auth/
+    │           ├── login.types.ts
+    │           └── register.types.ts
+    ├── models/             # Database model types
+    │   ├── user.types.ts
+    │   └── post.types.ts
+    ├── components/         # Component prop types
+    │   └── ui/
+    │       ├── button.types.ts
+    │       └── input.types.ts
+    └── common/             # Shared/utility types
+        └── index.ts
+```
+
+## Naming Conventions
+
+1. File Names:
+   - Use `.types.ts` extension for type files
+   - Use kebab-case for folder names
+  │   └── auth/
+  │       ├── login.types.ts
+  │       └── register.types.ts
+  ├── models/                # Database model types
+  │   ├── user.types.ts
+  │   └── post.types.ts
+  ├── components/            # Component prop types
+  │   └── ui/
+  │       ├── button.types.ts
+  │       └── input.types.ts
+  └── common/                # Shared/utility types
+      └── index.ts
+```
+
+## Naming Conventions
+
+1. File Names:
+   - Use `.types.ts` extension for type files
+   - Use kebab-case for folder names
+   - Use camelCase for file names
+
+2. Type Names:
+   - Interfaces: Prefix with 'I' (e.g., `IUser`)
+   - Types: PascalCase without prefix (e.g., `UserResponse`)
+   - Props: Suffix with 'Props' (e.g., `ButtonProps`)
+   - Enums: PascalCase (e.g., `UserRole`)
+
+## Type Definition Examples
+
+1. Interface Definitions:
+```typescript
+// Good
+export interface IUser {
+  id: string
+  email: string
+  firstName: string
+  lastName: string
+  isActive: boolean
+}
+
+// Bad - Missing export, inconsistent spacing
+interface user{
+  Id: string,
+  Email: string,
+  first_name: string
+}
+```
+
+2. Type Aliases:
+```typescript
+// Good
+export type UserResponse = {
+  user: IUser
+  token: string
+  expiresAt: Date
+}
+
+// Bad - Using interface for simple type alias
+export interface IUserResponse {
+  user: IUser,
+  token: string,
+  expiresAt: Date
+}
+```
+
+3. Component Props:
+```typescript
+// Good
+import { ButtonVariant, ButtonSize } from '@/enums/ui.enums'
+
+export interface IButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant: ButtonVariant
+  size?: ButtonSize
+  isLoading?: boolean
+}
+
+// Bad - Not extending HTML attributes, using string literals instead of enums
+interface ButtonProperties {
+  variant: string
+  size: string
+  loading: boolean
+}
+```
+
+4. Generic Types:
+```typescript
+// Good
+export type Nullable<T> = T | null
+export type Optional<T> = T | undefined
+export type AsyncResponse<T> = Promise<T>
+
+// Bad - Unclear naming, missing export
+type Opt<T> = T | undefined
+type Async<T> = Promise<T>
+```
+
+## Best Practices
+
+1. Type Organization:
+   - Group related types in feature-specific directories
+   - Keep component types close to their components
+   - Use index files for commonly used types
+   - Maintain clear separation between different type categories
+
+2. Type Exports:
+```typescript
+// Good - Named exports
+export interface IUser { ... }
+export type UserResponse = { ... }
+
+// Bad - Default exports
+export default interface IUser { ... }
+```
+
+3. Type Imports:
+```typescript
+// Good
+import type { IUser } from '@/types/models/user.types'
+import type { ButtonProps } from '@/types/components/ui/button.types'
+
+// Bad
+import { IUser } from '@/types/models/user.types'
+import { ButtonProps } from '@/types/components/ui/button.types'
+```
+
+4. Union Types:
+```typescript
+// Good
+type Status = 'pending' | 'success' | 'error'
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE'
+
+// Bad - Using enum or string when union is more appropriate
+enum Status {
+  PENDING = 'pending',
+  SUCCESS = 'success',
+  ERROR = 'error'
+}
+```
+
+5. Intersection Types:
+```typescript
+// Good
+interface IBaseProps {
+  className?: string
+  style?: React.CSSProperties
+}
+
+interface ICustomProps {
+  title: string
+  onClick: () => void
+}
+
+type CombinedProps = IBaseProps & ICustomProps
+
+// Bad - Duplicating properties
+interface ICombinedProps {
+  className?: string
+  style?: React.CSSProperties
+  title: string
+  onClick: () => void
+}
+```
+
+## Type Documentation
+
+1. Complex Types:
+```typescript
+/** 
+ * Represents a paginated response from the API
+ * @template T The type of items in the response
+ */
+export interface IPaginatedResponse<T> {
+  /** The current page number */
+  page: number
+  /** Total number of pages */
+  totalPages: number
+  /** Items in the current page */
+  items: T[]
+  /** Total number of items across all pages */
+  totalItems: number
+}
+```
+
+2. Utility Types:
+```typescript
+/**
+ * Makes all properties of T optional except for K
+ * @template T The base type
+ * @template K Keys of properties to keep required
+ */
+export type PartialExcept<T, K extends keyof T> = Partial<Omit<T, K>> & Pick<T, K>
+```
+
+## Type Safety Guidelines
+
+1. Avoid Type Assertions:
+```typescript
+// Good
+function getUser(): IUser | undefined {
+  const user = fetchUser()
+  return user
+}
+
+// Bad - Using type assertion
+function getUser(): IUser {
+  const user = fetchUser() as IUser
+  return user
+}
+```
+
+2. Use Strict Types:
+```typescript
+// Good
+function calculateAge(birthDate: Date): number {
+  // Implementation
+}
+
+// Bad - Using 'any'
+function calculateAge(birthDate: any): any {
+  // Implementation
+}
+```
+
+3. Readonly Properties:
+```typescript
+// Good
+export interface IConfig {
+  readonly apiUrl: string
+  readonly maxRetries: number
+}
+
+// Bad - Mutable configuration
+export interface IConfig {
+  apiUrl: string
+  maxRetries: number
+}
+```
+
+## Common Patterns
+
+1. API Request/Response Types:
+```typescript
+// Request type
+export interface ILoginRequest {
+  email: string
+  password: string
+  rememberMe?: boolean
+}
+
+// Response type
+export interface ILoginResponse {
+  user: IUser
+  token: string
+  expiresAt: Date
+}
+```
+
+2. Component Props with Children:
+```typescript
+export interface ILayoutProps {
+  children: React.ReactNode
+  sidebar?: React.ReactElement
+  header?: React.ReactElement
+}
+```
+
+3. Event Handler Types:
+```typescript
+export type ChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => void
+export type SubmitHandler = (event: React.FormEvent<HTMLFormElement>) => void
+export type ClickHandler = (event: React.MouseEvent<HTMLButtonElement>) => void
+```

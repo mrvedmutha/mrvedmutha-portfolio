@@ -1,0 +1,197 @@
+---
+description: How to structure and find media assets
+globs: 
+alwaysApply: false
+---
+# Media Assets Guidelines
+
+This document outlines the standards for organizing and using media assets in the project.
+
+## Directory Structure
+
+```
+public/
+├── images/
+│   ├── logos/           # Brand and partner logos
+│   │   ├── logo.svg     # Main site logo
+│   │   └── favicon.ico  # Site favicon
+│   ├── icons/           # UI and feature icons
+│   │   └── ...
+│   ├── backgrounds/     # Background images
+│   │   └── ...
+│   └── projects/        # Project-related images
+│       └── ...
+├── fonts/               # Custom font files
+│   └── ...
+└── videos/              # Video assets
+    └── ...
+```
+
+## Naming Conventions
+
+1. Use kebab-case for all file names:
+```
+✅ project-preview.png
+✅ hero-background.jpg
+❌ projectPreview.png
+❌ hero_background.jpg
+```
+
+2. Include dimensions for sized assets:
+```
+✅ hero-banner-1920x1080.jpg
+✅ logo-128x128.png
+```
+
+3. Include device density for retina images:
+```
+✅ logo@2x.png
+✅ icon@3x.png
+```
+
+## Image Guidelines
+
+1. Format Usage:
+   - SVG: Logos, icons, and vector graphics
+   - PNG: Images requiring transparency
+   - JPEG: Photos and complex images
+   - WebP: Modern alternative for better compression
+   - ICO: Favicons
+
+2. Optimization:
+   - Compress all images before committing
+   - Use appropriate resolution for the use case
+   - Consider lazy loading for below-fold images
+
+## Usage in Code
+
+1. Import and Usage:
+```typescript
+// Good - Using public URL path
+<Image 
+  src="/images/logos/logo.svg"
+  alt="Site Logo"
+  width={120}
+  height={40}
+/>
+
+// Bad - Using direct import
+<Image 
+  src="../../public/images/logos/logo.svg"
+  alt="Logo"
+/>
+```
+
+2. Dynamic Images:
+```typescript
+// Good - Using template literals for dynamic paths
+const projectImage = `/images/projects/${projectId}-preview.jpg`;
+
+// Bad - Hardcoding paths
+const projectImage = '/images/projects/project1-preview.jpg';
+```
+
+## Best Practices
+
+1. Always include:
+   - Alt text for images
+   - Width and height attributes
+   - Appropriate loading strategy
+
+2. Responsive Images:
+```typescript
+// Good - Using responsive image
+<Image
+  src="/images/hero.jpg"
+  alt="Hero Section"
+  sizes="(max-width: 768px) 100vw, 50vw"
+  fill
+  priority
+/>
+```
+
+3. Performance Considerations:
+   - Use `priority` for above-fold images
+   - Implement lazy loading for others
+   - Consider using next/image for optimization
+
+## Asset Management
+
+1. Before adding new assets:
+   - Check for existing similar assets
+   - Optimize file size
+   - Follow naming conventions
+   - Place in correct subdirectory
+
+2. Removing assets:
+   - Ensure asset isn't used anywhere
+   - Remove from version control
+   - Update documentation if necessary
+
+Remember:
+- Keep the public directory organized
+- Optimize assets for performance
+- Use consistent naming
+- Follow Next.js best practices for images
+
+## Accessing Public Assets
+
+1. Base URL Access:
+```typescript
+// Good - Assets in public folder are served at the root URL
+const logo = "/images/logos/logo.svg"        // maps to public/images/logos/logo.svg
+const icon = "/images/icons/dashboard.png"   // maps to public/images/icons/dashboard.png
+const font = "/fonts/inter.woff2"           // maps to public/fonts/inter.woff2
+
+// Bad - Never reference the public directory in the URL
+const badPath = "/public/images/logo.svg"    // ❌ won't work
+```
+
+2. In Next.js Components:
+```typescript
+// Good - Using next/image
+import Image from 'next/image'
+
+export function Logo() {
+  return (
+    <Image
+      src="/images/logos/logo.svg"
+      alt="Logo"
+      width={100}
+      height={50}
+    />
+  )
+}
+
+// Good - Using regular img for static assets
+export function Background() {
+  return (
+    <div style={{ 
+      backgroundImage: 'url("/images/backgrounds/hero.jpg")' 
+    }} />
+  )
+}
+```
+
+3. CSS/SCSS Access:
+```css
+/* Good - Direct URL reference */
+.hero {
+  background-image: url('/images/backgrounds/hero.jpg');
+}
+
+/* Bad - Including public in path */
+.hero {
+  background-image: url('/public/images/backgrounds/hero.jpg');
+}
+```
+
+4. Dynamic Asset Access:
+```typescript
+// Good - Building paths dynamically
+const getProjectImage = (id: string) => `/images/projects/${id}.jpg`
+const getIconPath = (name: string) => `/images/icons/${name}.svg`
+
+// Good - Using URL constructor for complex paths
+const getAssetUrl = (path: string) => new URL(path, process.env.NEXT_PUBLIC_BASE_URL).toString()
+```

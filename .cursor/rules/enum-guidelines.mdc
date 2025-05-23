@@ -1,0 +1,218 @@
+---
+description: How to write and structure enums for this project
+globs: 
+alwaysApply: false
+---
+# Enum Guidelines
+
+This document outlines the standards and best practices for creating and organizing enums in our project.
+
+## Directory Structure
+
+All enums should be organized in the `src/enums` directory:
+
+```
+src/
+└── enums/
+    ├── ui.enums.ts          # UI-related enums (components, styles)
+    ├── api.enums.ts         # API-related enums (status, methods)
+    ├── auth.enums.ts        # Authentication-related enums
+    └── common.enums.ts      # Shared/common enums
+```
+
+## Naming Conventions
+
+1. File Names:
+   - Use `.enums.ts` extension
+   - Use kebab-case for filenames
+   - Group related enums in a single file
+   ```
+   ✅ ui.enums.ts
+   ✅ api-status.enums.ts
+   ❌ UIEnums.ts
+   ❌ button.enum.ts
+   ```
+
+2. Enum Names:
+   - Prefix with 'E'
+   - Use PascalCase
+   - Be descriptive and specific
+   ```typescript
+   // Good
+   export enum EButtonVariant { ... }
+   export enum EHttpMethod { ... }
+   
+   // Bad
+   export enum Variant { ... }
+   export enum ButtonTypes { ... }
+   ```
+
+## Enum Structure
+
+1. String Enums:
+```typescript
+// Good - Consistent casing, descriptive values
+export enum EButtonVariant {
+  Primary = 'primary',
+  Secondary = 'secondary',
+  Ghost = 'ghost'
+}
+
+// Bad - Inconsistent casing, unclear values
+export enum ButtonType {
+  PRIMARY = 'PRIMARY',
+  secondary = 'Secondary',
+  Ghost = 'ghost_button'
+}
+```
+
+2. Numeric Enums:
+```typescript
+// Good - Start from 0 or 1, consistent increments
+export enum EHttpStatus {
+  OK = 200,
+  Created = 201,
+  BadRequest = 400,
+  Unauthorized = 401
+}
+
+// Bad - Random numbers, inconsistent increments
+export enum Status {
+  Success = 1,
+  Error = 5,
+  Warning = 10,
+  Info = 15
+}
+```
+
+## Documentation
+
+1. File Documentation:
+```typescript
+/**
+ * UI-related enums for component variants, sizes, and states
+ * @module ui.enums
+ */
+
+export enum EButtonVariant { ... }
+```
+
+2. Enum Documentation:
+```typescript
+/** 
+ * Available variants for button components
+ * @enum {string}
+ */
+export enum EButtonVariant {
+  /** Primary action button with solid background */
+  Primary = 'primary',
+  /** Secondary action button with outlined style */
+  Secondary = 'secondary',
+  /** Ghost button with transparent background */
+  Ghost = 'ghost'
+}
+```
+
+## Best Practices
+
+1. Export All Enums:
+```typescript
+// Good - All enums are exported
+export enum EButtonVariant { ... }
+export enum EButtonSize { ... }
+
+// Bad - Internal enum not exported
+enum InternalButtonState { ... }
+```
+
+2. Group Related Enums:
+```typescript
+// Good - Related enums in ui.enums.ts
+export enum EButtonVariant { ... }
+export enum EButtonSize { ... }
+export enum EButtonState { ... }
+
+// Bad - Scattered across multiple files
+// button-variant.enums.ts
+export enum EButtonVariant { ... }
+// button-size.enums.ts
+export enum EButtonSize { ... }
+```
+
+3. Consistent Value Types:
+```typescript
+// Good - Consistent string values
+export enum EAlertType {
+  Success = 'success',
+  Warning = 'warning',
+  Error = 'error'
+}
+
+// Bad - Mixed value types
+export enum EAlertType {
+  Success = 'success',
+  Warning = 1,
+  Error = true
+}
+```
+
+## Usage Examples
+
+1. In Component Props:
+```typescript
+// Good - Import and use enum type
+import { EButtonVariant } from '@/enums/ui.enums'
+
+interface IButtonProps {
+  variant: EButtonVariant
+}
+
+// Bad - String literal union type
+interface ButtonProps {
+  variant: 'primary' | 'secondary' | 'ghost'
+}
+```
+
+2. In Switch Statements:
+```typescript
+// Good - Type-safe enum usage
+import { EAlertType } from '@/enums/ui.enums'
+
+function getAlertIcon(type: EAlertType) {
+  switch (type) {
+    case EAlertType.Success:
+      return '✅'
+    case EAlertType.Warning:
+      return '⚠️'
+    case EAlertType.Error:
+      return '❌'
+  }
+}
+
+// Bad - String literals
+function getAlertIcon(type: string) {
+  switch (type) {
+    case 'success':
+      return '✅'
+    case 'warning':
+      return '⚠️'
+    case 'error':
+      return '❌'
+  }
+}
+```
+
+3. Default Values:
+```typescript
+// Good - Use enum member as default
+import { EButtonVariant } from '@/enums/ui.enums'
+
+function Button({ variant = EButtonVariant.Primary }) {
+  // Implementation
+}
+
+// Bad - String literal default
+function Button({ variant = 'primary' }) {
+  // Implementation
+}
+```

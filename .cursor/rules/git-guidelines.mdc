@@ -1,0 +1,165 @@
+---
+description: How to add, commit and push the code to git
+globs: 
+alwaysApply: false
+---
+# Git Commit Guidelines
+
+## 1. Commit Checkpoints
+
+1. Always use `git add .` at checkpoints to ensure all changes are tracked:
+```bash
+# At every checkpoint
+git add .  # Add all files, including new files
+git commit -m "feat: your message here"
+```
+
+2. Checkpoint Moments:
+   - After adding new features
+   - After major component changes
+   - After installing new dependencies
+   - After refactoring code
+   - After fixing bugs
+   - After updating configurations
+   - After adding new pages or routes
+
+## 2. Commit Message Format
+
+Follow the Conventional Commits specification:
+
+```bash
+# Format
+<type>[optional scope]: <description>
+
+# Examples
+feat: add header component with dark mode support
+fix: resolve hydration error in theme provider
+chore: update next-themes package
+style: improve header responsive design
+refactor: move header to common components
+docs: update README with setup instructions
+```
+
+Types:
+- `feat`: New features
+- `fix`: Bug fixes
+- `chore`: Maintenance tasks
+- `docs`: Documentation changes
+- `style`: Style/UI changes
+- `refactor`: Code restructuring
+- `test`: Adding/updating tests
+- `perf`: Performance improvements
+
+## 3. Best Practices
+
+1. Regular Commits:
+```bash
+# After completing a feature
+git add .
+git commit -m "feat: implement user authentication"
+
+# After fixing an issue
+git add .
+git commit -m "fix: resolve login form validation"
+```
+
+2. Dependency Changes:
+```bash
+# After installing packages
+git add .
+git commit -m "chore: add next-themes and shadcn/ui dependencies"
+```
+
+3. Component Updates:
+```bash
+# After component changes
+git add .
+git commit -m "feat(header): add responsive navigation menu"
+```
+
+## 4. Branch Management
+
+1. Feature Branches:
+```bash
+# Create new branch
+git checkout -b feat/header-component
+
+# After completing work
+git add .
+git commit -m "feat: complete header implementation"
+git push origin feat/header-component
+```
+
+2. Main Branch:
+```bash
+# Before merging to main
+git checkout main
+git pull origin main
+git merge feat/header-component
+git push origin main
+```
+
+## 5. Commit Organization
+
+1. Atomic Commits:
+   - Each commit should represent one logical change
+   - Group related changes together
+   - Keep unrelated changes in separate commits
+
+2. Descriptive Messages:
+```bash
+# Good
+git commit -m "feat(auth): implement Google OAuth with NextAuth.js"
+
+# Bad
+git commit -m "update code"
+```
+
+3. Breaking Changes:
+```bash
+# Format
+git commit -m "feat!: change authentication API response structure"
+```
+
+## 6. Review Before Commit
+
+Before each commit:
+1. Review all changes with `git status`
+2. Check diff with `git diff`
+3. Ensure no sensitive data is included
+4. Verify all necessary files are included
+5. Run linter and tests if applicable
+
+## 7. Example Workflow
+
+```bash
+# Start new feature
+git checkout -b feat/new-feature
+
+# After initial setup
+git add .
+git commit -m "feat: initialize new feature structure"
+
+# After component implementation
+git add .
+git commit -m "feat: implement feature components"
+
+# After styling
+git add .
+git commit -m "style: add responsive styles to feature"
+
+# After testing
+git add .
+git commit -m "test: add feature unit tests"
+
+# After documentation
+git add .
+git commit -m "docs: add feature documentation"
+```
+
+Remember:
+- Always use `git add .` to include all changes
+- Write clear, descriptive commit messages
+- Follow conventional commits format
+- Commit at logical checkpoints
+- Review changes before committing

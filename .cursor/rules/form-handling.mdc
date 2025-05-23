@@ -1,0 +1,100 @@
+---
+description: Form handling using React Hook Form and Zod
+globs: 
+alwaysApply: false
+---
+# Form Handling Guidelines (React Hook Form & Zod)
+
+This rule defines best practices for building and validating forms using @React Hook Form and @Zod in this project.
+
+## 1. Structure & Location
+- Place reusable form components in `components/forms/`.
+- Use PascalCase for form component filenames (e.g., `UserForm.tsx`).
+- Keep validation schemas in the same file as the form or in a `schemas/` directory if reused.
+- Create a folder for Zod validation schemas in `./src/schemas/zod` for organization and reuse.
+- All Zod schemas should be written in the `./src/schemas/zod` folder.
+
+## 2. Using React Hook Form
+- Use `useForm` from React Hook Form to manage form state.
+- Register all fields using the `register` function or `Controller` for custom components.
+- Use `handleSubmit` for form submission.
+- Prefer controlled components for complex UI elements (e.g., date pickers, selects).
+
+## 3. Validation with Zod
+- Define Zod schemas for form validation in `./src/schemas/zod/`.
+- Use `zodResolver` from `@hookform/resolvers/zod` to connect Zod with React Hook Form.
+- Keep validation logic in the schema, not in the component.
+- Use Zod's `.refine` for custom validation logic.
+
+## 4. Error Handling
+- Display validation errors next to each field using `formState.errors`.
+- Show a summary of errors at the top of the form for accessibility if the form is long.
+- Use ARIA attributes (e.g., `aria-invalid`, `aria-describedby`) for accessibility.
+
+## 5. Example: Schema and Form Component
+
+**Zod Schema: `./src/schemas/zod/user.ts`**
+```ts
+// ./src/schemas/zod/user.ts
+import { z } from "zod"
+
+export const userLoginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+})
+
+export type UserLoginSchema = z.infer<typeof userLoginSchema>
+```
+
+**Form Component: `components/forms/UserLoginForm.tsx`**
+```tsx
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { userLoginSchema, UserLoginSchema } from "@/schemas/zod/user"
+
+export function UserLoginForm() {
+  const { register, handleSubmit, formState: { errors } } = useForm<UserLoginSchema>({
+    resolver: zodResolver(userLoginSchema),
+  })
+
+  const onSubmit = (data: UserLoginSchema) => {
+    // handle login
+  }
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <input {...register("email")}
+        aria-invalid={!!errors.email}
+        aria-describedby="email-error"
+        placeholder="Email" />
+      {errors.email && <span id="email-error">{errors.email.message}</span>}
+
+      <input type="password" {...register("password")}
+        aria-invalid={!!errors.password}
+        aria-describedby="password-error"
+        placeholder="Password" />
+      {errors.password && <span id="password-error">{errors.password.message}</span>}
+
+      <button type="submit">Login</button>
+    </form>
+  )
+}
+```
+
+## 6. Do's and Don'ts
+```tsx
+// Good (schema in ./src/schemas/zod/user.ts)
+export const userSchema = z.object({ username: z.string().min(3) })
+
+// Good (importing schema in form component)
+import { userSchema } from "@/schemas/zod/user"
+const { register } = useForm({ resolver: zodResolver(userSchema) })
+
+// Bad (schema defined inside the component file)
+const { register } = useForm({ resolver: zodResolver(z.object({ username: z.string().min(3) })) })
+```
+
+## 7. References
+- @React Hook Form Docs
+- @Zod Docs
+- @@hookform/resolvers

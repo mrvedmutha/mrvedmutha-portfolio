@@ -1,0 +1,246 @@
+---
+description: How to write and comment console logs using todo
+globs: 
+alwaysApply: false
+---
+# TODO and Console.log Guidelines
+
+This document outlines the standards for using TODO comments and managing console logs in our codebase.
+
+## TODO Comments Structure
+
+1. Basic Format:
+```typescript
+// TODO: Brief description of what needs to be done
+// TODO(username): Task with ownership
+// TODO(deadline): Task with deadline
+// TODO(username, deadline): Task with both ownership and deadline
+```
+
+2. Priority Levels:
+```typescript
+// TODO(P0): Critical - Must be fixed immediately
+// TODO(P1): High - Should be fixed in current sprint
+// TODO(P2): Medium - Plan to fix in next sprint
+// TODO(P3): Low - Nice to have, no immediate timeline
+```
+
+3. Categories:
+```typescript
+// TODO(SECURITY): Security-related issues
+// TODO(PERF): Performance improvements
+// TODO(HACK): Temporary solutions that need proper implementation
+// TODO(FIXME): Broken code that needs fixing
+// TODO(CLEANUP): Code that needs cleanup or refactoring
+// TODO(TEST): Missing tests or test improvements
+```
+
+## Console Logs Management
+
+1. Development Logs:
+```typescript
+// Good - Tagged and clearly marked as temporary
+// TODO(CLEANUP): Remove console.log before production
+console.log('[Debug-Auth]:', userData);
+
+// Bad - Untagged and unclear purpose
+console.log('here');
+console.log(data);
+```
+
+2. Debug Information:
+```typescript
+// Good - Structured debug information
+// TODO(CLEANUP): Replace with proper logging
+console.log({
+  event: 'UserRegistration',
+  data: userData,
+  timestamp: new Date().toISOString()
+});
+
+// Bad - Unclear debug information
+console.log('debug');
+console.log(user, data, error);
+```
+
+3. Error Logging:
+```typescript
+// Good - Clear error context
+// TODO(ERROR-HANDLING): Implement proper error tracking
+console.error('[API Error]:', {
+  endpoint: '/api/users',
+  error: error.message,
+  stack: error.stack
+});
+
+// Bad - Minimal error information
+console.error(error);
+```
+
+## Best Practices
+
+1. TODO Comment Guidelines:
+```typescript
+// Good - Clear, actionable TODO
+// TODO(john, 2024-04-15): Implement user input validation
+function validateUser(user: User) {
+  return true; // Temporary bypass
+}
+
+// Bad - Vague, undated TODO
+// TODO: fix this later
+function validateUser(user: User) {
+  return true;
+}
+```
+
+2. Console Log Guidelines:
+```typescript
+// Good - Development only console logs
+if (process.env.NODE_ENV === 'development') {
+  // TODO(CLEANUP): Remove before production
+  console.log('[Debug-Payment]:', paymentDetails);
+}
+
+// Bad - Unconditional console logs
+console.log('Payment:', paymentDetails);
+```
+
+3. Temporary Code Markers:
+```typescript
+// Good - Clearly marked temporary code
+// TODO(HACK, john): Temporary workaround for API timeout
+// Remove when API performance is fixed (ETA: 2024-04-20)
+setTimeout(() => {
+  retryApiCall();
+}, 5000);
+
+// Bad - Unclear temporary code
+// TODO: temp fix
+setTimeout(() => {
+  retryApiCall();
+}, 5000);
+```
+
+## Documentation and Tracking
+
+1. Component TODOs:
+```typescript
+/**
+ * UserProfile Component
+ * TODO(FEATURE): Add profile picture upload
+ * TODO(UI): Improve mobile responsiveness
+ * TODO(P2): Add user activity history
+ */
+export function UserProfile() {
+  // Implementation
+}
+```
+
+2. File-Level TODOs:
+```typescript
+/**
+ * @file api.ts
+ * TODO(ARCH): Split this file into separate modules
+ * TODO(TEST, jane): Add integration tests
+ * TODO(DOCS): Add API documentation
+ */
+```
+
+3. Section TODOs:
+```typescript
+// TODO(REFACTOR): Extract these utilities into a separate file
+function helperOne() { /* ... */ }
+function helperTwo() { /* ... */ }
+
+// TODO(TYPES): Add proper type definitions
+const data = {
+  // ... data structure
+};
+```
+
+## Clean Up Process
+
+1. Regular Cleanup:
+```typescript
+// Good - Scheduled cleanup
+// TODO(CLEANUP, 2024-Q2): Remove legacy authentication code
+const legacyAuth = {
+  // Old authentication logic
+};
+
+// Bad - Unscheduled cleanup
+// TODO: clean this up
+const oldCode = {
+  // ...
+};
+```
+
+2. Migration Markers:
+```typescript
+// Good - Clear migration path
+// TODO(MIGRATION, P1): Replace with new API endpoints
+// See RFC: link-to-rfc-document
+api.legacyCall()
+  .then(data => {
+    // ...
+  });
+
+// Bad - Unclear migration
+// TODO: use new API
+api.oldCall();
+```
+
+## IDE Integration
+
+1. VSCode TODO Highlighting:
+```jsonc
+// .vscode/settings.json
+{
+  "todo-tree.regex.regex": "(?:TODO|FIXME|HACK|PERF|SECURITY)\\(([^)]+)\\)",
+  "todo-tree.highlights.customHighlight": {
+    "TODO": {
+      "icon": "check",
+      "foreground": "#fff",
+      "background": "#ffbd2a",
+      "iconColour": "#ffbd2a"
+    },
+    // Add more custom highlights...
+  }
+}
+```
+
+2. ESLint Configuration:
+```javascript
+// .eslintrc.js
+module.exports = {
+  rules: {
+    'no-console': ['warn', { allow: ['warn', 'error'] }],
+    'no-warning-comments': ['warn', {
+      terms: ['TODO', 'FIXME', 'HACK'],
+      location: 'start'
+    }]
+  }
+};
+```
+
+## Review Process
+
+1. Code Review Requirements:
+- All TODOs must have at least one of: owner, deadline, or priority
+- Console logs must be tagged with TODO(CLEANUP) if temporary
+- Critical TODOs (P0) must be addressed before merge
+- TODOs should be tracked in issue management system
+
+2. Pre-commit Hooks:
+```typescript
+// TODO(CI): Add husky pre-commit hook to check for untagged console.logs
+// See: .husky/pre-commit
+```
+
+Remember:
+- TODOs should be actionable and specific
+- Console logs should be temporary and clearly marked
+- Regular cleanup sprints should be scheduled
+- Use IDE tools to track and manage TODOs
+- Include cleanup tasks in sprint planning

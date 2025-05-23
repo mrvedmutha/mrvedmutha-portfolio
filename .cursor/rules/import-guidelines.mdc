@@ -1,0 +1,132 @@
+---
+description: How to write import statements
+globs: 
+alwaysApply: false
+---
+# Import Path Guidelines
+
+This document outlines the standards for importing files and modules in our project.
+
+## 1. Base Rules
+
+1. Always use absolute imports with `@/` prefix:
+```typescript
+// Good ✅
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { HeaderNav } from "@/components/common/Header/HeaderNav";
+
+// Bad ❌
+import { Button } from "./button";
+import { cn } from "../../lib/utils";
+import { HeaderNav } from "./HeaderNav";
+```
+
+2. Import Order:
+```typescript
+// 1. React and Next.js imports
+import * as React from "react";
+import { useRouter } from "next/router";
+
+// 2. External libraries
+import { useTheme } from "next-themes";
+import { Menu } from "lucide-react";
+
+// 3. Project imports (using @/)
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+```
+
+## 2. Directory Mapping
+
+Common import paths and their absolute mappings:
+
+```typescript
+// Components
+"@/components/ui/*"          // UI components
+"@/components/common/*"      // Shared components
+"@/components/home/*"        // Homepage components
+"@/components/blog/*"        // Blog components
+"@/components/projects/*"    // Project components
+
+// Core
+"@/lib/*"                    // Utility functions, helpers
+"@/hooks/*"                  // Custom hooks
+"@/types/*"                  // TypeScript types
+"@/styles/*"                 // Global styles
+
+// Features
+"@/app/*"                    // App router pages
+"@/api/*"                    // API routes
+```
+
+## 3. Best Practices
+
+1. Component Imports:
+```typescript
+// Good - Direct import from component index
+import { Header } from "@/components/common/Header";
+
+// Bad - Importing from specific file
+import { Header } from "@/components/common/Header/index";
+```
+
+2. Type Imports:
+```typescript
+// Good - Use type import when possible
+import type { ButtonProps } from "@/components/ui/button";
+
+// Bad - Regular import for types
+import { ButtonProps } from "@/components/ui/button";
+```
+
+3. Barrel Exports:
+```typescript
+// components/ui/index.ts
+export * from "./button";
+export * from "./input";
+
+// Good - Import from barrel
+import { Button, Input } from "@/components/ui";
+```
+
+## 4. Examples
+
+1. Page Component:
+```typescript
+// Good
+import { Header } from "@/components/common/Header";
+import { Hero } from "@/components/home/Hero";
+import { Features } from "@/components/home/Features";
+```
+
+2. Common Component:
+```typescript
+// Good
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import type { IconProps } from "@/types/icon.types";
+```
+
+3. API Route:
+```typescript
+// Good
+import { db } from "@/lib/db";
+import { authOptions } from "@/lib/auth";
+import type { ApiResponse } from "@/types/api.types";
+```
+
+## 5. Configuration
+
+This import structure requires proper configuration in `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
+```

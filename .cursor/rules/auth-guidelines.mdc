@@ -1,0 +1,239 @@
+---
+description: how to manage authentication for this project
+globs: 
+alwaysApply: false
+---
+# NextAuth Authentication Guidelines
+
+Guidelines for implementing and managing authentication using NextAuth.js in our project.
+
+## Directory Structure
+
+```
+src/
+├── app/
+│   └── api/
+│       └── auth/
+│           └── [...nextauth]/
+│               └── route.ts    # NextAuth API route handler
+├── lib/
+│   └── auth/
+│       ├── options.ts         # NextAuth configuration options
+│       ├── session.ts         # Session management utilities
+│       └── providers.ts       # Auth provider configurations
+└── components/
+    └── auth/
+        ├── auth-provider.tsx  # Client auth context provider
+        ├── sign-in.tsx       # Sign in component
+        └── sign-out.tsx      # Sign out component
+```
+
+## NextAuth Configuration
+
+1. Provider Setup:
+```typescript
+// Good - Organized provider configuration
+// src/lib/auth/providers.ts
+import { Provider } from "next-auth/providers"
+import Google from "next-auth/providers/google"
+import GitHub from "next-auth/providers/github"
+
+export const authProviders: Provider[] = [
+  Google({
+    clientId: process.env.GOOGLE_CLIENT_ID!,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+  }),
+  GitHub({
+    clientId: process.env.GITHUB_CLIENT_ID!,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+  }),
+]
+
+// Bad - Providers mixed with other configurations
+// src/app/api/auth/[...nextauth]/route.ts
+const providers = [
+  Google({ /* credentials here */ }),
+  // Other configurations mixed in
+]
+```
+
+2. Auth Options:
+```typescript
+// Good - Separated auth options
+// src/lib/auth/options.ts
+import { NextAuthOptions } from "next-auth"
+import { authProviders } from "./providers"
+
+export const authOptions: NextAuthOptions = {
+  providers: authProviders,
+  pages: {
+    signIn: "/auth/signin",
+    error: "/auth/error",
+  },
+  callbacks: {
+    session: async ({ session, token }) => {
+      if (session?.user) {
+        session.user.id = token.sub
+      }
+      return session
+    },
+  },
+}
+
+// Bad - Options defined directly in route
+const options = {
+  providers: [], // Inline provider definitions
+  // Other options mixed in route file
+}
+```
+
+3. Route Handler:
+```typescript
+// Good - Clean route handler
+// src/app/api/auth/[...nextauth]/route.ts
+import NextAuth from "next-auth"
+import { authOptions } from "@/lib/auth/options"
+
+const handler = NextAuth(authOptions)
+export { handler as GET, handler as POST }
+
+// Bad - Everything in route file
+import NextAuth from "next-auth"
+import Google from "next-auth/providers/google"
+// ... other imports
+
+const handler = NextAuth({
+  providers: [], // Providers defined here
+  callbacks: {}, // Callbacks defined here
+  pages: {},     // Pages defined here
+})
+```
+
+## Session Management
+
+1. Session Utilities:
+```typescript
+// Good - Reusable session utilities
+// src/lib/auth/session.ts
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "./options"
+
+export async function getCurrentUser() {
+  const session = await getServerSession(authOptions)
+  return session?.user
+}
+
+// Bad - Session logic repeated in components
+const session = await getServerSession(authOptions)
+if (!session?.user) {
+  // Repeated session checks
+}
+```
+
+2. Protected Routes:
+```typescript
+// Good - Middleware protection
+// src/middleware.ts
+export { default } from "next-auth/middleware"
+
+export const config = {
+  matcher: [
+    "/dashboard/:path*",
+    "/settings/:path*",
+  ]
+}
+
+// Bad - Individual route protection
+async function Page() {
+  const session = await getServerSession()
+  if (!session) redirect("/auth/signin")
+  // ... page content
+}
+```
+
+## Client Components
+
+1. Auth Provider:
+```typescript
+// Good - Centralized auth provider
+// src/components/auth/auth-provider.tsx
+"use client"
+import { SessionProvider } from "next-auth/react"
+
+export function AuthProvider({ children }) {
+  return <SessionProvider>{children}</SessionProvider>
+}
+
+// Bad - Multiple providers or missing provider
+// Various components using auth without provider
+```
+
+2. Sign In/Out Components:
+```typescript
+// Good - Reusable auth components
+// src/components/auth/sign-in.tsx
+"use client"
+import { signIn } from "next-auth/react"
+
+export function SignInButton({ provider = "google" }) {
+  return (
+    <button onClick={() => signIn(provider)}>
+      Sign in with {provider}
+    </button>
+  )
+}
+
+// Bad - Inline auth logic
+<button onClick={async () => {
+  const result = await signIn()
+  // Inline handling of auth
+}}>
+```
+
+## Environment Variables
+
+Required variables in `.env`:
+```
+# OAuth Providers
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+
+# NextAuth
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-secret-key
+```
+
+## Error Handling
+
+1. Custom Error Pages:
+```typescript
+// Good - Dedicated error handling
+// src/app/auth/error/page.tsx
+export default function AuthError({
+  searchParams: { error },
+}: {
+  searchParams: { error?: string }
+}) {
+  return (
+    <div>
+      <h1>Authentication Error</h1>
+      <p>{getErrorMessage(error)}</p>
+    </div>
+  )
+}
+
+// Bad - Generic error handling
+if (error) {
+  console.error(error)
+  // No user feedback
+}
+```
+
+Remember:
+- Always use environment variables for sensitive data
+- Implement proper error handling and user feedback
+- Keep authentication logic organized and separated
+- Use TypeScript for better type safety
+- Follow the directory structure for consistency

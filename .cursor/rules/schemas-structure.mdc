@@ -1,0 +1,73 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Schemas Structure Rule (Zod)
+
+**You MUST follow this structure for all Zod validation schemas in the codebase. These rules are mandatory for all contributors.**
+
+1. **Location of Zod Schemas**
+   - All Zod validation schemas MUST be placed in the `./src/schemas/zod` folder.
+   - You MUST organize schemas by page or feature:
+     - For schemas used only on the home page:
+       ```
+       ./src/schemas/zod/home/your-schema.ts
+       ```
+     - For schemas used across multiple pages (common/shared schemas):
+       ```
+       ./src/schemas/zod/common/your-schema.ts
+       ```
+   - You MUST use descriptive filenames in kebab-case.
+
+2. **Directory Structure Example**
+   ```
+   src/
+   └── schemas/
+       └── zod/
+           ├── home/
+           │   └── your-schema.ts
+           └── common/
+               └── your-schema.ts
+   ```
+
+3. **Guidelines**
+   - You MUST always use kebab-case for filenames and folders.
+   - You MUST place schemas in the most specific folder possible (e.g., `home` for home page schemas, `common` for shared schemas).
+   - You MUST NOT place Zod schemas outside the `./src/schemas/zod` directory or directly in the `zod` root.
+
+4. **Good and Bad Examples**
+
+   Example of a well-structured Zod schema (Good):
+   ```typescript
+   // File: ./src/schemas/zod/home/user-profile-schema.ts
+   import { z } from "zod";
+
+   export const userProfileSchema = z.object({
+     name: z.string().min(1, "Name is required"),
+     age: z.number().int().positive(),
+     email: z.string().email(),
+   });
+   ```
+
+   Example of a poorly structured Zod schema (Bad):
+   ```typescript
+   // File: ./src/schemas/userProfile.ts
+   import { z } from "zod";
+
+   export const schema = z.object({
+     Name: z.string(), // Bad: not using camelCase, no validation message
+     Age: z.number(),  // Bad: not using camelCase, no validation
+     Email: z.string(),
+   });
+   ```
+   - Bad example issues:
+     - Not placed in the correct folder (`zod/home` or `zod/common`)
+     - Filename is not in kebab-case
+     - Property names are not in camelCase
+     - No validation messages or constraints
+     - Export name is generic
+
+---
+
+**Following this structure is required for clarity, maintainability, and scalability in the codebase. Non-compliance will result in code review rejection.**

@@ -1,0 +1,251 @@
+---
+description: how to write and structure api
+globs: 
+alwaysApply: false
+---
+# API Structure and Implementation Guidelines
+
+This document outlines the standards and best practices for creating and maintaining APIs in our Next.js project.
+
+## Project Structure for API Related Files
+
+```
+src/
+├── lib/
+│   └── api/
+│       ├── responses.ts     # API response utilities
+│       └── middleware.ts    # API middleware functions
+├── schemas/
+│   └── zod/
+│       ├── api/            # API-related schemas
+│       │   ├── auth/       # Authentication schemas
+│       │   │   ├── login.schema.ts
+│       │   │   └── register.schema.ts
+│       │   ├── blogs/      # Blog-related schemas
+│       │   │   ├── post.schema.ts
+│       │   │   └── comment.schema.ts
+│       │   └── users/      # User-related schemas
+│       │       ├── create.schema.ts
+│       │       └── update.schema.ts
+│       └── common/         # Shared schemas
+│           └── pagination.schema.ts
+└── types/
+    ├── api/                # API-related types
+    │   ├── auth/           # Authentication types
+    │   │   ├── login.types.ts
+    │   │   └── register.types.ts
+    │   ├── blogs/          # Blog-related types
+    │   │   ├── post.types.ts
+    │   │   └── comment.types.ts
+    │   ├── users/          # User-related types
+    │   │   ├── user.types.ts
+    │   │   └── profile.types.ts
+    │   └── common/         # Common API types
+    │       ├── response.types.ts
+    │       └── request.types.ts
+    └── common/             # Shared types across the application
+        └── pagination.types.ts
+
+app/
+└── api/
+    ├── v1/
+    │   ├── users/
+    │   │   └── route.ts    # Route handler only
+    │   └── posts/
+    │       └── route.ts
+    └── auth/
+        └── [...nextauth]/
+            └── route.ts
+```
+
+## API Response Utilities
+
+All API responses should use the standardized response utilities from `src/lib/api/responses.ts`:
+
+```typescript
+// Success response
+successResponse(data: T, message?: string, status = 200)
+
+// Error response
+errorResponse(error: string, details?: any, status = 500)
+```
+
+## Route Handler Structure
+
+Always structure your route handlers using the following template:
+
+```typescript
+import { successResponse, errorResponse } from '@/lib/api/responses'
+import { createUserSchema } from '@/schemas/zod/user.schema'
+import type { CreateUserRequest } from '@/types/user.types'
+
+export async function POST(request: Request) {
+  try {
+    // 1. Request validation
+    const body = await request.json()
+    const validatedData = createUserSchema.parse(body) as CreateUserRequest
+
+    // 2. Business logic
+    const result = await processData(validatedData)
+
+    // 3. Response
+    return successResponse(result, 'User created successfully', 201)
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return errorResponse('Invalid request data', error.errors, 400)
+    }
+    return errorResponse('Internal server error')
+  }
+}
+```
+
+## Schema Organization
+
+1. Organize Zod schemas by feature in `src/schemas/zod/`:
+
+```typescript
+// src/schemas/zod/api/blogs/post.schema.ts
+import { z } from 'zod'
+
+export const createPostSchema = z.object({
+  title: z.string().min(5),
+  content: z.string().min(10),
+  // ... other fields
+})
+
+export const updatePostSchema = z.object({
+  // ... update fields
+})
+```
+
+2. Common schemas shared across features:
+
+```typescript
+// src/schemas/zod/common/pagination.schema.ts
+import { z } from 'zod'
+
+export const paginationSchema = z.object({
+  page: z.number().int().positive(),
+  limit: z.number().int().min(1).max(100)
+})
+```
+
+3. Feature-specific schema exports:
+
+```typescript
+// src/schemas/zod/api/blogs/index.ts
+export * from './post.schema'
+export * from './comment.schema'
+
+// src/schemas/zod/api/index.ts
+export * from './blogs'
+export * from './users'
+export * from './auth'
+```
+
+## Type Definitions
+
+1. Organize types by feature in `src/types/`:
+
+```typescript
+// src/types/api/blogs/post.types.ts
+import { z } from 'zod'
+import { createPostSchema } from '@/schemas/zod/api/blogs/post.schema'
+
+export type CreatePostRequest = z.infer<typeof createPostSchema>
+
+export interface Post extends CreatePostRequest {
+  id: string
+  authorId: string
+  createdAt: Date
+  updatedAt: Date
+}
+```
+
+2. Common API response types:
+
+```typescript
+// src/types/api/common/response.types.ts
+export interface ApiResponse<T> {
+  data: T
+  message?: string
+}
+
+export interface ApiError {
+  error: string
+  details?: any
+  code?: string
+}
+
+// src/types/api/common/request.types.ts
+export interface PaginatedRequest {
+  page: number
+  limit: number
+}
+```
+
+3. Feature-specific type exports:
+
+```typescript
+// src/types/api/blogs/index.ts
+export * from './post.types'
+export * from './comment.types'
+
+// src/types/api/index.ts
+export * from './blogs'
+export * from './users'
+export * from './auth'
+```
+
+## Route Handler Example
+
+```typescript
+import { successResponse, errorResponse } from '@/lib/api/responses'
+import { createPostSchema } from '@/schemas/zod/api/blogs/post.schema'
+import type { CreatePostRequest, Post } from '@/types/api/blogs/post.types'
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json()
+    const validatedData = createPostSchema.parse(body) as CreatePostRequest
+
+    const result = await createPost(validatedData)
+
+    return successResponse<Post>(result, 'Post created successfully', 201)
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return errorResponse('Invalid request data', error.errors, 400)
+    }
+    return errorResponse('Internal server error')
+  }
+}
+```
+
+## Import Conventions
+
+Always use the following import patterns with feature-based paths:
+
+```typescript
+// Schemas
+import { createPostSchema } from '@/schemas/zod/api/blogs/post.schema'
+import { paginationSchema } from '@/schemas/zod/common/pagination.schema'
+
+// Types
+import type { Post } from '@/types/api/blogs/post.types'
+import type { PaginatedRequest } from '@/types/api/common/request.types'
+
+// API utilities
+import { successResponse, errorResponse } from '@/lib/api/responses'
+```
+
+## Best Practices
+
+[Previous best practices remain, with these additions:]
+
+11. Always use the centralized response utilities
+12. Keep schemas and types organized by feature
+13. Use common directories for shared schemas and types
+14. Follow the established folder structure for new features
+15. Maintain consistent import paths using feature-based organization
+16. Group related functionality in feature-specific directories
+17. Use index files for clean exports from feature directories

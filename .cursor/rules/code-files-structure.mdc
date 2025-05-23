@@ -1,0 +1,90 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Code Files Structure Rule
+
+**You MUST follow this structure for all interfaces, props, models, schemas, and components in the codebase. These rules are mandatory for all contributors.**
+
+1. **Types and Props**
+   - All TypeScript interfaces and props MUST be placed in the `types` folder.
+   - You MUST organize by page or feature:
+     - For types used only on the home page:
+       ```
+       ./src/types/home/your-interface.ts
+       ```
+     - For types used across multiple pages (common types):
+       ```
+       ./src/types/common/your-interface.ts
+       ```
+   - You MUST use descriptive filenames in kebab-case.
+
+2. **Models and Schemas**
+   - All models and schemas MUST be placed in their respective folders, organized by page or feature if applicable.
+   - Example for a home page model:
+     ```
+     ./src/models/home/your-model.ts
+     ./src/schemas/home/your-schema.ts
+     ```
+   - Example for a common model or schema:
+     ```
+     ./src/models/common/your-model.ts
+     ./src/schemas/common/your-schema.ts
+     ```
+   - You MUST NOT place models or schemas outside their designated folders.
+
+3. **Components**
+   - All UI components (e.g., shadcn components) MUST be placed in:
+     ```
+     ./src/components/ui/
+     ```
+   - Page-specific components MUST be placed in a folder named after the page:
+     - For the homepage navbar:
+       ```
+       ./src/components/home/navbar/
+       ```
+     - For the homepage hero section:
+       ```
+       ./src/components/home/hero/
+       ```
+   - You MUST use descriptive folder and file names in kebab-case.
+   - You MUST NOT place components outside their designated folders.
+
+4. **Directory Structure Example**
+   ```
+   src/
+   ├── types/
+   │   ├── home/
+   │   │   └── your-interface.ts
+   │   └── common/
+   │       └── your-interface.ts
+   ├── models/
+   │   ├── home/
+   │   │   └── your-model.ts
+   │   └── common/
+   │       └── your-model.ts
+   ├── schemas/
+   │   ├── home/
+   │   │   └── your-schema.ts
+   │   └── common/
+   │       └── your-schema.ts
+   ├── components/
+   │   ├── ui/
+   │   │   └── shadcn-component.tsx
+   │   └── home/
+   │       ├── navbar/
+   │       │   └── navbar.tsx
+   │       └── hero/
+   │           └── hero.tsx
+   └── ...
+   ```
+
+5. **General Guidelines**
+   - You MUST always use kebab-case for filenames and folders.
+   - You MUST place files in the most specific folder possible (e.g., `home` for home page components, `common` for shared types).
+   - You MUST NOT place types, models, schemas, or components directly in the `src` root or outside their designated folders.
+
+---
+
+**Following this structure is required for clarity, maintainability, and scalability in the codebase. Non-compliance will result in code review rejection.**

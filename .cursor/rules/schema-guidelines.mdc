@@ -1,0 +1,259 @@
+---
+description: How to write and structure schemas
+globs: 
+alwaysApply: false
+---
+# MongoDB Schema Guidelines
+
+This document outlines the standards and best practices for creating and organizing MongoDB schemas in our project.
+
+## Directory Structure
+
+```
+src/
+├── types/
+│   └── models/                 # Model interfaces
+│       ├── user.types.ts
+│       ├── post.types.ts
+│       └── index.ts           # Type exports
+├── enums/                     # Enum definitions
+│   ├── user.enum.ts
+│   ├── post.enum.ts
+│   └── index.ts
+├── schemas/
+│   └── mongodb/              # MongoDB schemas
+│       ├── user.schema.ts
+│       ├── post.schema.ts
+│       └── comment.schema.ts
+└── models/                   # MongoDB models
+    └── index.ts
+```
+
+## Schema Implementation
+
+### 1. Basic Schema Definition
+
+```typescript
+// src/schemas/mongodb/user.schema.ts
+import { Schema } from 'mongoose'
+import type { IUser } from '@/types/models/user.types'
+import { UserRole, UserStatus } from '@/enums/user.enum'
+
+export const userSchema = new Schema<IUser>({
+  email: {
+    type: String,
+    required: [true, 'Email is required'],
+    unique: true,
+    trim: true,
+    lowercase: true
+  },
+  password: {
+    type: String,
+    required: [true, 'Password is required'],
+    select: false
+  },
+  role: {
+    type: String,
+    enum: {
+      values: Object.values(UserRole),
+      message: 'Invalid user role'
+    },
+    default: UserRole.USER
+  },
+  status: {
+    type: String,
+    enum: {
+      values: Object.values(UserStatus),
+      message: 'Invalid user status'
+    },
+    default: UserStatus.ACTIVE
+  }
+}, {
+  timestamps: true,
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
+})
+```
+
+### 2. Nested Schemas
+
+```typescript
+// src/schemas/mongodb/post.schema.ts
+import { Schema } from 'mongoose'
+import type { IPost } from '@/types/models/post.types'
+
+// Define reusable sub-schemas in separate files
+import { commentSchema } from '@/schemas/mongodb/comment.schema'
+
+export const postSchema = new Schema<IPost>({
+  title: {
+    type: String,
+    required: [true, 'Title is required'],
+    trim: true,
+    minlength: [5, 'Title must be at least 5 characters'],
+    maxlength: [100, 'Title cannot exceed 100 characters']
+  },
+  content: {
+    type: String,
+    required: [true, 'Content is required'],
+    trim: true
+  },
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  comments: [commentSchema],
+  tags: [{
+    type: String,
+    trim: true
+  }]
+}, {
+  timestamps: true
+})
+```
+
+## Best Practices
+
+### 1. Schema Options
+
+```typescript
+// Good - Using schema options
+const schema = new Schema({
+  // fields
+}, {
+  timestamps: true,
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
+})
+
+// Bad - Missing important options
+const schema = new Schema({
+  // fields
+})
+```
+
+### 2. Field Validation
+
+```typescript
+// Good - Comprehensive validation
+field: {
+  type: String,
+  required: [true, 'Field is required'],
+  minlength: [5, 'Min length error'],
+  maxlength: [100, 'Max length error'],
+  validate: {
+    validator: (value: string) => /pattern/.test(value),
+    message: 'Custom validation error'
+  }
+}
+
+// Bad - Minimal validation
+field: {
+  type: String,
+  required: true
+}
+```
+
+### 3. Indexes
+
+```typescript
+// Good - Proper indexing
+schema.index({ email: 1 }, { unique: true })
+schema.index({ createdAt: -1 })
+
+// Compound indexes
+schema.index({ field1: 1, field2: -1 })
+```
+
+### 4. Virtual Fields
+
+```typescript
+// src/schemas/mongodb/user.schema.ts
+userSchema.virtual('fullName').get(function() {
+  return `${this.firstName} ${this.lastName}`
+})
+
+// Virtual populate
+userSchema.virtual('posts', {
+  ref: 'Post',
+  localField: '_id',
+  foreignField: 'author'
+})
+```
+
+### 5. Type Safety
+
+```typescript
+// Good - Using TypeScript interfaces
+import type { IUser } from '@/types/models/user.types'
+const schema = new Schema<IUser>({ ... })
+
+// Bad - No type definition
+const schema = new Schema({ ... })
+```
+
+## Common Patterns
+
+### 1. Reference Fields
+
+```typescript
+// Good - Properly typed references
+author: {
+  type: Schema.Types.ObjectId,
+  ref: 'User',
+  required: true,
+  index: true
+}
+
+// Bad - Missing index on frequently queried reference
+author: {
+  type: Schema.Types.ObjectId,
+  ref: 'User'
+}
+```
+
+### 2. Array Fields
+
+```typescript
+// Good - Defined sub-schema for array elements
+comments: [{
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  content: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+}]
+
+// Bad - Unstructured array
+comments: [Schema.Types.Mixed]
+```
+
+### 3. Date Fields
+
+```typescript
+// Good - Using Date type with defaults
+createdAt: {
+  type: Date,
+  default: Date.now,
+  immutable: true
+},
+updatedAt: {
+  type: Date,
+  default: Date.now
+}
+
+// Bad - String dates
+createdAt: {
+  type: String
+}
+```

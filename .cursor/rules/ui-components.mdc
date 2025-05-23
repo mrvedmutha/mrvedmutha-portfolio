@@ -1,0 +1,148 @@
+---
+description: how to write and maintain ui components
+globs: 
+alwaysApply: false
+---
+# UI Component and Styling Guidelines (shadcn/ui & Tailwind CSS)
+
+**You MUST follow these rules before writing any UI component:**
+
+1. Always read the official UI documentation (e.g., shadcn/ui, Tailwind CSS) before implementing a component.
+2. If a suitable package or component already exists, you MUST add and use that package/component instead of writing your own.
+3. Only write custom components if no package or prebuilt component is available for your use case.
+
+This document outlines the standards for building UI components and applying styles using shadcn/ui and Tailwind CSS.
+
+## 1. Component Directory Structure
+
+```
+src/
+└── components/
+    ├── ui/              # shadcn/ui base components
+    │   ├── button.tsx
+    │   ├── input.tsx
+    │   └── ...
+    ├── common/          # Shared components used across multiple pages
+    │   ├── Header/
+    │   │   ├── index.tsx
+    │   │   └── HeaderNav.tsx
+    │   ├── Footer/
+    │   │   └── index.tsx
+    │   └── Layout/
+    │       └── index.tsx
+    ├── home/            # Components specific to homepage
+    │   ├── Hero/
+    │   │   ├── index.tsx
+    │   │   └── HeroContent.tsx
+    │   └── Features/
+    │       └── index.tsx
+    ├── blog/            # Blog-specific components
+    │   ├── PostCard/
+    │   │   └── index.tsx
+    │   └── PostList/
+    │       └── index.tsx
+    └── projects/        # Project-specific components
+        ├── ProjectCard/
+        │   └── index.tsx
+        └── ProjectGrid/
+            └── index.tsx
+```
+
+## 2. Component Organization Rules
+
+1. Base UI Components:
+   - Place all shadcn/ui components in `components/ui/`
+   - Keep one component per file
+  │   - Use the exact shadcn/ui naming convention
+
+2. Common Components:
+   - Place in `components/common/` if used across multiple pages
+   - Create a folder for each component if it has multiple parts
+   - Use index.tsx for the main component export
+
+3. Page-Specific Components:
+   - Organize by page/feature (home/, blog/, projects/, etc.)
+   - Create subfolders for complex components with multiple parts
+   - Keep components close to where they're used
+
+4. Component File Naming:
+   - Use PascalCase for component files and folders
+   - Use index.tsx for main component exports
+   - Add descriptive suffixes for related components (e.g., ProjectCard, ProjectGrid)
+
+## 3. Using shadcn/ui
+- Prefer shadcn/ui primitives for common UI elements
+- Extend or compose shadcn/ui components rather than rewriting
+- Keep shadcn/ui imports at the top of the file
+- Use `asChild` prop or className overrides for customization
+
+## 4. Tailwind CSS Usage
+- Use Tailwind utility classes for styling
+- Compose class names using `cn` utility from `@/lib/utils`
+- Follow responsive design patterns
+- Use semantic HTML elements
+- Leverage Tailwind's dark mode utilities
+
+## 5. Component Structure Example
+
+```tsx
+// components/common/Header/index.tsx
+import { Button } from "@/components/ui/button"
+import { HeaderNav } from "./HeaderNav"
+
+export function Header() {
+  return (
+    <header className="sticky top-0 z-50">
+      <div className="container mx-auto px-4">
+        <HeaderNav />
+      </div>
+    </header>
+  )
+}
+```
+
+## 6. Best Practices
+
+1. Component Organization:
+```tsx
+// Good - Organized in appropriate directory
+// components/home/Hero/index.tsx
+export function Hero() {
+  return <section>...</section>
+}
+
+// Bad - Placed in wrong directory
+// components/Hero.tsx
+export function Hero() {
+  return <section>...</section>
+}
+```
+
+2. File Structure:
+```tsx
+// Good - Complex component with multiple parts
+components/common/Header/
+├── index.tsx          # Main component
+├── HeaderNav.tsx      # Navigation subcomponent
+└── HeaderSearch.tsx   # Search subcomponent
+
+// Bad - All in one file
+components/common/Header.tsx  # Contains all logic
+```
+
+3. Component Naming:
+```tsx
+// Good
+ProjectCard/
+├── index.tsx
+└── ProjectCardImage.tsx
+
+// Bad
+project/
+├── card.tsx
+└── img.tsx
+```
+
+## 7. References
+- @shadcn/ui Documentation
+- @Tailwind CSS Documentation
