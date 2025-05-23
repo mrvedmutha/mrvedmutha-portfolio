@@ -54,6 +54,7 @@ const logos = [
   },
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function LogoBillboard({
   src,
   alt,
@@ -140,11 +141,13 @@ function TagCloud({
   });
 
   // Drag to rotate
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handlePointerDown = (e: any) => {
     setDragging(true);
     setLastX(e.clientX);
   };
   const handlePointerUp = () => setDragging(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handlePointerMove = (e: any) => {
     if (dragging && group.current) {
       const deltaX = e.clientX - lastX;
