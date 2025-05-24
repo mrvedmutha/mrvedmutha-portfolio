@@ -4,6 +4,7 @@ import {
   SkillsSection,
   ProjectsSection,
   ExperienceSection,
+  BlogSection,
 } from "@/components/home";
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
       <SkillsSection />
       <ProjectsSection />
       <ExperienceSection />
+      <BlogSection />
     </div>
   );
 }
