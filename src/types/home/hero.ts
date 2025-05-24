@@ -4,3 +4,10 @@ export type HeroSkill = string;
 export interface HeroProps {
   skills?: HeroSkill[];
 }
+
+export interface TechStackLogo {
+  src: string;
+  alt: string;
+}
+
+export type TechStackLogoArray = TechStackLogo[];
