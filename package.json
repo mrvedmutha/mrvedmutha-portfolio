@@ -17,6 +17,7 @@
     "@react-three/drei": "^10.0.8",
     "@react-three/fiber": "^9.1.2",
     "@tabler/icons-react": "^3.33.0",
+    "@tanstack/react-table": "^8.21.3",
     "@types/bcryptjs": "^2.4.6",
     "@types/mongoose": "^5.11.96",
     "@types/next-auth": "^3.13.0",
