@@ -1,5 +1,8 @@
+import { User } from "@/models/models/user.model";
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { dbConnect } from "@/lib/db";
+import bcrypt from "bcryptjs";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -10,14 +13,28 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials: any) {
-        // TODO: Replace with real user lookup and password check
-        if (
-          credentials?.email === process.env.ADMIN_EMAIL &&
-          credentials?.password === process.env.ADMIN_PASSWORD
-        ) {
-          return { id: "1", email: credentials.email };
+        if (!credentials?.email || !credentials?.password) {
+          return null;
         }
-        return null;
+        await dbConnect();
+        const user = await User.findOne({ email: credentials.email }).select(
+          "+password"
+        );
+        if (!user || !user.password) {
+          return null;
+        }
+        const isValid = await bcrypt.compare(
+          credentials.password,
+          user.password
+        );
+        if (!isValid) {
+          return null;
+        }
+        return {
+          id: user._id.toString(),
+          email: user.email,
+          role: user.role,
+        };
       },
     }),
   ],
