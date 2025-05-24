@@ -43,3 +43,7 @@ next-env.d.ts
 # ._
 ._*
 **/._*
+
+# .env
+.env
+.env.*
