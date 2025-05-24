@@ -1,19 +1,19 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import { Projects } from "@/context/constants/projects";
+import { Experience } from "@/context/constants/experience";
 
-export default function ProjectsSection() {
+export default function ExperienceSection() {
   return (
     <motion.section
       initial={{ opacity: 0, y: 60 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="w-full max-w-7xl mx-auto px-4 py-16"
+      className="w-full max-w-7xl mx-auto px-4"
     >
       <h2 className="text-3xl md:text-4xl font-extrabold mt-16 mb-8 text-center w-full">
-        Projects
+        Experience
       </h2>
       <div className="flex flex-col gap-8 items-stretch">
         {[0, 1].map((rowIdx) => (
@@ -21,9 +21,9 @@ export default function ProjectsSection() {
             key={rowIdx}
             className="flex flex-col md:flex-row gap-8 items-stretch"
           >
-            {Projects.slice(rowIdx * 3, rowIdx * 3 + 3).map((project, idx) => (
+            {Experience.slice(rowIdx * 3, rowIdx * 3 + 3).map((exp, idx) => (
               <motion.div
-                key={project.name}
+                key={exp.name}
                 initial={{ opacity: 0, y: 60 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
@@ -34,9 +34,9 @@ export default function ProjectsSection() {
                 }}
                 className="flex-1 bg-muted rounded-xl shadow p-8 flex flex-col justify-center items-start border border-border min-h-[220px]"
               >
-                <h2 className="text-2xl font-bold mb-2">Projects</h2>
+                <h2 className="text-2xl font-bold mb-2">Experience</h2>
                 <p className="text-muted-foreground text-base md:text-lg">
-                  {project.icon} {project.name}
+                  {exp.icon} {exp.name}
                 </p>
               </motion.div>
             ))}

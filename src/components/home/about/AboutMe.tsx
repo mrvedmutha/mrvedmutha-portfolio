@@ -16,6 +16,9 @@ export default function AboutMe() {
 
   return (
     <>
+      <h2 className="text-3xl md:text-4xl font-extrabold mt-16 mb-8 text-center w-full">
+        About Me
+      </h2>
       <motion.section
         initial={{ opacity: 0, y: 60 }}
         whileInView={{ opacity: 1, y: 0 }}
