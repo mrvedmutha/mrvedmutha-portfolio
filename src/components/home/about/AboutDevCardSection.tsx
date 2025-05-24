@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
+import { motion } from "framer-motion";
 
 export default function AboutDevCardSection() {
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -15,9 +16,21 @@ export default function AboutDevCardSection() {
   }, []);
 
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 py-8 mt-0 flex flex-col md:flex-row gap-8 items-stretch">
+    <motion.section
+      initial={{ opacity: 0, y: 60 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="w-full max-w-7xl mx-auto px-4 py-8 mt-0 flex flex-col md:flex-row gap-8 items-stretch"
+    >
       {/* Left: DevCard Image (35% on md+, 100% on mobile) */}
-      <div className="w-full md:flex-[0_0_35%] md:max-w-[35%] flex items-center justify-center bg-muted rounded-xl shadow p-6 border border-border min-h-[220px]">
+      <motion.div
+        initial={{ opacity: 0, y: 60 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
+        className="w-full md:flex-[0_0_35%] md:max-w-[35%] flex items-center justify-center bg-muted rounded-xl shadow p-6 border border-border min-h-[220px]"
+      >
         <a
           href="https://app.daily.dev/mrvedmutha"
           target="_blank"
@@ -37,14 +50,20 @@ export default function AboutDevCardSection() {
             <Skeleton className="w-full h-[200px] rounded-lg" />
           )}
         </a>
-      </div>
+      </motion.div>
       {/* Right: Dynamic Content Placeholder (65% on md+, 100% on mobile) */}
-      <div className="w-full md:flex-1 flex items-center justify-center bg-muted rounded-xl shadow p-8 border border-border min-h-[220px]">
+      <motion.div
+        initial={{ opacity: 0, y: 60 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
+        className="w-full md:flex-1 flex items-center justify-center bg-muted rounded-xl shadow p-8 border border-border min-h-[220px]"
+      >
         {/* Dynamic content will go here */}
         <span className="text-muted-foreground text-base md:text-lg">
           Dynamic content coming soon...
         </span>
-      </div>
-    </section>
+      </motion.div>
+    </motion.section>
   );
 }
