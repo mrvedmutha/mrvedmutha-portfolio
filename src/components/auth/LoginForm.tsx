@@ -5,8 +5,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { loginSchema, LoginSchema } from "@/schemas/zod/auth/login-schema";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export function LoginForm() {
+  const router = useRouter();
+  const [error, setError] = React.useState("");
   const {
     register,
     handleSubmit,
@@ -15,9 +19,18 @@ export function LoginForm() {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data: LoginSchema) => {
-    // TODO: Integrate authentication logic
-    // console.log(data)
+  const onSubmit = async (data: LoginSchema) => {
+    setError("");
+    const res = await signIn("credentials", {
+      redirect: false,
+      email: data.email,
+      password: data.password,
+    });
+    if (res?.ok) {
+      router.push("/admin");
+    } else {
+      setError("Invalid email or password.");
+    }
   };
 
   return (
@@ -25,6 +38,9 @@ export function LoginForm() {
       onSubmit={handleSubmit(onSubmit)}
       className="space-y-6 w-full max-w-sm mx-auto"
     >
+      {error && (
+        <div className="text-red-600 text-sm text-center mb-2">{error}</div>
+      )}
       <div>
         <label htmlFor="email" className="block text-sm font-medium mb-1">
           Email address
