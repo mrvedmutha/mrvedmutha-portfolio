@@ -29,7 +29,7 @@ export const authOptions: NextAuthOptions = {
           }
           return user;
         } catch (error: any) {
-          throw new Error("Error in credentials provider", error.message);
+          throw new Error(`Error in credentials provider: ${error.message}`);
         }
       },
     }),
