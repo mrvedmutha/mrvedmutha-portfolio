@@ -17,19 +17,25 @@ export const authOptions: NextAuthOptions = {
         try {
           await dbConnect();
           const user = await User.findOne({ email: credentials.email });
-          if (!user) {
-            throw new Error("User not found");
+          if (!user || !user.password) {
+            console.error(
+              "User not found or password missing:",
+              credentials.email
+            );
+            return null;
           }
           const isValid = await bcrypt.compare(
             credentials.password,
             user.password
           );
           if (!isValid) {
-            throw new Error("Invalid password");
+            console.error("Invalid password for:", credentials.email);
+            return null;
           }
           return user;
         } catch (error: any) {
-          throw new Error(`Error in credentials provider: ${error.message}`);
+          console.error("Auth error:", error);
+          return null;
         }
       },
     }),
