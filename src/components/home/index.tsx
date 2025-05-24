@@ -5,3 +5,5 @@ export { default as SkillsSection } from "@/components/home/skills/SkillsSection
 export { default as ProjectsSection } from "@/components/home/projects/ProjectsSection";
 export { default as ExperienceSection } from "./experience/ExperienceSection";
 export { default as BlogSection } from "./blogs/BlogSection";
+export { default as ConnectSection } from "./connect/ConnectSection";
+export { default as Footer } from "@/components/common/Footer";
