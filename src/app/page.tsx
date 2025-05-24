@@ -1,5 +1,6 @@
 import { Hero, AboutMe } from "@/components/home";
-import AboutDevCardSection from "@/components/home/about/AboutDevCardSection";
+
+import SkillsSection from "@/components/home/skills/SkillsSection";
 
 export default function Home() {
   return (
@@ -9,7 +10,7 @@ export default function Home() {
         About Me
       </h2>
       <AboutMe />
-      <AboutDevCardSection />
+      <SkillsSection />
     </div>
   );
 }
