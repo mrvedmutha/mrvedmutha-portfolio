@@ -6,15 +6,25 @@ import type {
 } from "@/types/admin/pages/skill.types";
 import { dbConnect } from "@/lib/db";
 
-export async function createSkill(data: SkillRequest): Promise<SkillResponse> {
-  await dbConnect();
-  // Validate input
-  const parsed = skillZodSchema.safeParse(data);
-  if (!parsed.success) {
-    throw new Error(parsed.error.errors.map((e) => e.message).join(", "));
-  }
-  // Save to DB
-  const skill = new Skill(parsed.data);
-  await skill.save();
-  return skill.toObject();
-}
+export const skillService = {
+  async create(data: SkillRequest): Promise<SkillResponse> {
+    await dbConnect();
+    // Validate input
+    const parsed = skillZodSchema.safeParse(data);
+    if (!parsed.success) {
+      throw new Error(parsed.error.errors.map((e) => e.message).join(", "));
+    }
+    // Save to DB
+    const skill = new Skill(parsed.data);
+    await skill.save();
+    return skill.toObject();
+  },
+
+  async getAll(limit = 25): Promise<SkillResponse[]> {
+    await dbConnect();
+    // Find all skills, limit to 25
+    const skills = await Skill.find({}).limit(limit).lean();
+    // Cast is safe because schema matches
+    return skills as unknown as SkillResponse[];
+  },
+};
