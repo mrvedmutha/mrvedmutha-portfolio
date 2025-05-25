@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 export const Sidebar = React.forwardRef<
   HTMLDivElement,
@@ -64,13 +65,37 @@ export const SidebarMenuItem = React.forwardRef<
 ));
 SidebarMenuItem.displayName = "SidebarMenuItem";
 
+type SidebarMenuButtonProps = React.PropsWithChildren<{
+  className?: string;
+  isActive?: boolean;
+  href?: string;
+}> &
+  React.ButtonHTMLAttributes<HTMLButtonElement> &
+  React.AnchorHTMLAttributes<HTMLAnchorElement>;
+
 export const SidebarMenuButton = React.forwardRef<
-  HTMLButtonElement & React.AnchorHTMLAttributes<HTMLAnchorElement>,
-  any
->(({ className, isActive, asChild, ...props }, ref) => {
-  const Comp = asChild ? "a" : "button";
+  HTMLButtonElement,
+  SidebarMenuButtonProps
+>(({ className, isActive, href, children, ...props }, ref) => {
+  if (href) {
+    return (
+      <Link
+        href={href}
+        className={cn(
+          "w-full flex items-center gap-2 px-3 py-2 rounded transition-colors",
+          isActive
+            ? "bg-accent text-accent-foreground"
+            : "hover:bg-muted hover:text-primary",
+          className
+        )}
+        {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+      >
+        {children}
+      </Link>
+    );
+  }
   return (
-    <Comp
+    <button
       ref={ref}
       className={cn(
         "w-full flex items-center gap-2 px-3 py-2 rounded transition-colors",
@@ -79,8 +104,10 @@ export const SidebarMenuButton = React.forwardRef<
           : "hover:bg-muted hover:text-primary",
         className
       )}
-      {...props}
-    />
+      {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}
+    >
+      {children}
+    </button>
   );
 });
 SidebarMenuButton.displayName = "SidebarMenuButton";
@@ -102,12 +129,28 @@ export const SidebarMenuSubItem = React.forwardRef<
 SidebarMenuSubItem.displayName = "SidebarMenuSubItem";
 
 export const SidebarMenuSubButton = React.forwardRef<
-  HTMLButtonElement & React.AnchorHTMLAttributes<HTMLAnchorElement>,
-  any
->(({ className, isActive, asChild, ...props }, ref) => {
-  const Comp = asChild ? "a" : "button";
+  HTMLButtonElement,
+  SidebarMenuButtonProps
+>(({ className, isActive, href, children, ...props }, ref) => {
+  if (href) {
+    return (
+      <Link
+        href={href}
+        className={cn(
+          "w-full flex items-center gap-2 px-3 py-2 rounded transition-colors text-sm",
+          isActive
+            ? "bg-accent text-accent-foreground"
+            : "hover:bg-muted hover:text-primary",
+          className
+        )}
+        {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+      >
+        {children}
+      </Link>
+    );
+  }
   return (
-    <Comp
+    <button
       ref={ref}
       className={cn(
         "w-full flex items-center gap-2 px-3 py-2 rounded transition-colors text-sm",
@@ -116,8 +159,10 @@ export const SidebarMenuSubButton = React.forwardRef<
           : "hover:bg-muted hover:text-primary",
         className
       )}
-      {...props}
-    />
+      {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}
+    >
+      {children}
+    </button>
   );
 });
 SidebarMenuSubButton.displayName = "SidebarMenuSubButton";

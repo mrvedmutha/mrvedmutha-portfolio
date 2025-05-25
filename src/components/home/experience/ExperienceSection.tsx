@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import { Experience } from "@/context/constants/experience";
+import { Experience } from "@/context/constants/home/experience";
 
 export default function ExperienceSection() {
   return (

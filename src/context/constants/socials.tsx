@@ -1,4 +1,4 @@
-import type { SocialLink } from "@/types/context/socials";
+import type { SocialLink } from "@/types/home/socials";
 import {
   IconBrandFacebook,
   IconBrandInstagram,

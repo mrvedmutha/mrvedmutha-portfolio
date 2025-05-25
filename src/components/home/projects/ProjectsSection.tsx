@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import { Projects } from "@/context/constants/projects";
+import { Projects } from "@/context/constants/home/projects";
 
 export default function ProjectsSection() {
   return (

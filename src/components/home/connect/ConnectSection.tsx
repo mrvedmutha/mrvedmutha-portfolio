@@ -2,7 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Socials, IconMap } from "@/context/constants/socials";
-import type { SocialLink } from "@/types/context/socials";
+import type { SocialLink } from "@/types/home/socials";
 
 export default function ConnectSection() {
   return (

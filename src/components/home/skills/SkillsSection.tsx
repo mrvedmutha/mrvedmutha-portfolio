@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import { Skills } from "@/context/constants/skills";
+import { Skills } from "@/context/constants/home/skills";
 
 export default function SkillsSection() {
   return (

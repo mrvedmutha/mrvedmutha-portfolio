@@ -3,7 +3,7 @@ import React, { useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import * as THREE from "three";
-import { TechStackLogos } from "@/context/constants/hero";
+import { TechStackLogos } from "@/context/constants/home/hero";
 import type { TechStackLogo } from "@/types/home/hero";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -10,7 +10,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Menu, Sun, Moon } from "lucide-react";
-import { NavigationLinks } from "@/context/constants/navigation";
+import { NavigationLinks } from "@/context/constants/home/navigation";
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = React.useState(false);

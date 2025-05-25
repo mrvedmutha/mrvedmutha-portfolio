@@ -2,6 +2,7 @@
 import React from "react";
 import AdminSidebar from "@/components/common/AdminSidebar";
 import { SessionProvider } from "next-auth/react";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function AdminLayout({
   children,
@@ -13,6 +14,7 @@ export default function AdminLayout({
       <SessionProvider>
         <AdminSidebar />
         <main className="flex-1 w-full bg-background">{children}</main>
+        <Toaster />
       </SessionProvider>
     </div>
   );

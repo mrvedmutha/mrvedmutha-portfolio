@@ -120,18 +120,14 @@ export default function AdminSidebar() {
                             item.items.map((subItem) => (
                               <SidebarMenuSubItem key={subItem.title}>
                                 <SidebarMenuSubButton
-                                  asChild
+                                  href={subItem.url}
                                   isActive={isActive(subItem.url)}
+                                  className="flex items-center"
                                 >
-                                  <a
-                                    href={subItem.url}
-                                    className="flex items-center"
-                                  >
-                                    {subItem.icon && (
-                                      <subItem.icon className="w-4 h-4 mr-2" />
-                                    )}
-                                    {subItem.title}
-                                  </a>
+                                  {subItem.icon && (
+                                    <subItem.icon className="w-4 h-4 mr-2" />
+                                  )}
+                                  {subItem.title}
                                 </SidebarMenuSubButton>
                               </SidebarMenuSubItem>
                             ))}
@@ -143,11 +139,13 @@ export default function AdminSidebar() {
               } else {
                 return (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={activeState}>
-                      <a href={item.url} className="flex items-center">
-                        {item.icon && <item.icon className="w-4 h-4 mr-2" />}
-                        {item.title}
-                      </a>
+                    <SidebarMenuButton
+                      href={item.url}
+                      isActive={activeState}
+                      className="flex items-center"
+                    >
+                      {item.icon && <item.icon className="w-4 h-4 mr-2" />}
+                      {item.title}
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );

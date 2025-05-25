@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import { Blogs } from "@/context/constants/blogs";
+import { Blogs } from "@/context/constants/home/blogs";
 
 export default function BlogSection() {
   return (

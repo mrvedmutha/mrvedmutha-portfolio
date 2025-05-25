@@ -1,4 +1,4 @@
-import { User } from "@/models/models/user.model";
+import { User } from "@/models/admin/user.model";
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { dbConnect } from "@/lib/db";

@@ -3,7 +3,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Github, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { HeroSkills } from "@/context/constants/hero";
+import { HeroSkills } from "@/context/constants/home/hero";
 import type { HeroSkill } from "@/types/home/hero";
 import TechStackGrid from "./TechStackGrid";
 
