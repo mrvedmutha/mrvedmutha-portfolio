@@ -11,12 +11,10 @@ export interface ISkillIcon {
 }
 
 export interface ISkill {
-  _id?: string;
+  _id: string;
   title: string;
-  icon: ISkillIcon;
-  tags: ISkillTag[];
-  createdAt?: Date;
-  updatedAt?: Date;
+  icon: { name: string; lucideName: string };
+  tags: { name: string; svg: string }[];
 }
 
 export type SkillFormValues = {

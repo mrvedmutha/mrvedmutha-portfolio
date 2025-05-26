@@ -27,4 +27,9 @@ export const skillService = {
     // Cast is safe because schema matches
     return skills as unknown as SkillResponse[];
   },
+
+  async deleteSkill(id: string): Promise<void> {
+    await dbConnect();
+    await Skill.findByIdAndDelete(id);
+  },
 };

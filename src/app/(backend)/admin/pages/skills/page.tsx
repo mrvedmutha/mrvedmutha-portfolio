@@ -1,95 +1,28 @@
 "use client";
-
 import DataTable from "@/components/common/DataTable";
-import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
-import { MoreVertical, Pencil, Trash2 } from "lucide-react";
-
-// Define the Skill type based on your API
-interface Skill {
-  _id: string;
-  title: string;
-  icon: { name: string; lucideName: string };
-  tags: { name: string; svg: string }[];
-}
-
-// Column definitions for the skills table
-const getColumns = (
-  router: ReturnType<typeof useRouter>
-): ColumnDef<Skill>[] => [
-  {
-    accessorKey: "title",
-    header: "Title",
-    cell: (info) => info.getValue(),
-  },
-  {
-    accessorKey: "tags",
-    header: "Tags",
-    cell: (info) => {
-      const tags = info.getValue() as Skill["tags"];
-      return (
-        <div className="flex flex-wrap gap-1">
-          {tags?.map((tag) => (
-            <span
-              key={tag.name}
-              className="flex items-center gap-1 bg-muted px-2 py-1 rounded text-xs"
-            >
-              <Image src={tag.svg} alt={tag.name} width={16} height={16} />
-              {tag.name}
-            </span>
-          ))}
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "actions",
-    header: "Actions",
-    cell: (info) => {
-      const skill = info.row.original;
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <MoreVertical className="w-4 h-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              onClick={() =>
-                router.push(`/admin/pages/skills/edit/${skill._id}`)
-              }
-            >
-              <Pencil className="w-4 h-4 mr-2" /> Edit
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                /* handle delete */
-              }}
-            >
-              <Trash2 className="w-4 h-4 mr-2 text-red-500" /> Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
-];
+import { ISkill } from "@/types/admin/pages/skill.types";
+import getColumns from "@/helpers/admin/pages/skill.helpers";
+import axios from "axios";
 
 export default function AdminSkillsPage() {
-  const [skills, setSkills] = useState<Skill[]>([]);
+  const [skills, setSkills] = useState<ISkill[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+
+  async function handleDelete(id: string) {
+    try {
+      await axios.delete(`/api/v1/admin/skills/${id}`, {
+        withCredentials: true,
+      });
+      setSkills((prev) => prev.filter((s) => s._id !== id));
+    } catch (err) {
+      // Optionally show error toast
+    }
+  }
 
   useEffect(() => {
     async function fetchSkills() {
@@ -129,8 +62,8 @@ export default function AdminSkillsPage() {
           No data available
         </div>
       ) : (
-        <DataTable<Skill>
-          columns={getColumns(router)}
+        <DataTable<ISkill>
+          columns={getColumns(router, handleDelete)}
           data={skills}
           model="skill"
         />

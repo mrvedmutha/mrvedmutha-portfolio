@@ -1,6 +1,6 @@
 import { SuccessResponse, FailureResponse } from "@/lib/common/responses";
 import type { NextRequest } from "next/server";
-import { skillService } from "@/services/admin/pages/skills";
+import { skillService } from "@/services/admin/pages/skill.services";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/options";
 

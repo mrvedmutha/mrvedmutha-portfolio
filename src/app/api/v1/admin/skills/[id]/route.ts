@@ -3,6 +3,7 @@ import { getSkillById, updateSkillById } from "@/lib/db/skills";
 import { skillZodSchema } from "@/schemas/zod/admin/pages/skill.zod.schema";
 import { getServerSession } from "next-auth";
 import { SuccessResponse, FailureResponse } from "@/lib/common/responses";
+import { skillService } from "@/services/admin/pages/skill.services";
 
 export async function GET(
   req: NextRequest,
@@ -36,5 +37,20 @@ export async function PATCH(
     return SuccessResponse(updated);
   } catch (err) {
     return FailureResponse("Failed to update skill", 500);
+  }
+}
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const session = await getServerSession();
+  if (!session) return FailureResponse("Unauthorized", 401);
+  try {
+    const { id } = await params;
+    await skillService.deleteSkill(id);
+    return SuccessResponse({ message: "Skill deleted" });
+  } catch (err) {
+    return FailureResponse("Failed to delete skill", 500);
   }
 }
