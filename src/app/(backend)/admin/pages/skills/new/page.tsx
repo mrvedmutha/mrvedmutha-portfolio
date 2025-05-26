@@ -1,4 +1,4 @@
-import NewSkillForm from "@/components/admin/skills/NewSkillForm";
+import NewSkillForm from "@/components/admin/pages/skills/NewSkillForm";
 
 export default function NewSkillPage() {
   return (

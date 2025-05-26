@@ -1,46 +1,13 @@
 "use client";
 import DataTable from "@/components/common/DataTable";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ISkill } from "@/types/admin/pages/skill.types";
 import getColumns from "@/helpers/admin/pages/skill.helpers";
-import axios from "axios";
+import { useSkills } from "@/hooks/admin/pages/skill.hooks";
 
 export default function AdminSkillsPage() {
-  const [skills, setSkills] = useState<ISkill[]>([]);
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
-
-  async function handleDelete(id: string) {
-    try {
-      await axios.delete(`/api/v1/admin/skills/${id}`, {
-        withCredentials: true,
-      });
-      setSkills((prev) => prev.filter((s) => s._id !== id));
-    } catch (err) {
-      // Optionally show error toast
-    }
-  }
-
-  useEffect(() => {
-    async function fetchSkills() {
-      setLoading(true);
-      try {
-        const res = await fetch("/api/v1/admin/skills", {
-          credentials: "include",
-        });
-        const data = await res.json();
-        setSkills(data.data || []);
-      } catch (err) {
-        setSkills([]);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchSkills();
-  }, []);
+  const { skills, loading, handleDelete, router } = useSkills();
 
   return (
     <div className="p-6">

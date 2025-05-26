@@ -1,5 +1,5 @@
 "use client";
-import EditSkillForm from "@/components/admin/skills/EditSkillForm";
+import EditSkillForm from "@/components/admin/pages/skills/EditSkillForm";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
