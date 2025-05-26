@@ -5,13 +5,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/options";
 
 export async function GET(req: NextRequest) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return FailureResponse(
-      "Unauthorized: Please log in to perform this action",
-      401
-    );
-  }
   try {
     const { searchParams } = new URL(req.url);
     const limit = parseInt(searchParams.get("limit") || "25", 10);

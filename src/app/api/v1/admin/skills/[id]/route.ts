@@ -6,12 +6,11 @@ import { SuccessResponse, FailureResponse } from "@/lib/common/responses";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await getServerSession();
-  if (!session) return FailureResponse("Unauthorized", 401);
   try {
-    const skill = await getSkillById(params.id);
+    const { id } = await params;
+    const skill = await getSkillById(id);
     if (!skill) return FailureResponse("Skill not found", 404);
     return SuccessResponse(skill);
   } catch (err) {
@@ -21,7 +20,7 @@ export async function GET(
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await getServerSession();
   if (!session) return FailureResponse("Unauthorized", 401);
@@ -31,7 +30,8 @@ export async function PATCH(
     if (!parse.success) {
       return FailureResponse("Invalid data", 400);
     }
-    const updated = await updateSkillById(params.id, parse.data);
+    const { id } = await params;
+    const updated = await updateSkillById(id, parse.data);
     if (!updated) return FailureResponse("Skill not found", 404);
     return SuccessResponse(updated);
   } catch (err) {

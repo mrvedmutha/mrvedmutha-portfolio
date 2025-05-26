@@ -24,7 +24,9 @@ interface Skill {
 }
 
 // Column definitions for the skills table
-const columns: ColumnDef<Skill>[] = [
+const getColumns = (
+  router: ReturnType<typeof useRouter>
+): ColumnDef<Skill>[] => [
   {
     accessorKey: "title",
     header: "Title",
@@ -54,7 +56,6 @@ const columns: ColumnDef<Skill>[] = [
     accessorKey: "actions",
     header: "Actions",
     cell: (info) => {
-      const router = useRouter();
       const skill = info.row.original;
       return (
         <DropdownMenu>
@@ -128,7 +129,11 @@ export default function AdminSkillsPage() {
           No data available
         </div>
       ) : (
-        <DataTable<Skill> columns={columns} data={skills} model="skill" />
+        <DataTable<Skill>
+          columns={getColumns(router)}
+          data={skills}
+          model="skill"
+        />
       )}
     </div>
   );
