@@ -53,31 +53,35 @@ const columns: ColumnDef<Skill>[] = [
   {
     accessorKey: "actions",
     header: "Actions",
-    cell: (info) => (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon">
-            <MoreVertical className="w-4 h-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem
-            onClick={() => {
-              /* handle edit */
-            }}
-          >
-            <Pencil className="w-4 h-4 mr-2" /> Edit
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => {
-              /* handle delete */
-            }}
-          >
-            <Trash2 className="w-4 h-4 mr-2 text-red-500" /> Delete
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    ),
+    cell: (info) => {
+      const router = useRouter();
+      const skill = info.row.original;
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon">
+              <MoreVertical className="w-4 h-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem
+              onClick={() =>
+                router.push(`/admin/pages/skills/edit/${skill._id}`)
+              }
+            >
+              <Pencil className="w-4 h-4 mr-2" /> Edit
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                /* handle delete */
+              }}
+            >
+              <Trash2 className="w-4 h-4 mr-2 text-red-500" /> Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
   },
 ];
 
