@@ -70,7 +70,7 @@ export function SkillActionsCell({
           <AlertDialogAction
             onClick={() => {
               setOpen(false);
-              onDelete && onDelete(skill._id);
+              if (onDelete) onDelete(skill._id);
             }}
             className="bg-red-600 hover:bg-red-700"
           >
