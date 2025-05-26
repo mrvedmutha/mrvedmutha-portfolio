@@ -6,6 +6,14 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import { MoreVertical, Pencil, Trash2 } from "lucide-react";
 
 // Define the Skill type based on your API
 interface Skill {
@@ -45,7 +53,31 @@ const columns: ColumnDef<Skill>[] = [
   {
     accessorKey: "actions",
     header: "Actions",
-    cell: (info) => <Button>Edit</Button>,
+    cell: (info) => (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon">
+            <MoreVertical className="w-4 h-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem
+            onClick={() => {
+              /* handle edit */
+            }}
+          >
+            <Pencil className="w-4 h-4 mr-2" /> Edit
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => {
+              /* handle delete */
+            }}
+          >
+            <Trash2 className="w-4 h-4 mr-2 text-red-500" /> Delete
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    ),
   },
 ];
 
@@ -81,7 +113,12 @@ export default function AdminSkillsPage() {
         </Button>
       </div>
       {loading ? (
-        <div className="text-center py-8 text-muted-foreground">Loading...</div>
+        <div className="py-8">
+          <Skeleton className="h-10 w-1/3 mb-4" />
+          <Skeleton className="h-8 w-full mb-2" />
+          <Skeleton className="h-8 w-full mb-2" />
+          <Skeleton className="h-8 w-full mb-2" />
+        </div>
       ) : skills.length === 0 ? (
         <div className="text-center py-8 text-muted-foreground">
           No data available
