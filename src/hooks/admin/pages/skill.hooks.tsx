@@ -15,7 +15,9 @@ export function useSkills() {
       await axios.delete(`/api/v1/admin/skills/${id}`, {
         withCredentials: true,
       });
-      setSkills((prev) => prev.filter((s) => s._id !== id));
+      setSkills((prev) =>
+        Array.isArray(prev) ? prev.filter((s) => s._id !== id) : []
+      );
       toast({
         title: "Skill deleted",
         description: "The skill was deleted successfully.",
@@ -38,7 +40,7 @@ export function useSkills() {
           credentials: "include",
         });
         const data = await res.json();
-        setSkills(data.data || []);
+        setSkills(Array.isArray(data.data) ? data.data : []);
       } catch (err) {
         setSkills([]);
       } finally {

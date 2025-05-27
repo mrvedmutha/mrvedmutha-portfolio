@@ -15,7 +15,9 @@ export function useEducations() {
       await axios.delete(`/api/v1/admin/education/${id}`, {
         withCredentials: true,
       });
-      setEducations((prev) => prev.filter((e) => e._id !== id));
+      setEducations((prev) =>
+        Array.isArray(prev) ? prev.filter((e) => e._id !== id) : []
+      );
       toast({
         title: "Education deleted",
         description: "The education record was deleted successfully.",
@@ -38,7 +40,7 @@ export function useEducations() {
           credentials: "include",
         });
         const data = await res.json();
-        setEducations(data.data || []);
+        setEducations(Array.isArray(data.data) ? data.data : []);
       } catch (err) {
         setEducations([]);
       } finally {

@@ -11,18 +11,21 @@ export interface IEducationDoc extends Document {
   tags: string[];
 }
 
-const EducationSchema = new Schema<IEducationDoc>({
-  educationName: { type: String, required: true },
-  instituteName: { type: String, required: true },
-  educationType: {
-    type: String,
-    enum: Object.values(EducationType),
-    required: true,
+const EducationSchema = new Schema<IEducationDoc>(
+  {
+    educationName: { type: String, required: true },
+    instituteName: { type: String, required: true },
+    educationType: {
+      type: String,
+      enum: Object.values(EducationType),
+      required: true,
+    },
+    description: { type: String },
+    fromYear: { type: String, required: true },
+    toYear: { type: String, required: true },
+    tags: { type: [String], default: [] },
   },
-  description: { type: String },
-  fromYear: { type: String, required: true },
-  toYear: { type: String, required: true },
-  tags: { type: [String], default: [] },
-});
+  { timestamps: true }
+);
 
 export default EducationSchema;

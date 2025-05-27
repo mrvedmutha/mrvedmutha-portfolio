@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableCaption,
@@ -11,23 +11,28 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import {
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-  getPaginationRowModel,
-  getFilteredRowModel,
   ColumnDef,
+  useReactTable,
+  getCoreRowModel,
+  flexRender,
 } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import axios from "axios";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface DataTableProps<T> {
   data: T[];
-  columns: ColumnDef<T>[];
+  columns: ColumnDef<T, any>[];
   model: string;
   divClassName?: string;
   captionLink?: string;
   captionText?: string;
+  page: number;
+  pageSize: number;
+  total: number;
+  onPageChange: (page: number) => void;
+  fetchUrl: string;
 }
 
 const DataTable = <T,>({
@@ -37,13 +42,32 @@ const DataTable = <T,>({
   divClassName = "",
   captionLink = "",
   captionText = "",
+  page,
+  pageSize,
+  total,
+  onPageChange,
+  fetchUrl,
 }: DataTableProps<T>) => {
+  const totalPages = Math.ceil(total / pageSize);
+  const [loading, setLoading] = useState(false);
+  const [tableData, setTableData] = useState<T[]>(data);
+
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get(fetchUrl, { params: { page, limit: pageSize } })
+      .then((res) => {
+        setTableData(res.data.data.data || []);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [page, pageSize, fetchUrl]);
+
+  // Create the table instance
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
   });
 
   return (
@@ -63,17 +87,29 @@ const DataTable = <T,>({
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <TableHead key={header.id}>
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
                 </TableHead>
               ))}
             </TableRow>
           ))}
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows.length > 0 ? (
+          {loading ? (
+            Array.from({ length: 3 }).map((_, i) => (
+              <TableRow key={`skeleton-${i}`}>
+                {columns.map((_, colIdx) => (
+                  <TableCell key={colIdx}>
+                    <Skeleton className="h-4 w-full" />
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
+          ) : table.getRowModel().rows.length > 0 ? (
             table.getRowModel().rows.map((row) => (
               <TableRow key={row.id}>
                 {row.getVisibleCells().map((cell) => (
@@ -85,36 +121,36 @@ const DataTable = <T,>({
             ))
           ) : (
             <TableRow>
-              <TableCell
-                colSpan={table.getAllColumns().length}
-                className="text-center"
-              >
+              <TableCell colSpan={columns.length} className="text-center">
                 No data available
               </TableCell>
             </TableRow>
           )}
         </TableBody>
       </Table>
-      {!captionText && (
-        <div className="flex items-center justify-start space-x-2 py-4">
+      <div className="flex items-center justify-between space-x-2 py-4">
+        <span className="text-sm font-medium">
+          Page {page} of {isNaN(totalPages) ? 1 : totalPages}
+        </span>
+        <div className="flex items-center space-x-2">
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
+            onClick={() => onPageChange(page - 1)}
+            disabled={page <= 1}
           >
             Previous
           </Button>
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
+            onClick={() => onPageChange(page + 1)}
+            disabled={page >= totalPages || tableData.length < pageSize}
           >
             Next
           </Button>
         </div>
-      )}
+      </div>
     </div>
   );
 };

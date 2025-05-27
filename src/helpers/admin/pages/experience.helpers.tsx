@@ -11,18 +11,18 @@ const getColumns = (
   {
     accessorKey: "jobTitle",
     header: "Job Title",
-    cell: (info) => info.getValue(),
+    cell: (cell) => cell.getValue(),
   },
   {
     accessorKey: "companyName",
     header: "Company Name",
-    cell: (info) => info.getValue(),
+    cell: (cell) => cell.getValue(),
   },
   {
     accessorKey: "fromDate",
     header: "From",
-    cell: (info) => {
-      const value = info.getValue() as string;
+    cell: (cell) => {
+      const value = cell.getValue() as string;
       if (!value) return "-";
       try {
         return format(new Date(value), "MMM-yy");
@@ -34,8 +34,8 @@ const getColumns = (
   {
     accessorKey: "toDate",
     header: "To",
-    cell: (info) => {
-      const row = info.row.original;
+    cell: (cell) => {
+      const row = cell.row.original;
       if (row.currentlyWorking) return "Present";
       if (!row.toDate) return "-";
       try {
@@ -48,8 +48,8 @@ const getColumns = (
   {
     accessorKey: "tags",
     header: "Tags",
-    cell: (info) => {
-      const tags = info.getValue() as string[];
+    cell: (cell) => {
+      const tags = cell.getValue() as string[];
       return (
         <div className="flex flex-wrap gap-1">
           {tags?.map((tag) => (
@@ -64,11 +64,10 @@ const getColumns = (
   {
     accessorKey: "actions",
     header: "Actions",
-    cell: (info) => {
-      const experience = info.row.original;
+    cell: (cell) => {
       return (
         <AdminActionsCell
-          entity={experience}
+          entity={cell.row.original}
           editPath={`/admin/pages/experience/edit/`}
           entityLabel="experience"
           router={router}

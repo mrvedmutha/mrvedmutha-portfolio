@@ -10,9 +10,8 @@ import {
   CommandGroup,
   CommandEmpty,
 } from "@/components/ui/command";
-import Image from "next/image";
 import { lucideIcons } from "@/context/constants/admin/pages/skills";
-import { deviconTools } from "@/context/constants/admin/pages/skills";
+import { deviconTools } from "@/context/constants/common/tools";
 import { Check } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,6 +28,7 @@ import {
 } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import ToolSelect from "@/components/common/admin/pages/ToolSelect";
 
 export function EditSkillForm({
   skill,
@@ -37,7 +37,6 @@ export function EditSkillForm({
 }) {
   const [iconOpen, setIconOpen] = React.useState(false);
   const [toolsOpen, setToolsOpen] = React.useState(false);
-  const [toolInput, setToolInput] = React.useState("");
   const { toast } = useToast();
   const router = useRouter();
 
@@ -53,26 +52,7 @@ export function EditSkillForm({
     watch,
     formState: { isSubmitting },
   } = form;
-  const icon = watch("icon");
   const tags = watch("tags");
-
-  const filteredTools = deviconTools.filter(
-    (t) =>
-      t.name.toLowerCase().includes(toolInput.toLowerCase()) &&
-      !tags.some((tag) => tag.name === t.name)
-  );
-
-  const addTool = (tool: (typeof deviconTools)[0]) => {
-    setValue("tags", [...tags, tool]);
-    setToolInput("");
-  };
-
-  const removeTool = (name: string) => {
-    setValue(
-      "tags",
-      tags.filter((t) => t.name !== name)
-    );
-  };
 
   const onSubmit = async (data: SkillFormValues) => {
     try {
@@ -186,81 +166,13 @@ export function EditSkillForm({
             <FormItem>
               <FormLabel>Tools / Tags</FormLabel>
               <FormControl>
-                <div>
-                  <div className="flex flex-wrap gap-2 mb-2">
-                    {tags.map((tool) => (
-                      <span
-                        key={tool.name}
-                        className="flex items-center gap-1 bg-muted px-2 py-1 rounded text-sm"
-                      >
-                        <Image
-                          src={tool.svg}
-                          alt={tool.name}
-                          width={20}
-                          height={20}
-                        />
-                        {tool.name}
-                        <button
-                          type="button"
-                          className="ml-1 text-muted-foreground hover:text-destructive"
-                          onClick={() => removeTool(tool.name)}
-                          aria-label={`Remove ${tool.name}`}
-                        >
-                          ×
-                        </button>
-                      </span>
-                    ))}
-                  </div>
-                  <div className="relative">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="flex items-center gap-2 w-full justify-start"
-                      onClick={() => setToolsOpen((open) => !open)}
-                      aria-expanded={toolsOpen}
-                    >
-                      <span>Add Tool</span>
-                    </Button>
-                    {toolsOpen && (
-                      <div className="absolute z-10 mt-2 w-full bg-popover border rounded shadow-lg">
-                        <Command>
-                          <CommandInput
-                            placeholder="Search tool..."
-                            value={toolInput}
-                            onValueChange={setToolInput}
-                            autoFocus
-                          />
-                          <CommandList>
-                            {filteredTools.length === 0 ? (
-                              <CommandEmpty>No tools found.</CommandEmpty>
-                            ) : (
-                              <CommandGroup>
-                                {filteredTools.map((tool) => (
-                                  <CommandItem
-                                    key={tool.name}
-                                    onSelect={() => {
-                                      addTool(tool);
-                                      setToolsOpen(false);
-                                    }}
-                                    className="flex items-center gap-2 cursor-pointer"
-                                  >
-                                    <Image
-                                      src={tool.svg}
-                                      alt={tool.name}
-                                      width={20}
-                                      height={20}
-                                    />
-                                    <span>{tool.name}</span>
-                                  </CommandItem>
-                                ))}
-                              </CommandGroup>
-                            )}
-                          </CommandList>
-                        </Command>
-                      </div>
-                    )}
-                  </div>
-                </div>
+                <ToolSelect
+                  tools={deviconTools}
+                  value={tags}
+                  onChange={(newTags) => setValue("tags", newTags)}
+                  open={toolsOpen}
+                  onOpenChange={setToolsOpen}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -10,33 +10,33 @@ const getColumns = (
   {
     accessorKey: "educationName",
     header: "Education Name",
-    cell: (info) => info.getValue(),
+    cell: (cell) => cell.getValue(),
   },
   {
     accessorKey: "instituteName",
     header: "Institute Name",
-    cell: (info) => info.getValue(),
+    cell: (cell) => cell.getValue(),
   },
   {
     accessorKey: "educationType",
     header: "Education Type",
-    cell: (info) => info.getValue(),
+    cell: (cell) => cell.getValue(),
   },
   {
     accessorKey: "fromYear",
     header: "From Year",
-    cell: (info) => info.getValue(),
+    cell: (cell) => cell.getValue(),
   },
   {
     accessorKey: "toYear",
     header: "To Year",
-    cell: (info) => info.getValue(),
+    cell: (cell) => cell.getValue(),
   },
   {
     accessorKey: "tags",
     header: "Tags",
-    cell: (info) => {
-      const tags = info.getValue() as string[];
+    cell: (cell) => {
+      const tags = cell.getValue() as string[];
       return (
         <div className="flex flex-wrap gap-1">
           {tags?.map((tag) => (
@@ -51,11 +51,10 @@ const getColumns = (
   {
     accessorKey: "actions",
     header: "Actions",
-    cell: (info) => {
-      const education = info.row.original;
+    cell: (cell) => {
       return (
         <AdminActionsCell
-          entity={education}
+          entity={cell.row.original}
           editPath={`/admin/pages/education/edit/`}
           entityLabel="education"
           router={router}

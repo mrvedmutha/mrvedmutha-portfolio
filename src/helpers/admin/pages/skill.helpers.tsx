@@ -11,13 +11,13 @@ const getColumns = (
   {
     accessorKey: "title",
     header: "Title",
-    cell: (info) => info.getValue(),
+    cell: (cell) => cell.getValue(),
   },
   {
     accessorKey: "tags",
     header: "Tags",
-    cell: (info) => {
-      const tags = info.getValue() as ISkill["tags"];
+    cell: (cell) => {
+      const tags = cell.getValue() as ISkill["tags"];
       return (
         <div className="flex flex-wrap gap-1">
           {tags?.map((tag) => (
@@ -36,11 +36,10 @@ const getColumns = (
   {
     accessorKey: "actions",
     header: "Actions",
-    cell: (info) => {
-      const skill = info.row.original;
+    cell: (cell) => {
       return (
         <AdminActionsCell
-          entity={skill}
+          entity={cell.row.original}
           editPath={`/admin/pages/skills/edit/`}
           entityLabel="skill"
           router={router}

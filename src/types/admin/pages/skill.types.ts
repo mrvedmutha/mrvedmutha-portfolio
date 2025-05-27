@@ -1,9 +1,6 @@
 // Types for admin skill page
 
-export interface ISkillTag {
-  name: string;
-  svg: string;
-}
+import { IToolTag } from "@/types/admin/pages/tooltag.types";
 
 export interface ISkillIcon {
   name: string;
@@ -20,7 +17,7 @@ export interface ISkill {
 export type SkillFormValues = {
   title: string;
   icon: ISkillIcon;
-  tags: ISkillTag[];
+  tags: IToolTag[];
 };
 
 export type SkillRequest = SkillFormValues;

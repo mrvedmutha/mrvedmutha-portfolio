@@ -15,7 +15,9 @@ export function useExperiences() {
       await axios.delete(`/api/v1/admin/experience/${id}`, {
         withCredentials: true,
       });
-      setExperiences((prev) => prev.filter((e) => e._id !== id));
+      setExperiences((prev) =>
+        Array.isArray(prev) ? prev.filter((e) => e._id !== id) : []
+      );
       toast({
         title: "Experience deleted",
         description: "The experience was deleted successfully.",
@@ -34,11 +36,10 @@ export function useExperiences() {
     async function fetchExperiences() {
       setLoading(true);
       try {
-        const res = await fetch("/api/v1/admin/experience", {
-          credentials: "include",
+        const res = await axios.get("/api/v1/admin/experience", {
+          withCredentials: true,
         });
-        const data = await res.json();
-        setExperiences(data.data || []);
+        setExperiences(res.data.data || []);
       } catch (err) {
         setExperiences([]);
       } finally {

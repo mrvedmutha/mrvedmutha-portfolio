@@ -5,7 +5,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ISkill } from "@/types/admin/pages/skill.types";
 import getColumns from "@/helpers/admin/pages/skill.helpers";
 import { useSkills } from "@/hooks/admin/pages/skill.hooks";
-
+import { Table, TableBody } from "@/components/ui/table";
+import { TableSkeletonRows } from "@/components/common/TableSkletonRows";
 export default function AdminSkillsPage() {
   const { skills, loading, handleDelete, router } = useSkills();
 
@@ -18,12 +19,11 @@ export default function AdminSkillsPage() {
         </Button>
       </div>
       {loading ? (
-        <div className="py-8">
-          <Skeleton className="h-10 w-1/3 mb-4" />
-          <Skeleton className="h-8 w-full mb-2" />
-          <Skeleton className="h-8 w-full mb-2" />
-          <Skeleton className="h-8 w-full mb-2" />
-        </div>
+        <Table>
+          <TableBody>
+            <TableSkeletonRows columnsCount={3} rowsCount={3} />
+          </TableBody>
+        </Table>
       ) : skills.length === 0 ? (
         <div className="text-center py-8 text-muted-foreground">
           No data available
@@ -33,6 +33,11 @@ export default function AdminSkillsPage() {
           columns={getColumns(router, handleDelete)}
           data={skills}
           model="skill"
+          fetchUrl="/api/v1/admin/skills"
+          page={1}
+          pageSize={25}
+          total={skills.length}
+          onPageChange={() => {}}
         />
       )}
     </div>

@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { useEducations } from "@/hooks/admin/pages/education.hooks";
 import getColumns from "@/helpers/admin/pages/education.helpers";
 import { IEducation } from "@/types/admin/pages/education.types";
+import { TableSkeletonRows } from "@/components/common/TableSkletonRows";
+import { Table, TableBody } from "@/components/ui/table";
 
 export default function AdminEducationPage() {
   const { educations, loading, handleDelete, router } = useEducations();
@@ -17,7 +19,11 @@ export default function AdminEducationPage() {
         </Button>
       </div>
       {loading ? (
-        <div className="py-8">Loading...</div>
+        <Table>
+          <TableBody>
+            <TableSkeletonRows columnsCount={7} rowsCount={3} />
+          </TableBody>
+        </Table>
       ) : educations.length === 0 ? (
         <div className="text-center py-8 text-muted-foreground">
           No data available
@@ -27,6 +33,11 @@ export default function AdminEducationPage() {
           columns={getColumns(router, handleDelete)}
           data={educations}
           model="education"
+          fetchUrl="/api/v1/admin/education"
+          page={1}
+          pageSize={25}
+          total={educations.length}
+          onPageChange={() => {}}
         />
       )}
     </div>

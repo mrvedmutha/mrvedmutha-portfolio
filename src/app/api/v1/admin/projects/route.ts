@@ -1,7 +1,7 @@
 import { SuccessResponse, FailureResponse } from "@/lib/common/responses";
+import { projectService } from "@/services/admin/pages/project.services";
 import type { NextRequest } from "next/server";
-import { educationService } from "@/services/admin/pages/education.services";
-import Education from "@/models/admin/pages/education.model";
+import { Project } from "@/models/admin/pages/project.model";
 
 export async function GET(req: NextRequest) {
   try {
@@ -9,12 +9,12 @@ export async function GET(req: NextRequest) {
     const page = parseInt(searchParams.get("page") || "1", 10);
     const limit = parseInt(searchParams.get("limit") || "25", 10);
     const skip = (page - 1) * limit;
-    const [educations, total] = await Promise.all([
-      educationService.getAll(limit, skip),
-      Education.countDocuments({}),
+    const [projects, total] = await Promise.all([
+      projectService.getAll(limit, skip),
+      Project.countDocuments({}),
     ]);
-    return SuccessResponse({ data: educations, total }, 200);
+    return SuccessResponse({ data: projects, total }, 200);
   } catch (error: any) {
-    return FailureResponse(error.message || "Failed to fetch educations", 500);
+    return FailureResponse(error.message || "Failed to fetch projects", 500);
   }
 }

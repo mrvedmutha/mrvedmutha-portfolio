@@ -21,9 +21,9 @@ export const educationService = {
     return education.toObject() as EducationResponse;
   },
 
-  async getAll(limit = 25): Promise<EducationResponse[]> {
+  async getAll(limit = 25, skip = 0): Promise<EducationResponse[]> {
     await dbConnect();
-    const educations = await Education.find({}).limit(limit).lean();
+    const educations = await Education.find({}).skip(skip).limit(limit).lean();
     return educations as unknown as EducationResponse[];
   },
 

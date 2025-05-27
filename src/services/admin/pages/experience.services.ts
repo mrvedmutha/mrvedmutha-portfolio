@@ -20,9 +20,12 @@ export const experienceService = {
     return experience.toObject();
   },
 
-  async getAll(limit = 25): Promise<ExperienceResponse[]> {
+  async getAll(limit = 25, skip = 0): Promise<ExperienceResponse[]> {
     await dbConnect();
-    const experiences = await Experience.find({}).limit(limit).lean();
+    const experiences = await Experience.find({})
+      .skip(skip)
+      .limit(limit)
+      .lean();
     return experiences as unknown as ExperienceResponse[];
   },
 

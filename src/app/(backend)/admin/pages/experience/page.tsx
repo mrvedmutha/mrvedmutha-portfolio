@@ -2,9 +2,10 @@
 import DataTable from "@/components/common/DataTable";
 import { Button } from "@/components/ui/button";
 import { useExperiences } from "@/hooks/admin/pages/experience.hooks";
-import { Skeleton } from "@/components/ui/skeleton";
 import { IExperience } from "@/types/admin/pages/experience.types";
 import getColumns from "@/helpers/admin/pages/experience.helpers";
+import { Table, TableBody } from "@/components/ui/table";
+import { TableSkeletonRows } from "@/components/common/TableSkletonRows";
 
 export default function AdminExperiencePage() {
   const { experiences, loading, handleDelete, router } = useExperiences();
@@ -18,12 +19,11 @@ export default function AdminExperiencePage() {
         </Button>
       </div>
       {loading ? (
-        <div className="py-8">
-          <Skeleton className="h-10 w-1/3 mb-4" />
-          <Skeleton className="h-8 w-full mb-2" />
-          <Skeleton className="h-8 w-full mb-2" />
-          <Skeleton className="h-8 w-full mb-2" />
-        </div>
+        <Table>
+          <TableBody>
+            <TableSkeletonRows columnsCount={6} rowsCount={3} />
+          </TableBody>
+        </Table>
       ) : experiences.length === 0 ? (
         <div className="text-center py-8 text-muted-foreground">
           No data available
@@ -33,6 +33,11 @@ export default function AdminExperiencePage() {
           columns={getColumns(router, handleDelete)}
           data={experiences}
           model="experience"
+          fetchUrl="/api/v1/admin/experience"
+          page={1}
+          pageSize={25}
+          total={experiences.length}
+          onPageChange={() => {}}
         />
       )}
     </div>

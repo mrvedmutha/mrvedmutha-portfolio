@@ -20,10 +20,10 @@ export const skillService = {
     return skill.toObject();
   },
 
-  async getAll(limit = 25): Promise<SkillResponse[]> {
+  async getAll(limit = 25, skip = 0): Promise<SkillResponse[]> {
     await dbConnect();
-    // Find all skills, limit to 25
-    const skills = await Skill.find({}).limit(limit).lean();
+    // Find all skills, limit and skip
+    const skills = await Skill.find({}).skip(skip).limit(limit).lean();
     // Cast is safe because schema matches
     return skills as unknown as SkillResponse[];
   },
