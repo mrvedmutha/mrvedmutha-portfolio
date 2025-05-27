@@ -1,6 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { IEducation } from "@/types/admin/pages/education.types";
-import EducationActionsCell from "@/components/admin/pages/education/EducationActionsCell";
 import { useRouter } from "next/navigation";
 import AdminActionsCell from "@/components/common/admin/pages/ActionsCell";
 
