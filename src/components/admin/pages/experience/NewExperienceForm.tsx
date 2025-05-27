@@ -54,8 +54,6 @@ export function NewExperienceForm() {
       tags: [],
     },
   });
-  const [fromOpen, setFromOpen] = useState(false);
-  const [toOpen, setToOpen] = useState(false);
   const router = useRouter();
 
   const months = [

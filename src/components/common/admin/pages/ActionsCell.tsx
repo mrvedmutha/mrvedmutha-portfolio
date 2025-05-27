@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { ISkill } from "@/types/admin/pages/skill.types";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -21,15 +19,21 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 
-export function SkillActionsCell({
-  skill,
+interface AdminActionsCellProps<T extends { _id: string }> {
+  entity: T;
+  editPath: string; // e.g. "/admin/pages/education/edit/"
+  entityLabel: string; // e.g. "education"
+  router: ReturnType<typeof import("next/navigation").useRouter>;
+  onDelete?: (id: string) => void;
+}
+
+function AdminActionsCell<T extends { _id: string }>({
+  entity,
+  editPath,
+  entityLabel,
   router,
   onDelete,
-}: {
-  skill: ISkill;
-  router: ReturnType<typeof useRouter>;
-  onDelete?: (id: string) => void;
-}) {
+}: AdminActionsCellProps<T>) {
   const [open, setOpen] = useState(false);
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
@@ -41,7 +45,7 @@ export function SkillActionsCell({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem
-            onClick={() => router.push(`/admin/pages/skills/edit/${skill._id}`)}
+            onClick={() => router.push(`${editPath}${entity._id}`)}
           >
             <Pencil className="w-4 h-4 mr-2" /> Edit
           </DropdownMenuItem>
@@ -58,11 +62,10 @@ export function SkillActionsCell({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Are you sure you want to delete this skill?
+            {`Are you sure you want to delete this ${entityLabel}?`}
           </AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete the
-            skill.
+            {`This action cannot be undone. This will permanently delete the ${entityLabel}.`}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -70,7 +73,7 @@ export function SkillActionsCell({
           <AlertDialogAction
             onClick={() => {
               setOpen(false);
-              if (onDelete) onDelete(skill._id);
+              if (onDelete) onDelete(entity._id);
             }}
             className="bg-red-600 hover:bg-red-700"
           >
@@ -81,3 +84,5 @@ export function SkillActionsCell({
     </AlertDialog>
   );
 }
+
+export default AdminActionsCell;

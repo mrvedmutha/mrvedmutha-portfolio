@@ -1,49 +1,37 @@
 import { ColumnDef } from "@tanstack/react-table";
+import { IEducation } from "@/types/admin/pages/education.types";
+import EducationActionsCell from "@/components/admin/pages/education/EducationActionsCell";
 import { useRouter } from "next/navigation";
-import { IExperience } from "@/types/admin/pages/experience.types";
-import { format } from "date-fns";
 import AdminActionsCell from "@/components/common/admin/pages/ActionsCell";
 
 const getColumns = (
   router: ReturnType<typeof useRouter>,
   onDelete?: (id: string) => void
-): ColumnDef<IExperience>[] => [
+): ColumnDef<IEducation>[] => [
   {
-    accessorKey: "jobTitle",
-    header: "Job Title",
+    accessorKey: "educationName",
+    header: "Education Name",
     cell: (info) => info.getValue(),
   },
   {
-    accessorKey: "companyName",
-    header: "Company Name",
+    accessorKey: "instituteName",
+    header: "Institute Name",
     cell: (info) => info.getValue(),
   },
   {
-    accessorKey: "fromDate",
-    header: "From",
-    cell: (info) => {
-      const value = info.getValue() as string;
-      if (!value) return "-";
-      try {
-        return format(new Date(value), "MMM-yy");
-      } catch {
-        return value;
-      }
-    },
+    accessorKey: "educationType",
+    header: "Education Type",
+    cell: (info) => info.getValue(),
   },
   {
-    accessorKey: "toDate",
-    header: "To",
-    cell: (info) => {
-      const row = info.row.original;
-      if (row.currentlyWorking) return "Present";
-      if (!row.toDate) return "-";
-      try {
-        return format(new Date(row.toDate), "MMM-yy");
-      } catch {
-        return row.toDate;
-      }
-    },
+    accessorKey: "fromYear",
+    header: "From Year",
+    cell: (info) => info.getValue(),
+  },
+  {
+    accessorKey: "toYear",
+    header: "To Year",
+    cell: (info) => info.getValue(),
   },
   {
     accessorKey: "tags",
@@ -65,12 +53,12 @@ const getColumns = (
     accessorKey: "actions",
     header: "Actions",
     cell: (info) => {
-      const experience = info.row.original;
+      const education = info.row.original;
       return (
         <AdminActionsCell
-          entity={experience}
-          editPath={`/admin/pages/experience/edit/`}
-          entityLabel="experience"
+          entity={education}
+          editPath={`/admin/pages/education/edit/`}
+          entityLabel="education"
           router={router}
           onDelete={onDelete}
         />

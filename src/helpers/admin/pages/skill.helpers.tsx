@@ -2,7 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
 import { ISkill } from "@/types/admin/pages/skill.types";
 import Image from "next/image";
-import { SkillActionsCell } from "@/components/admin/pages/skills/SkillActionsCell";
+import AdminActionsCell from "@/components/common/admin/pages/ActionsCell";
 
 const getColumns = (
   router: ReturnType<typeof useRouter>,
@@ -39,7 +39,13 @@ const getColumns = (
     cell: (info) => {
       const skill = info.row.original;
       return (
-        <SkillActionsCell skill={skill} router={router} onDelete={onDelete} />
+        <AdminActionsCell
+          entity={skill}
+          editPath={`/admin/pages/skills/edit/`}
+          entityLabel="skill"
+          router={router}
+          onDelete={onDelete}
+        />
       );
     },
   },
