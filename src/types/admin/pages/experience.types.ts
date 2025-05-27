@@ -9,3 +9,6 @@ export interface IExperience {
   aboutCompany?: string;
   responsibilities?: string;
 }
+
+export type ExperienceRequest = Omit<IExperience, "_id">;
+export type ExperienceResponse = IExperience;

@@ -9,9 +9,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreVertical, Pencil, Trash2 } from "lucide-react";
+import { format } from "date-fns";
+import ExperienceActionsCell from "@/components/admin/pages/experience/ExperienceActionsCell";
 
 const getColumns = (
-  router: ReturnType<typeof useRouter>
+  router: ReturnType<typeof useRouter>,
+  onDelete?: (id: string) => void
 ): ColumnDef<IExperience>[] => [
   {
     accessorKey: "jobTitle",
@@ -26,14 +29,28 @@ const getColumns = (
   {
     accessorKey: "fromDate",
     header: "From",
-    cell: (info) => info.getValue(),
+    cell: (info) => {
+      const value = info.getValue() as string;
+      if (!value) return "-";
+      try {
+        return format(new Date(value), "MMM-yy");
+      } catch {
+        return value;
+      }
+    },
   },
   {
     accessorKey: "toDate",
     header: "To",
     cell: (info) => {
       const row = info.row.original;
-      return row.currentlyWorking ? "Present" : row.toDate || "-";
+      if (row.currentlyWorking) return "Present";
+      if (!row.toDate) return "-";
+      try {
+        return format(new Date(row.toDate), "MMM-yy");
+      } catch {
+        return row.toDate;
+      }
     },
   },
   {
@@ -58,29 +75,11 @@ const getColumns = (
     cell: (info) => {
       const experience = info.row.original;
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <MoreVertical className="w-4 h-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              onClick={() =>
-                router.push(`/admin/pages/experience/edit/${experience._id}`)
-              }
-            >
-              <Pencil className="w-4 h-4 mr-2" /> Edit
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                /* handle delete */
-              }}
-            >
-              <Trash2 className="w-4 h-4 mr-2 text-red-500" /> Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <ExperienceActionsCell
+          experience={experience}
+          router={router}
+          onDelete={onDelete}
+        />
       );
     },
   },

@@ -49,7 +49,7 @@ export async function DELETE(
   try {
     const { id } = await params;
     await skillService.deleteSkill(id);
-    return SuccessResponse({ message: "Skill deleted" });
+    return SuccessResponse({ message: "Skill deleted" }, 200);
   } catch (err) {
     return FailureResponse("Failed to delete skill", 500);
   }

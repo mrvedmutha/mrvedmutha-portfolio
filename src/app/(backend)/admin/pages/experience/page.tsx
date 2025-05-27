@@ -1,46 +1,13 @@
 "use client";
 import DataTable from "@/components/common/DataTable";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useExperiences } from "@/hooks/admin/pages/experience.hooks";
 import { Skeleton } from "@/components/ui/skeleton";
 import { IExperience } from "@/types/admin/pages/experience.types";
 import getColumns from "@/helpers/admin/pages/experience.helpers";
 
-const MOCK_DATA: IExperience[] = [
-  {
-    _id: "1",
-    jobTitle: "Frontend Developer",
-    companyName: "Tech Solutions",
-    fromDate: "2021-01-01",
-    toDate: "2023-06-01",
-    currentlyWorking: false,
-    tags: ["React", "TypeScript", "UI"],
-  },
-  {
-    _id: "2",
-    jobTitle: "Full Stack Engineer",
-    companyName: "InnovateX",
-    fromDate: "2023-07-01",
-    toDate: undefined,
-    currentlyWorking: true,
-    tags: ["Node.js", "React", "AI"],
-  },
-];
-
 export default function AdminExperiencePage() {
-  const [experiences, setExperiences] = useState<IExperience[]>([]);
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
-
-  useEffect(() => {
-    setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setExperiences(MOCK_DATA);
-      setLoading(false);
-    }, 1000);
-  }, []);
+  const { experiences, loading, handleDelete, router } = useExperiences();
 
   return (
     <div className="p-6">
@@ -63,7 +30,7 @@ export default function AdminExperiencePage() {
         </div>
       ) : (
         <DataTable<IExperience>
-          columns={getColumns(router)}
+          columns={getColumns(router, handleDelete)}
           data={experiences}
           model="experience"
         />

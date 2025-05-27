@@ -14,7 +14,7 @@ import Image from "next/image";
 import { lucideIcons } from "@/context/constants/admin/pages/skills";
 import { deviconTools } from "@/context/constants/admin/pages/skills";
 import { Check } from "lucide-react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { SkillFormValues } from "@/types/admin/pages/skill.types";
