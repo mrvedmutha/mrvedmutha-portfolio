@@ -133,3 +133,15 @@
 .custom-tiptap-content li {
   @apply mb-1;
 }
+
+.custom-tiptap-content a,
+.prose a {
+  color: #2563eb; /* or your primary/link color */
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.custom-tiptap-content a:hover,
+.prose a:hover {
+  color: #1d4ed8; /* darker on hover */
+}
