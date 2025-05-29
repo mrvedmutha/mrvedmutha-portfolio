@@ -24,16 +24,11 @@ export default function AdminSkillsPage() {
             <TableSkeletonRows columnsCount={3} rowsCount={3} />
           </TableBody>
         </Table>
-      ) : skills.length === 0 ? (
-        <div className="text-center py-8 text-muted-foreground">
-          No data available
-        </div>
       ) : (
         <DataTable<ISkill>
           columns={getColumns(router, handleDelete)}
           data={skills}
           model="skill"
-          fetchUrl="/api/v1/admin/skills"
           page={1}
           pageSize={25}
           total={skills.length}

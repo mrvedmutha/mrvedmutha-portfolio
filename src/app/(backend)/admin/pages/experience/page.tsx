@@ -33,7 +33,7 @@ export default function AdminExperiencePage() {
           columns={getColumns(router, handleDelete)}
           data={experiences}
           model="experience"
-          fetchUrl="/api/v1/admin/experience"
+          // fetchUrl="/api/v1/admin/experience"
           page={1}
           pageSize={25}
           total={experiences.length}

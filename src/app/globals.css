@@ -2,11 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 @layer base {
   :root {
-
     --background: 0 0% 100%;
 
     --foreground: 0 0% 3.9%;
@@ -55,10 +52,9 @@
 
     --chart-5: 27 87% 67%;
 
-    --radius: 0.5rem
+    --radius: 0.5rem;
   }
   .dark {
-
     --background: 0 0% 3.9%;
 
     --foreground: 0 0% 98%;
@@ -105,11 +101,9 @@
 
     --chart-4: 280 65% 60%;
 
-    --chart-5: 340 75% 55%
+    --chart-5: 340 75% 55%;
   }
 }
-
-
 
 @layer base {
   * {
@@ -118,4 +112,24 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Add this to your global CSS file, NOT inside the component */
+.custom-tiptap-content h1 {
+  @apply text-3xl font-bold mb-2;
+}
+.custom-tiptap-content h2 {
+  @apply text-2xl font-semibold mb-2;
+}
+.custom-tiptap-content h3 {
+  @apply text-xl font-semibold mb-2;
+}
+.custom-tiptap-content ul {
+  @apply list-disc pl-6 mb-2;
+}
+.custom-tiptap-content ol {
+  @apply list-decimal pl-6 mb-2;
+}
+.custom-tiptap-content li {
+  @apply mb-1;
 }

@@ -40,7 +40,7 @@ export function useSkills() {
           credentials: "include",
         });
         const data = await res.json();
-        setSkills(Array.isArray(data.data) ? data.data : []);
+        setSkills(Array.isArray(data.data.data) ? data.data.data : []);
       } catch (err) {
         setSkills([]);
       } finally {

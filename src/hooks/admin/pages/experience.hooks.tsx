@@ -36,10 +36,11 @@ export function useExperiences() {
     async function fetchExperiences() {
       setLoading(true);
       try {
-        const res = await axios.get("/api/v1/admin/experience", {
-          withCredentials: true,
+        const res = await fetch("/api/v1/admin/experience", {
+          credentials: "include",
         });
-        setExperiences(res.data.data || []);
+        const data = await res.json();
+        setExperiences(Array.isArray(data.data.data) ? data.data.data : []);
       } catch (err) {
         setExperiences([]);
       } finally {

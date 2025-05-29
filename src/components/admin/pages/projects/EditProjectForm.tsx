@@ -70,7 +70,7 @@ export function EditProjectForm({ project }: EditProjectFormProps) {
   const onSubmit = async (data: EditProjectFormValues) => {
     setLoading(true);
     try {
-      await axios.patch(`/api/v1/admin/projects/edit/${project._id}`, data);
+      await axios.patch(`/api/v1/admin/projects/${project._id}`, data);
       toast({
         title: "Project updated!",
         description: "Your project has been updated.",

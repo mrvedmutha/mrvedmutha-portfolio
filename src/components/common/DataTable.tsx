@@ -32,7 +32,6 @@ interface DataTableProps<T> {
   pageSize: number;
   total: number;
   onPageChange: (page: number) => void;
-  fetchUrl: string;
 }
 
 const DataTable = <T,>({
@@ -46,26 +45,12 @@ const DataTable = <T,>({
   pageSize,
   total,
   onPageChange,
-  fetchUrl,
 }: DataTableProps<T>) => {
   const totalPages = Math.ceil(total / pageSize);
   const [loading, setLoading] = useState(false);
-  const [tableData, setTableData] = useState<T[]>(data);
-
-  useEffect(() => {
-    setLoading(true);
-    axios
-      .get(fetchUrl, { params: { page, limit: pageSize } })
-      .then((res) => {
-        setTableData(res.data.data.data || []);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, [page, pageSize, fetchUrl]);
-
-  // Create the table instance
+  console.log(data);
   const table = useReactTable({
-    data: tableData,
+    data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -100,7 +85,7 @@ const DataTable = <T,>({
         </TableHeader>
         <TableBody>
           {loading ? (
-            Array.from({ length: 3 }).map((_, i) => (
+            Array.from({ length: 5 }).map((_, i) => (
               <TableRow key={`skeleton-${i}`}>
                 {columns.map((_, colIdx) => (
                   <TableCell key={colIdx}>
@@ -145,7 +130,7 @@ const DataTable = <T,>({
             variant="ghost"
             size="sm"
             onClick={() => onPageChange(page + 1)}
-            disabled={page >= totalPages || tableData.length < pageSize}
+            disabled={page >= totalPages || data.length < pageSize}
           >
             Next
           </Button>

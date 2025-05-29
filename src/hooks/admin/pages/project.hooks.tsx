@@ -1,59 +1,57 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
-import { IEducation } from "@/types/admin/pages/education.types";
+import { IProject } from "@/types/admin/pages/project.types";
 import axios from "axios";
 
-export function useEducations() {
-  const [educations, setEducations] = useState<IEducation[]>([]);
+export function useProjects() {
+  const [projects, setProjects] = useState<IProject[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { toast } = useToast();
 
   async function handleDelete(id: string) {
     try {
-      await axios.delete(`/api/v1/admin/education/${id}`, {
+      await axios.delete(`/api/v1/admin/projects/${id}`, {
         withCredentials: true,
       });
-      setEducations((prev) => {
-        console.log(prev);
-        console.log(id);
-        return Array.isArray(prev) ? prev.filter((e) => e._id !== id) : [];
-      });
+      setProjects((prev) =>
+        Array.isArray(prev) ? prev.filter((p) => p._id !== id) : []
+      );
       toast({
-        title: "Education deleted",
-        description: "The education record was deleted successfully.",
+        title: "Project deleted",
+        description: "The project was deleted successfully.",
         variant: "default",
       });
     } catch (err) {
       toast({
         title: "Delete failed",
-        description: "There was an error deleting the education record.",
+        description: "There was an error deleting the project.",
         variant: "destructive",
       });
     }
   }
 
   useEffect(() => {
-    async function fetchEducations() {
+    async function fetchProjects() {
       setLoading(true);
       try {
-        const res = await fetch("/api/v1/admin/education", {
+        const res = await fetch("/api/v1/admin/projects", {
           credentials: "include",
         });
         const data = await res.json();
-        setEducations(Array.isArray(data.data.data) ? data.data.data : []);
+        setProjects(Array.isArray(data.data.data) ? data.data.data : []);
       } catch (err) {
-        setEducations([]);
+        setProjects([]);
       } finally {
         setLoading(false);
       }
     }
-    fetchEducations();
+    fetchProjects();
   }, []);
 
   return {
-    educations,
+    projects,
     loading,
     handleDelete,
     router,

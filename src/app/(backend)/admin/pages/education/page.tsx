@@ -33,7 +33,7 @@ export default function AdminEducationPage() {
           columns={getColumns(router, handleDelete)}
           data={educations}
           model="education"
-          fetchUrl="/api/v1/admin/education"
+          // fetchUrl="/api/v1/admin/education"
           page={1}
           pageSize={25}
           total={educations.length}

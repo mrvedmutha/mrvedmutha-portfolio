@@ -1,11 +1,12 @@
 import { ColumnDef } from "@tanstack/react-table";
+import { useRouter } from "next/navigation";
 import { IProject } from "@/types/admin/pages/project.types";
 import Image from "next/image";
 import AdminActionsCell from "@/components/common/admin/pages/ActionsCell";
 
 const getColumns = (
-  router: any,
-  handleDelete: (id: string) => void
+  router: ReturnType<typeof useRouter>,
+  onDelete?: (id: string) => void
 ): ColumnDef<IProject>[] => [
   {
     accessorKey: "title",
@@ -60,17 +61,19 @@ const getColumns = (
     },
   },
   {
-    id: "actions",
+    accessorKey: "actions",
     header: "Actions",
-    cell: (cell) => (
-      <AdminActionsCell
-        entity={cell.row.original}
-        editPath="/admin/pages/projects/edit/"
-        entityLabel="project"
-        router={router}
-        onDelete={handleDelete}
-      />
-    ),
+    cell: (cell) => {
+      return (
+        <AdminActionsCell
+          entity={cell.row.original}
+          editPath="/admin/pages/projects/edit/"
+          entityLabel="project"
+          router={router}
+          onDelete={onDelete}
+        />
+      );
+    },
   },
 ];
 
