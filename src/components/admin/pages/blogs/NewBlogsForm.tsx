@@ -1,5 +1,9 @@
 "use client";
-import { useState } from "react";
+import * as React from "react";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { BlogZod } from "@/schemas/zod/admin/blogs/blog.zod";
+import { BlogStatus } from "@/enums/admin/blogs/status.enum";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import TipTapEditor from "@/components/ui/TipTapEditor";
@@ -8,52 +12,106 @@ import Editor from "react-simple-code-editor";
 import Prism from "prismjs";
 import "prismjs/components/prism-markup";
 import "prismjs/themes/prism-tomorrow.css";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input as ShadcnInput } from "@/components/ui/input";
-import { Button as ShadcnButton } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import BlogPostSidebar from "./BlogPostSidebar";
+import axios from "axios";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
+
+const defaultValues = {
+  title: "",
+  slug: "",
+  description: "",
+  status: BlogStatus.DRAFT,
+  author: { _id: "", name: "", email: "" },
+  allowComments: true,
+  categories: [],
+  tags: [],
+};
 
 export default function NewBlogsForm() {
-  const [title, setTitle] = useState("");
-  const [slug, setSlug] = useState("");
-  const [slugEdit, setSlugEdit] = useState(false);
-  const [description, setDescription] = useState("");
-  const [showHtml, setShowHtml] = useState(false);
-  const [htmlEdit, setHtmlEdit] = useState("");
+  const [showHtml, setShowHtml] = React.useState(false);
+  const [htmlEdit, setHtmlEdit] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+  const { toast } = useToast();
+  const router = useRouter();
 
-  // Generate slug from title
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-    if (!slugEdit) {
-      setSlug(
-        e.target.value
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/(^-|-$)+/g, "")
-      );
-    }
+  // Data for dropdowns
+  const [authors, setAuthors] = React.useState([]);
+  const [categories, setCategories] = React.useState([]);
+  const [tags, setTags] = React.useState([]);
+
+  // Fetchers
+  const fetchCategories = async () => {
+    const res = await axios.get("/api/v1/admin/blogs/category");
+    setCategories(res.data.data || res.data);
+  };
+  const fetchTags = async () => {
+    const res = await axios.get("/api/v1/admin/blogs/tags");
+    setTags(res.data.data || res.data);
   };
 
-  // Toggle to HTML view, just set htmlEdit to description
+  React.useEffect(() => {
+    fetchCategories();
+    fetchTags();
+    axios
+      .get("/api/v1/admin/blogs/authors")
+      .then((res) => setAuthors(res.data.data || res.data))
+      .catch(() => setAuthors([]));
+  }, []);
+
+  const form = useForm({
+    resolver: zodResolver(BlogZod),
+    defaultValues,
+  });
+
+  const { control, handleSubmit, setValue, getValues, formState } = form;
+
+  // HTML/TipTap toggle
   const handleShowHtml = () => {
     if (!showHtml) {
-      setHtmlEdit(description);
+      setHtmlEdit(getValues("description") as string);
     }
     setShowHtml((v) => !v);
   };
-
-  // Save HTML back to TipTap
   const handleSaveHtml = () => {
-    setDescription(htmlEdit);
+    setValue("description", htmlEdit);
     setShowHtml(false);
+  };
+
+  // Slug generator utility
+  function generateSlug(text: string) {
+    return text
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)+/g, "");
+  }
+
+  // Sidebar save handler
+  const onSidebarSave = async (sidebarData: any) => {
+    setLoading(true);
+    try {
+      const values = getValues();
+      let slug = values.slug;
+      if (!slug) {
+        slug = generateSlug(values.title);
+      }
+      const payload = { ...values, ...sidebarData, slug };
+      await axios.post("/api/v1/admin/blogs/create", payload);
+      toast({
+        title: "Blog created!",
+        description: "Your blog post has been added.",
+      });
+      router.push("/admin/blogs");
+    } catch (error: any) {
+      toast({
+        title: "Failed to create blog",
+        description:
+          error?.response?.data?.message || error.message || "Unknown error",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -63,15 +121,23 @@ export default function NewBlogsForm() {
         <h1 className="text-2xl font-bold mb-6">Create blog</h1>
         {/* Post Title */}
         <div className="mb-6">
-          <label className="block text-sm font-medium mb-1" htmlFor="post-title">
+          <label
+            className="block text-sm font-medium mb-1"
+            htmlFor="post-title"
+          >
             Post Title
           </label>
-          <Input
-            id="post-title"
-            value={title}
-            onChange={handleTitleChange}
-            placeholder="Post Title"
-            className="text-2xl font-bold mb-2"
+          <Controller
+            control={control}
+            name="title"
+            render={({ field }) => (
+              <Input
+                id="post-title"
+                {...field}
+                placeholder="Post Title"
+                className="text-2xl mb-2"
+              />
+            )}
           />
           {/* Slug with edit/save */}
           <div className="mt-2">
@@ -82,31 +148,18 @@ export default function NewBlogsForm() {
               Slug
             </label>
             <div className="flex gap-2">
-              <Input
-                id="post-slug"
-                value={slug}
-                onChange={(e) => setSlug(e.target.value)}
-                disabled={!slugEdit}
-                className="flex-1 text-base"
-                style={{ minWidth: 0 }}
+              <Controller
+                control={control}
+                name="slug"
+                render={({ field }) => (
+                  <Input
+                    id="post-slug"
+                    {...field}
+                    className="flex-1 text-base"
+                    style={{ minWidth: 0 }}
+                  />
+                )}
               />
-              {slugEdit ? (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => setSlugEdit(false)}
-                >
-                  Save
-                </Button>
-              ) : (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => setSlugEdit(true)}
-                >
-                  Edit
-                </Button>
-              )}
             </div>
           </div>
         </div>
@@ -157,14 +210,32 @@ export default function NewBlogsForm() {
                 </Button>
               </div>
             ) : (
-              <TipTapEditor
-                value={description}
-                onChange={setDescription}
-                editorHeight={400}
+              <Controller
+                control={control}
+                name="description"
+                render={({ field }) => (
+                  <TipTapEditor
+                    value={field.value}
+                    onChange={field.onChange}
+                    editorHeight={400}
+                  />
+                )}
               />
             )}
           </div>
         </div>
+      </div>
+      {/* Sidebar (20%) */}
+      <div className="w-[350px]">
+        <BlogPostSidebar
+          authors={authors}
+          categories={categories}
+          tags={tags}
+          loading={loading}
+          onSave={onSidebarSave}
+          onCategoryAdded={fetchCategories}
+          onTagAdded={fetchTags}
+        />
       </div>
     </div>
   );
