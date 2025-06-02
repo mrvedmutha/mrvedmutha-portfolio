@@ -8,8 +8,18 @@ export const blogService = {
     data: Omit<BlogType, "_id" | "createdAt" | "updatedAt">
   ): Promise<BlogType> {
     await dbConnect();
+    // Generate slug if empty
+    if (!data.slug || data.slug.trim() === "") {
+      data.slug = data.title
+        .toLowerCase()
+        .replace(/\s+/g, "-") // Replace whitespace with hyphens
+        .replace(/[^a-z0-9-]/g, "") // Remove special characters except hyphens
+        .replace(/-+/g, "-") // Replace multiple hyphens with single
+        .replace(/^-+|-+$/g, ""); // Trim hyphens from start/end
+    }
     // Validate input
     const parsed = BlogZod.safeParse(data);
+    console.log(parsed);
     if (!parsed.success) {
       throw new Error(parsed.error.errors.map((e) => e.message).join(", "));
     }
@@ -36,9 +46,15 @@ export const blogService = {
     data: Partial<Omit<BlogType, "_id" | "createdAt" | "updatedAt">>
   ): Promise<BlogType | null> {
     await dbConnect();
-    const parsed = BlogZod.partial().safeParse(data);
+    const parsed = (BlogZod as unknown as import("zod").ZodObject<any>)
+      .partial()
+      .safeParse(data);
     if (!parsed.success) {
-      throw new Error(parsed.error.errors.map((e) => e.message).join(", "));
+      throw new Error(
+        parsed.error.errors
+          .map((e: import("zod").ZodIssue) => e.message)
+          .join(", ")
+      );
     }
     const updated = await Blog.findByIdAndUpdate(id, parsed.data, {
       new: true,

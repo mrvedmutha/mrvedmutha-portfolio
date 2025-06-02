@@ -14,6 +14,7 @@ export async function POST(req: NextRequest) {
   }
   try {
     const data = await req.json();
+    console.log(data);
     const blog = await blogService.create(data);
     return SuccessResponse(blog, 201);
   } catch (error: any) {

@@ -8,14 +8,14 @@ export interface Author {
 }
 
 export interface Category {
-  id: string; // custom id, not Mongo _id
+  id: number; // custom id, not Mongo _id
   name: string;
   description?: string;
-  parentId?: string | null; // parent category id
+  parentId?: number | null; // parent category id
 }
 
 export interface Tag {
-  id: string; // custom id, not Mongo _id
+  id: number; // custom id, not Mongo _id
   name: string;
 }
 
@@ -35,16 +35,15 @@ export interface Comment {
 }
 
 export interface Blog {
-  _id: string;
+  _id?: string;
   title: string;
   slug: string;
   description: string | object; // TipTap JSON or HTML string
   status: BlogStatus;
-  author: Author;
-  allowComments: boolean;
-  comments: Comment[];
-  categories: Category[];
-  tags: Tag[];
-  createdAt: Date;
-  updatedAt: Date;
+  author?: Author;
+  allowComments?: boolean;
+  comments?: Comment[];
+  categories?: Category[];
+  tags?: Tag[];
+  mainImage?: string;
 }

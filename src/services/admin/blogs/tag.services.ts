@@ -3,14 +3,16 @@ import type { Tag as TagType } from "@/types/admin/blogs/blog.types";
 import { dbConnect } from "@/lib/db";
 
 export const tagService = {
-  async create(data: Omit<TagType, "id"> & { id: string }): Promise<TagType> {
+  async create(
+    data: Omit<TagType, "id"> // id will be generated
+  ): Promise<TagType> {
     await dbConnect();
-    // Ensure id is unique
-    const exists = await Tag.findOne({ id: data.id });
-    if (exists) {
-      throw new Error("Tag id must be unique");
-    }
-    const tag = new Tag(data);
+    // Find the max id and increment
+    const last = (await Tag.findOne({}).sort({ id: -1 }).lean()) as {
+      id: number;
+    } | null;
+    const nextId = last && typeof last.id === "number" ? last.id + 1 : 1;
+    const tag = new Tag({ ...data, id: nextId });
     await tag.save();
     return tag.toObject();
   },

@@ -4,15 +4,15 @@ import { dbConnect } from "@/lib/db";
 
 export const categoryService = {
   async create(
-    data: Omit<CategoryType, "id"> & { id: string }
+    data: Omit<CategoryType, "id"> // id will be generated
   ): Promise<CategoryType> {
     await dbConnect();
-    // Ensure id is unique
-    const exists = await Category.findOne({ id: data.id });
-    if (exists) {
-      throw new Error("Category id must be unique");
-    }
-    const category = new Category(data);
+    // Find the max id and increment
+    const last = (await Category.findOne({}).sort({ id: -1 }).lean()) as {
+      id: number;
+    } | null;
+    const nextId = last && typeof last.id === "number" ? last.id + 1 : 1;
+    const category = new Category({ ...data, id: nextId });
     await category.save();
     return category.toObject();
   },

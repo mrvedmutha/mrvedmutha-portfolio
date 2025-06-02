@@ -33,6 +33,8 @@ import { Popover, PopoverTrigger, PopoverContent } from "./popover";
 import { Button } from "./button";
 import { Iframe } from "./tiptap-iframe-extension";
 import { Input } from "./input";
+import axios from "axios";
+import { useToast } from "@/hooks/use-toast";
 
 interface TipTapEditorProps {
   value: string;
@@ -57,11 +59,13 @@ export default function TipTapEditor({
   const [showImagePopover, setShowImagePopover] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageUploading, setImageUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [mounted, setMounted] = useState(false);
   const [showEmbedPopover, setShowEmbedPopover] = useState(false);
   const [embedCode, setEmbedCode] = useState("");
   const embedInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     setMounted(true);
@@ -76,13 +80,35 @@ export default function TipTapEditor({
     }
   };
 
-  // Insert image into editor
-  const handleInsertImage = () => {
-    if (imagePreview && editor) {
-      editor.chain().focus().setImage({ src: imagePreview }).run();
-      setShowImagePopover(false);
-      setImageFile(null);
-      setImagePreview(null);
+  // Insert image into editor (upload to Cloudinary first)
+  const handleInsertImage = async () => {
+    if (imageFile && editor) {
+      setImageUploading(true);
+      try {
+        const formData = new FormData();
+        formData.append("file", imageFile);
+        const res = await axios.post("/api/v1/admin/media/upload", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        const url = res.data?.data?.url;
+        if (url) {
+          editor.chain().focus().setImage({ src: url }).run();
+        }
+        setShowImagePopover(false);
+        setImageFile(null);
+        setImagePreview(null);
+      } catch (err: any) {
+        toast({
+          title: "Image upload failed",
+          description:
+            err?.response?.data?.error ||
+            err?.message ||
+            "An error occurred while uploading the image.",
+          variant: "destructive",
+        });
+      } finally {
+        setImageUploading(false);
+      }
     }
   };
 
@@ -99,15 +125,7 @@ export default function TipTapEditor({
   const editor = useEditor({
     extensions: [
       StarterKit,
-      Heading,
-      Image,
       ImageResize,
-      Bold,
-      Italic,
-      Underline,
-      BulletList,
-      OrderedList,
-      ListItem,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       Link.configure({ openOnClick: false }),
       Iframe,
@@ -319,9 +337,9 @@ export default function TipTapEditor({
                 size="sm"
                 variant="default"
                 onClick={handleInsertImage}
-                disabled={!imagePreview}
+                disabled={!imagePreview || imageUploading || !editor}
               >
-                Insert
+                {imageUploading ? "Uploading..." : "Insert"}
               </Button>
               <Button
                 size="sm"
@@ -331,6 +349,7 @@ export default function TipTapEditor({
                   setImageFile(null);
                   setImagePreview(null);
                 }}
+                disabled={imageUploading}
               >
                 Cancel
               </Button>
