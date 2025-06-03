@@ -1,5 +1,4 @@
 import { v2 as cloudinary } from "cloudinary";
-// @ts-ignore: No type definitions for cloudinary result object
 import type { UploadApiResponse, UploadApiErrorResponse } from "cloudinary";
 import { ICloudinaryUploadResult } from "@/types/admin/common/cloudinary/cloudinary.types";
 cloudinary.config({

@@ -11,12 +11,14 @@ export interface Category {
   id: number; // custom id, not Mongo _id
   name: string;
   description?: string;
+  slug: string;
   parentId?: number | null; // parent category id
 }
 
 export interface Tag {
   id: number; // custom id, not Mongo _id
   name: string;
+  slug: string;
 }
 
 export interface CommentUser {
@@ -35,7 +37,7 @@ export interface Comment {
 }
 
 export interface Blog {
-  _id?: string;
+  _id: string;
   title: string;
   slug: string;
   description: string | object; // TipTap JSON or HTML string

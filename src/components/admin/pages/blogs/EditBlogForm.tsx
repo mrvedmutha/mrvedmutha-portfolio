@@ -15,11 +15,9 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
-import { SelectItem } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
 import { z } from "zod";
 import { addTag, removeTag, handleAddTag } from "@/utils/blog/tag.utils";
-import { handleAddCategory } from "@/utils/blog/category.utils";
+import { handleAddCategory, getAncestorIds } from "@/utils/blog/category.utils";
 import PostDescription from "./components/PostDescription";
 import CancelSaveButtons from "./components/CancelSaveButtons";
 import CategorySelector from "./components/CategorySelector";
@@ -29,99 +27,7 @@ import StatusAuthorSelector from "./components/StatusAuthorSelector";
 
 type BlogFormType = z.infer<typeof BlogZod>;
 
-const defaultValues: BlogFormType = {
-  title: "",
-  slug: "",
-  description: "",
-  status: BlogStatus.DRAFT,
-  author: { name: "", email: "", avatarUrl: "" },
-  allowComments: true,
-  categories: [],
-  tags: [],
-  comments: [],
-  mainImage: "",
-};
-
-// Utility to build a tree from flat categories
-function buildCategoryTree(categories: any[]): any[] {
-  const map: Record<string, any> = {};
-  const roots: any[] = [];
-  categories.forEach((cat: any) => {
-    map[cat.id] = { ...cat, children: [] };
-  });
-  categories.forEach((cat: any) => {
-    if (cat.parentId && map[cat.parentId]) {
-      map[cat.parentId].children.push(map[cat.id]);
-    } else {
-      roots.push(map[cat.id]);
-    }
-  });
-  return roots;
-}
-
-// Recursive render for checkbox list
-function renderCategoryCheckboxes(
-  categories: any[],
-  selectedCategories: number[],
-  toggleCategory: (id: number) => void,
-  depth = 0
-): React.ReactNode {
-  return categories.map((cat: any) => (
-    <React.Fragment key={cat.id}>
-      <div
-        className="flex items-center gap-2"
-        style={{ marginLeft: depth * 16 }}
-      >
-        <Checkbox
-          id={String(cat.id)}
-          checked={selectedCategories.includes(cat.id)}
-          onCheckedChange={() => toggleCategory(cat.id)}
-        />
-        <label htmlFor={String(cat.id)}>{cat.name}</label>
-      </div>
-      {cat.children &&
-        cat.children.length > 0 &&
-        renderCategoryCheckboxes(
-          cat.children,
-          selectedCategories,
-          toggleCategory,
-          depth + 1
-        )}
-    </React.Fragment>
-  ));
-}
-
-// Recursive render for Select dropdown
-function renderCategoryOptions(
-  categories: any[],
-  depth = 0
-): React.ReactNode[] {
-  return categories.flatMap((cat: any) => [
-    <SelectItem key={cat.id} value={cat.id} style={{ marginLeft: depth * 16 }}>
-      {cat.name}
-    </SelectItem>,
-    ...(cat.children && cat.children.length > 0
-      ? renderCategoryOptions(cat.children, depth + 1)
-      : []),
-  ]);
-}
-
-// Utility to get all ancestor IDs for a category (number version)
-function getAncestorIds(categoryId: number, categories: any[]): number[] {
-  const map: Record<number, any> = {};
-  categories.forEach((cat) => {
-    map[cat.id] = cat;
-  });
-  const ancestors: number[] = [];
-  let current = map[categoryId];
-  while (current && current.parentId !== null && map[current.parentId]) {
-    ancestors.push(current.parentId);
-    current = map[current.parentId];
-  }
-  return ancestors;
-}
-
-export default function NewBlogsForm() {
+export default function EditBlogForm({ blogId }: { blogId: string }) {
   const [showHtml, setShowHtml] = React.useState(false);
   const [htmlEdit, setHtmlEdit] = React.useState("");
   const [loading, setLoading] = React.useState(false);
@@ -133,7 +39,7 @@ export default function NewBlogsForm() {
   const [categories, setCategories] = React.useState<any[]>([]);
   const [tags, setTags] = React.useState<any[]>([]);
 
-  // Sidebar state and handlers (moved from BlogPostSidebar)
+  // Sidebar state and handlers
   const [status, setStatus] = React.useState(BlogStatus.DRAFT);
   const [authorId, setAuthorId] = React.useState("");
   const [allowComments, setAllowComments] = React.useState(true);
@@ -159,42 +65,82 @@ export default function NewBlogsForm() {
   const [mainImage, setMainImage] = React.useState<string>("");
   const [slugEditMode, setSlugEditMode] = React.useState(false);
 
-  // Fetchers
-  const fetchCategories = async () => {
-    const res = await axios.get("/api/v1/admin/blogs/category");
-    // Normalize parentId to number or null
-    const normalized = (res.data.data || res.data).map((cat: any) => ({
-      ...cat,
-      parentId:
-        cat.parentId !== null &&
-        cat.parentId !== undefined &&
-        cat.parentId !== ""
-          ? Number(cat.parentId)
-          : null,
-      id: Number(cat.id),
-    }));
-    setCategories(normalized);
-  };
-  const fetchTags = async () => {
-    const res = await axios.get("/api/v1/admin/blogs/tags");
-    setTags(res.data.data || res.data);
-  };
-
+  // Fetch blog data and dropdowns on mount
   React.useEffect(() => {
-    fetchCategories();
-    fetchTags();
+    async function fetchData() {
+      setLoading(true);
+      try {
+        // Fetch blog
+        const blogRes = await axios.get(`/api/v1/admin/blogs/${blogId}`);
+        const blog = blogRes.data.data || blogRes.data;
+        setStatus(blog.status);
+        setAuthorId(blog.author?._id || "");
+        setAllowComments(blog.allowComments);
+        setSelectedCategories(blog.categories?.map((c: any) => c.id) || []);
+        setSelectedTags(blog.tags?.map((t: any) => t.id) || []);
+        setMainImage(blog.mainImage || "");
+        setPassword(blog.password || "");
+        setIsPasswordProtected(blog.isPasswordProtected || false);
+        setScheduledDate(
+          blog.scheduledDate ? new Date(blog.scheduledDate) : undefined
+        );
+        setScheduledHour(blog.scheduledHour || "");
+        setScheduledMinute(blog.scheduledMinute || "");
+        setScheduledPeriod(blog.scheduledPeriod || "");
+        form.reset({
+          ...blog,
+          author: blog.author || { name: "", email: "", avatarUrl: "" },
+        });
+      } catch (e: any) {
+        toast({
+          title: "Failed to fetch blog",
+          description: e.message,
+          variant: "destructive",
+        });
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+    // Fetch dropdowns
     axios
       .get("/api/v1/admin/blogs/authors")
       .then((res) => setAuthors(res.data.data || res.data))
       .catch(() => setAuthors([]));
-  }, []);
+    axios.get("/api/v1/admin/blogs/category").then((res) => {
+      const normalized = (res.data.data || res.data).map((cat: any) => ({
+        ...cat,
+        parentId:
+          cat.parentId !== null &&
+          cat.parentId !== undefined &&
+          cat.parentId !== ""
+            ? Number(cat.parentId)
+            : null,
+        id: Number(cat.id),
+      }));
+      setCategories(normalized);
+    });
+    axios
+      .get("/api/v1/admin/blogs/tags")
+      .then((res) => setTags(res.data.data || res.data));
+  }, [blogId]);
 
-  const form = useForm<BlogFormType>({
+  const form = useForm<z.infer<typeof BlogZod>>({
     resolver: zodResolver(BlogZod),
-    defaultValues,
+    defaultValues: {
+      title: "",
+      slug: "",
+      description: "",
+      status: BlogStatus.DRAFT,
+      author: { name: "", email: "", avatarUrl: "" },
+      allowComments: true,
+      categories: [],
+      tags: [],
+      comments: [],
+      mainImage: "",
+    },
   });
-
-  const { control, handleSubmit, setValue, getValues, formState } = form;
+  const { control, handleSubmit, setValue, getValues, formState, reset } = form;
 
   // HTML/TipTap toggle
   const handleShowHtml = () => {
@@ -208,7 +154,6 @@ export default function NewBlogsForm() {
     setShowHtml(false);
   };
 
-  // Slug generator utility
   function generateSlug(text: string) {
     return text
       .toLowerCase()
@@ -239,44 +184,42 @@ export default function NewBlogsForm() {
   const toggleCategory = (id: number) => {
     setSelectedCategories((prev) => {
       if (prev.includes(id)) {
-        // Uncheck only this category
         return prev.filter((c) => c !== id);
       } else {
-        // Check this category and all ancestors
         const ancestors = getAncestorIds(id, categories);
         return Array.from(new Set([...prev, id, ...ancestors]));
       }
     });
   };
 
-  // Save handler (sidebar)
-  const handleSidebarSave = () => {
-    // Compose sidebar data
-    const sidebarData = {
-      status,
-      author: authors.find((a: any) => a._id === authorId),
-      allowComments,
-      categories: categories.filter((c: any) =>
-        selectedCategories.includes(c.id)
-      ),
-      tags: tags.filter((t: any) => selectedTags.includes(t.id)),
-      scheduledDate,
-      scheduledHour,
-      scheduledMinute,
-      scheduledPeriod,
-      isPasswordProtected,
-      password,
-    };
-    onSidebarSave(sidebarData);
+  // Fetchers
+  const fetchCategories = async () => {
+    const res = await axios.get("/api/v1/admin/blogs/category");
+    const normalized = (res.data.data || res.data).map((cat: any) => ({
+      ...cat,
+      parentId:
+        cat.parentId !== null &&
+        cat.parentId !== undefined &&
+        cat.parentId !== ""
+          ? Number(cat.parentId)
+          : null,
+      id: Number(cat.id),
+    }));
+    setCategories(normalized);
+  };
+  const fetchTags = async () => {
+    const res = await axios.get("/api/v1/admin/blogs/tags");
+    setTags(res.data.data || res.data);
   };
 
-  // Cancel handler
+  // Save handler (sidebar)
+  const handleSidebarSave = () => {
+    onSidebarSave();
+  };
   const handleCancel = () => {
     router.push("/admin/blogs");
   };
-
-  // Sidebar save handler
-  const onSidebarSave = async (sidebarData: any) => {
+  const onSidebarSave = async () => {
     setLoading(true);
     try {
       const values = getValues();
@@ -284,18 +227,61 @@ export default function NewBlogsForm() {
       if (!slug) {
         slug = generateSlug(values.title);
       }
-      const payload = { ...values, ...sidebarData, slug, mainImage };
-      console.log("Blog create payload:", payload);
-      await axios.post("/api/v1/admin/blogs/create", payload);
+      const payload = {
+        ...values,
+        slug,
+        mainImage,
+        author: authorId
+          ? {
+              name: authors.find((a) => a._id === authorId)?.name || "",
+              email: authors.find((a) => a._id === authorId)?.email || "",
+              avatarUrl:
+                authors.find((a) => a._id === authorId)?.avatarUrl || "",
+            }
+          : undefined,
+        tags: selectedTags
+          .map((tagId) => {
+            const tag = tags.find((t) => t.id === tagId);
+            return tag
+              ? {
+                  id: tag.id,
+                  name: tag.name,
+                  slug: tag.slug,
+                }
+              : null;
+          })
+          .filter(Boolean),
+        categories: selectedCategories
+          .map((catId) => {
+            const category = categories.find((c) => c.id === catId);
+            return category
+              ? {
+                  id: category.id,
+                  name: category.name,
+                  slug: category.slug,
+                  parentId: category.parentId,
+                }
+              : null;
+          })
+          .filter(Boolean),
+        status,
+        allowComments,
+        scheduledDate,
+        scheduledHour,
+        scheduledMinute,
+        scheduledPeriod,
+        isPasswordProtected,
+        password,
+      };
+      await axios.patch(`/api/v1/admin/blogs/${blogId}`, payload);
       toast({
-        title: "Blog created!",
-        description: "Your blog post has been added.",
+        title: "Blog updated!",
+        description: "Your blog post has been updated.",
       });
       router.push("/admin/blogs");
     } catch (error: any) {
-      console.log("Blog create error:", error, error?.response?.data);
       toast({
-        title: "Failed to create blog",
+        title: "Failed to update blog",
         description:
           error?.response?.data?.message || error.message || "Unknown error",
         variant: "destructive",
@@ -309,7 +295,7 @@ export default function NewBlogsForm() {
     <div className="flex min-h-screen">
       {/* Main Content (80%) */}
       <div className="w-4/5 min-w-0 p-8">
-        <h1 className="text-2xl font-bold mb-6">Create blog</h1>
+        <h1 className="text-2xl font-bold mb-6">Edit blog</h1>
         {/* Post Title */}
         <div className="mb-6">
           <label
@@ -390,7 +376,7 @@ export default function NewBlogsForm() {
             onCancel={handleCancel}
             onSave={handleSidebarSave}
             loading={loading}
-            saveLabel="Save"
+            saveLabel="Update"
           />
           {/* Post Status Dropdown */}
           <div className="mb-8">

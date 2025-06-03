@@ -12,6 +12,7 @@ import OrderedList from "@tiptap/extension-ordered-list";
 import ListItem from "@tiptap/extension-list-item";
 import TextAlign from "@tiptap/extension-text-align";
 import Link from "@tiptap/extension-link";
+import HardBreak from "@tiptap/extension-hard-break";
 import {
   Bold as BoldIcon,
   Italic as ItalicIcon,
@@ -28,6 +29,7 @@ import {
   AlignJustify,
   Link as LinkIcon,
   Code as CodeIcon,
+  CornerDownLeft,
 } from "lucide-react";
 import { Popover, PopoverTrigger, PopoverContent } from "./popover";
 import { Button } from "./button";
@@ -125,6 +127,7 @@ export default function TipTapEditor({
   const editor = useEditor({
     extensions: [
       StarterKit,
+      HardBreak,
       ImageResize,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       Link.configure({ openOnClick: false }),
@@ -183,6 +186,16 @@ export default function TipTapEditor({
           aria-label="Underline"
         >
           <UnderlineIcon className="w-4 h-4" />
+        </Button>
+        <Button
+          type="button"
+          size="icon"
+          variant="outline"
+          onClick={() => editor?.chain().focus().setHardBreak().run()}
+          aria-label="Line Break"
+          title="Line Break (Shift+Enter)"
+        >
+          <CornerDownLeft className="w-4 h-4" />
         </Button>
         <Button
           type="button"

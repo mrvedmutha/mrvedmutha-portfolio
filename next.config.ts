@@ -3,9 +3,16 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
-      new URL(
-        "https://api.daily.dev/devcards/v2/B18UDambwv8Sw8pdumYmh.png?type=wide&r=6xe"
-      ),
+      {
+        protocol: "https",
+        hostname: "api.daily.dev",
+        pathname: "/devcards/v2/**",
+      },
+      {
+        protocol: "https",
+        hostname: "**.cloudinary.com",
+        pathname: "/**",
+      },
     ],
   },
 };
