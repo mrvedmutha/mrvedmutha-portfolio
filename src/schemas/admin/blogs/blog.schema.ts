@@ -2,6 +2,7 @@ import { Schema, Types } from "mongoose";
 import { CategorySchema } from "@/schemas/admin/blogs/category.schema";
 import { TagSchema } from "@/schemas/admin/blogs/tag.schema";
 import { Blog } from "@/types/admin/blogs/blog.types";
+import { AuthorSchema } from "@/schemas/admin/blogs/author.schema";
 
 export const BlogSchema = new Schema<Blog>(
   {
@@ -9,7 +10,7 @@ export const BlogSchema = new Schema<Blog>(
     slug: { type: String, required: true, unique: true },
     description: { type: Schema.Types.Mixed, required: true }, // string or object (TipTap JSON)
     status: { type: String, required: true },
-    author: { type: Types.ObjectId, ref: "Author", default: null },
+    author: { type: AuthorSchema },
     allowComments: { type: Boolean, default: true },
     comments: [{ type: Types.ObjectId, ref: "Comment" }],
     categories: [{ type: CategorySchema }],

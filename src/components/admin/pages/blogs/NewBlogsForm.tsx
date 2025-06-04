@@ -446,7 +446,7 @@ export default function NewBlogsForm() {
             />
           </div>
           {/* Main Image */}
-          <div className="mb-4">
+          <div className="mb-6">
             <MainImageSelector
               mainImage={mainImage}
               setMainImage={setMainImage}

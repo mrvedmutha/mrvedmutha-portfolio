@@ -47,16 +47,8 @@ const AuthorSelector: React.FC<AuthorSelectorProps> = ({
     try {
       const res = await axios.get("/api/v1/admin/blogs/authors");
       setAuthors(res.data.data || res.data);
-      toast({
-        title: "Success",
-        description: "Authors fetched successfully",
-      });
     } catch (e: any) {
-      toast({
-        title: "Error",
-        description: "Failed to fetch authors",
-        variant: "destructive",
-      });
+      throw new Error(e);
     }
   };
 
@@ -106,6 +98,10 @@ const AuthorSelector: React.FC<AuthorSelectorProps> = ({
       if (res.data && res.data.data && res.data.data._id) {
         setAuthorId(res.data.data._id);
       }
+      toast({
+        title: "Success",
+        description: "Author added",
+      });
     } catch (e: any) {
       toast({
         title: "Error",
