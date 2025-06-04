@@ -17,7 +17,7 @@ export const categoryService = {
     // Slug logic
     let slug =
       data.slug && data.slug.trim() ? slugify(data.slug) : slugify(data.name);
-    let exists = await Category.findOne({ slug });
+    const exists = await Category.findOne({ slug });
     if (exists) {
       // If parentId is present, try parentname-slug
       if (data.parentId) {

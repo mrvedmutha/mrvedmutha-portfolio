@@ -40,7 +40,7 @@ export const authorService = {
     data: Partial<Omit<AuthorType, "_id">> & { avatarBuffer?: Buffer }
   ): Promise<AuthorType | null> {
     await dbConnect();
-    let updateData: any = { ...data };
+    const updateData: any = { ...data };
     if (data.avatarBuffer) {
       const result = await uploadToCloudinary(data.avatarBuffer, 0);
       updateData.avatarUrl = result.secure_url;
