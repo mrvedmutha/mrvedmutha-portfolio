@@ -8,6 +8,11 @@ export const authorService = {
     data: Omit<AuthorType, "_id"> & { avatarBuffer?: Buffer }
   ): Promise<AuthorType> {
     await dbConnect();
+    // Check for existing email
+    const existing = await Author.findOne({ email: data.email });
+    if (existing) {
+      throw new Error("Author with this email already exists.");
+    }
     let avatarUrl = data.avatarUrl;
     if (data.avatarBuffer) {
       // Upload avatar to Cloudinary
