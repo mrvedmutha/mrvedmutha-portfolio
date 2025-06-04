@@ -484,13 +484,7 @@ export default function NewBlogsForm() {
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-          <AuthorSelector
-            authors={authors}
-            authorId={authorId}
-            setAuthorId={setAuthorId}
-            addAuthorLoading={addAuthorLoading}
-            onAddAuthor={onAddAuthor}
-          />
+          <AuthorSelector authorId={authorId} setAuthorId={setAuthorId} />
         </div>
       </div>
     </div>
