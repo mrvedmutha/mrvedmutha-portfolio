@@ -6,7 +6,6 @@ import {
   ExperienceSection,
   BlogSection,
   ConnectSection,
-  Footer,
 } from "@/components/home";
 
 export default function Home() {
@@ -19,7 +18,6 @@ export default function Home() {
       <ExperienceSection />
       <BlogSection />
       <ConnectSection />
-      <Footer />
     </div>
   );
 }

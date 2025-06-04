@@ -1584,4 +1584,28 @@ export const deviconTools = [
   },
   { name: "Zend", svg: "/assets/devicon-master/icons/zend/zend-original.svg" },
   { name: "Zig", svg: "/assets/devicon-master/icons/zig/zig-original.svg" },
+  {
+    name: "Illustrator",
+    svg: "/assets/devicon-master/icons/illustrator/illustrator-original.svg",
+  },
+  {
+    name: "Shopify",
+    svg: "/assets/devicon-master/icons/shopify/shopify-original.svg",
+  },
+  {
+    name: "Amazon",
+    svg: "/assets/devicon-master/icons/amazon/amazon-original.svg",
+  },
+  {
+    name: "Flipkart",
+    svg: "/assets/devicon-master/icons/flipkart/flipkart-original.svg",
+  },
+  {
+    name: "Meesho",
+    svg: "/assets/devicon-master/icons/meesho/meesho-original.svg",
+  },
+  {
+    name: "Adobe Creative Cloud",
+    svg: "/assets/devicon-master/icons/creativecloud/creativecloud-original.svg",
+  },
 ];

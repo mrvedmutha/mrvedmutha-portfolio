@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "@/components/home/navbar";
+import Footer from "@/components/home/Footer";
 
 export default function FrontendLayout({
   children,
@@ -10,6 +11,7 @@ export default function FrontendLayout({
     <>
       <Navbar />
       {children}
+      <Footer />
     </>
   );
 }

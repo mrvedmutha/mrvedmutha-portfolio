@@ -6,6 +6,4 @@ export interface IUser {
   email: string;
   password: string;
   role: UserRole;
-  createdAt: Date;
-  updatedAt: Date;
 }
