@@ -35,7 +35,7 @@ const defaultValues: BlogFormType = {
   slug: "",
   description: "",
   status: BlogStatus.DRAFT,
-  author: { name: "", email: "", avatarUrl: "" },
+  author: "",
   allowComments: true,
   categories: [],
   tags: [],
@@ -257,7 +257,7 @@ export default function NewBlogsForm() {
     // Compose sidebar data
     const sidebarData = {
       status,
-      author: authors.find((a: any) => a._id === authorId),
+      author: authorId,
       allowComments,
       categories: categories.filter((c: any) =>
         selectedCategories.includes(c.id)

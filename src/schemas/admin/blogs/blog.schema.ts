@@ -10,7 +10,7 @@ export const BlogSchema = new Schema<Blog>(
     slug: { type: String, required: true, unique: true },
     description: { type: Schema.Types.Mixed, required: true }, // string or object (TipTap JSON)
     status: { type: String, required: true },
-    author: { type: AuthorSchema },
+    author: { type: Types.ObjectId, ref: "Author" },
     allowComments: { type: Boolean, default: true },
     comments: [{ type: Types.ObjectId, ref: "Comment" }],
     categories: [{ type: CategorySchema }],

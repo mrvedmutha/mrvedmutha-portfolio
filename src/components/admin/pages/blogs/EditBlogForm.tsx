@@ -131,7 +131,7 @@ export default function EditBlogForm({ blogId }: { blogId: string }) {
       slug: "",
       description: "",
       status: BlogStatus.DRAFT,
-      author: { name: "", email: "", avatarUrl: "" },
+      author: "",
       allowComments: true,
       categories: [],
       tags: [],

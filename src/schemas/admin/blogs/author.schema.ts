@@ -1,4 +1,4 @@
-import { Schema, Types } from "mongoose";
+import { Schema } from "mongoose";
 
 export const AuthorSchema = new Schema({
   name: { type: String, required: true },

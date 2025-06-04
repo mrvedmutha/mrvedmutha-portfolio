@@ -42,7 +42,7 @@ export interface Blog {
   slug: string;
   description: string | object; // TipTap JSON or HTML string
   status: BlogStatus;
-  author?: Author;
+  author?: string;
   allowComments?: boolean;
   comments?: Comment[];
   categories?: Category[];

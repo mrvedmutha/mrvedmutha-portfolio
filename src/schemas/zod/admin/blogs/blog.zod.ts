@@ -39,7 +39,7 @@ export const BlogZod = z.object({
   slug: z.string().min(1, { message: "Slug is required" }),
   description: z.string().min(1, { message: "Description is required" }),
   status: z.nativeEnum(BlogStatus),
-  author: AuthorZod.optional(),
+  author: z.string().optional(),
   allowComments: z.boolean().optional(),
   comments: z.array(CommentZod).optional(),
   categories: z.array(CategoryZod).optional(),
