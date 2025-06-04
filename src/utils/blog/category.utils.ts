@@ -1,3 +1,4 @@
+import { toast } from "@/hooks/use-toast";
 import axios from "axios";
 
 interface HandleAddCategoryArgs {
@@ -30,8 +31,18 @@ export async function handleAddCategory({
     setParentCategoryId("");
     setShowAddCategory(false);
     fetchCategories();
+    toast({
+      title: "Category added",
+      description: "Category added successfully",
+    });
   } catch (e) {
     // Optionally show error toast
+    console.log(e);
+    toast({
+      title: "Error",
+      description: "Failed to add category",
+      variant: "destructive",
+    });
   } finally {
     setAddCategoryLoading(false);
   }

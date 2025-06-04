@@ -1,6 +1,7 @@
 import { Tag } from "@/models/admin/blogs/tag.model";
 import type { Tag as TagType } from "@/types/admin/blogs/blog.types";
 import { dbConnect } from "@/lib/db";
+import { slugify } from "@/utils/slug.utils";
 
 export const tagService = {
   async create(
@@ -12,7 +13,12 @@ export const tagService = {
       id: number;
     } | null;
     const nextId = last && typeof last.id === "number" ? last.id + 1 : 1;
-    const tag = new Tag({ ...data, id: nextId });
+
+    // Slug logic: always format slug, or generate from name if empty
+    const slug =
+      data.slug && data.slug.trim() ? slugify(data.slug) : slugify(data.name);
+
+    const tag = new Tag({ ...data, id: nextId, slug });
     await tag.save();
     return tag.toObject();
   },

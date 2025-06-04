@@ -18,12 +18,13 @@ import {
 import { z } from "zod";
 import { addTag, removeTag, handleAddTag } from "@/utils/blog/tag.utils";
 import { handleAddCategory, getAncestorIds } from "@/utils/blog/category.utils";
-import PostDescription from "./components/PostDescription";
-import CancelSaveButtons from "./components/CancelSaveButtons";
+import PostDescription from "@/components/admin/pages/blogs/components/PostDescription";
+import CancelSaveButtons from "@/components/admin/pages/blogs/components/CancelSaveButtons";
 import CategorySelector from "./components/CategorySelector";
 import TagSelector from "./components/TagSelector";
 import MainImageSelector from "./components/MainImageSelector";
-import StatusAuthorSelector from "./components/StatusAuthorSelector";
+import StatusSelector from "./components/StatusSelector";
+import AuthorSelector from "./components/AuthorSelector";
 
 type BlogFormType = z.infer<typeof BlogZod>;
 
@@ -64,6 +65,7 @@ export default function EditBlogForm({ blogId }: { blogId: string }) {
   const [addTagLoading, setAddTagLoading] = React.useState(false);
   const [mainImage, setMainImage] = React.useState<string>("");
   const [slugEditMode, setSlugEditMode] = React.useState(false);
+  const [addAuthorLoading, setAddAuthorLoading] = React.useState(false);
 
   // Fetch blog data and dropdowns on mount
   React.useEffect(() => {
@@ -103,10 +105,7 @@ export default function EditBlogForm({ blogId }: { blogId: string }) {
     }
     fetchData();
     // Fetch dropdowns
-    axios
-      .get("/api/v1/admin/blogs/authors")
-      .then((res) => setAuthors(res.data.data || res.data))
-      .catch(() => setAuthors([]));
+    fetchAuthors();
     axios.get("/api/v1/admin/blogs/category").then((res) => {
       const normalized = (res.data.data || res.data).map((cat: any) => ({
         ...cat,
@@ -211,6 +210,10 @@ export default function EditBlogForm({ blogId }: { blogId: string }) {
     const res = await axios.get("/api/v1/admin/blogs/tags");
     setTags(res.data.data || res.data);
   };
+  const fetchAuthors = async () => {
+    const res = await axios.get("/api/v1/admin/blogs/authors");
+    setAuthors(res.data.data || res.data);
+  };
 
   // Save handler (sidebar)
   const handleSidebarSave = () => {
@@ -288,6 +291,32 @@ export default function EditBlogForm({ blogId }: { blogId: string }) {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const onAddAuthor = async ({
+    name,
+    email,
+  }: {
+    name: string;
+    email: string;
+  }) => {
+    setAddAuthorLoading(true);
+    try {
+      const res = await axios.post("/api/v1/admin/blogs/authors/create", {
+        name,
+        email,
+      });
+      await fetchAuthors();
+      setAuthorId(res.data.data._id);
+    } catch (e) {
+      toast({
+        title: "Error",
+        description: "Failed to add author",
+        variant: "destructive",
+      });
+    } finally {
+      setAddAuthorLoading(false);
     }
   };
 
@@ -380,18 +409,13 @@ export default function EditBlogForm({ blogId }: { blogId: string }) {
           />
           {/* Post Status Dropdown */}
           <div className="mb-8">
-            <StatusAuthorSelector
+            <StatusSelector
               status={status}
               setStatus={setStatus}
-              authors={authors}
-              authorId={authorId}
-              setAuthorId={setAuthorId}
               allowComments={allowComments}
               setAllowComments={setAllowComments}
               isPasswordProtected={isPasswordProtected}
               setIsPasswordProtected={setIsPasswordProtected}
-              password={password}
-              setPassword={setPassword}
               scheduledDate={scheduledDate}
               setScheduledDate={setScheduledDate}
               scheduledHour={scheduledHour}
@@ -400,6 +424,8 @@ export default function EditBlogForm({ blogId }: { blogId: string }) {
               setScheduledMinute={setScheduledMinute}
               scheduledPeriod={scheduledPeriod}
               setScheduledPeriod={setScheduledPeriod}
+              password={password}
+              setPassword={setPassword}
               popoverOpen={popoverOpen}
               setPopoverOpen={setPopoverOpen}
             />
@@ -443,6 +469,13 @@ export default function EditBlogForm({ blogId }: { blogId: string }) {
               </AccordionContent>
             </AccordionItem>
           </Accordion>
+          <AuthorSelector
+            authors={authors}
+            authorId={authorId}
+            setAuthorId={setAuthorId}
+            addAuthorLoading={addAuthorLoading}
+            onAddAuthor={onAddAuthor}
+          />
         </div>
       </div>
     </div>

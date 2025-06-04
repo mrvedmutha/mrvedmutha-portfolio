@@ -33,10 +33,6 @@ export const AdminSidebarNav = [
   {
     title: "Posts",
     icon: FileText,
-    items: [
-      { title: "Blogs", url: "/admin/blogs", icon: FileText },
-      { title: "Categories", url: "/admin/categories", icon: Folder },
-      { title: "Tags", url: "/admin/tags", icon: Tag },
-    ],
+    items: [{ title: "Blogs", url: "/admin/blogs", icon: FileText }],
   },
 ];

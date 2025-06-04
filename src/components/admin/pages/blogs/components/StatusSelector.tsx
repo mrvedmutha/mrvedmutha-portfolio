@@ -18,12 +18,9 @@ import {
 } from "@/components/ui/popover";
 import { BlogStatus } from "@/enums/admin/blogs/status.enum";
 
-interface StatusAuthorSelectorProps {
+interface StatusSelectorProps {
   status: BlogStatus;
   setStatus: (v: BlogStatus) => void;
-  authors: any[];
-  authorId: string;
-  setAuthorId: (v: string) => void;
   allowComments: boolean;
   setAllowComments: (v: boolean) => void;
   isPasswordProtected: boolean;
@@ -42,12 +39,9 @@ interface StatusAuthorSelectorProps {
   setPopoverOpen: (v: boolean) => void;
 }
 
-const StatusAuthorSelector: React.FC<StatusAuthorSelectorProps> = ({
+const StatusSelector: React.FC<StatusSelectorProps> = ({
   status,
   setStatus,
-  authors,
-  authorId,
-  setAuthorId,
   allowComments,
   setAllowComments,
   isPasswordProtected,
@@ -169,22 +163,6 @@ const StatusAuthorSelector: React.FC<StatusAuthorSelectorProps> = ({
         </div>
       )}
     </div>
-    {/* Author Dropdown */}
-    <div className="mb-4">
-      <label className="block text-sm font-medium mb-1">Author</label>
-      <Select value={authorId} onValueChange={setAuthorId}>
-        <SelectTrigger>
-          <SelectValue placeholder="Select author" />
-        </SelectTrigger>
-        <SelectContent>
-          {authors.map((a) => (
-            <SelectItem key={a._id} value={a._id}>
-              {a.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
     {/* Discussion Checkbox */}
     <div className="mb-4 flex items-center gap-2">
       <Checkbox
@@ -199,4 +177,4 @@ const StatusAuthorSelector: React.FC<StatusAuthorSelectorProps> = ({
   </>
 );
 
-export default StatusAuthorSelector;
+export default StatusSelector;

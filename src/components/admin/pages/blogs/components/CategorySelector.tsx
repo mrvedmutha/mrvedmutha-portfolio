@@ -103,12 +103,12 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
   addCategoryLoading,
   onHandleAddCategory,
 }) => (
-  <Accordion type="single" collapsible className="mb-8">
+  <Accordion type="single" collapsible className="mb-4">
     <AccordionItem value="category">
       <AccordionTrigger>Categories</AccordionTrigger>
       <AccordionContent>
         <div className="flex flex-col gap-4">
-          <div className="max-h-40 overflow-y-auto p-2 border rounded bg-muted/20 flex flex-col gap-4">
+          <div className="max-h-40 overflow-y-auto p-2 border rounded bg-muted/20 flex flex-col gap-2">
             {renderCategoryCheckboxes(
               buildCategoryTree(categories),
               selectedCategories,
