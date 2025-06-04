@@ -6,7 +6,7 @@ import { authOptions } from "@/lib/auth/options";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
@@ -16,7 +16,7 @@ export async function GET(
     }
     return SuccessResponse(blog);
   } catch (error: any) {
-    return FailureResponse(error.message, 400);
+    return FailureResponse(error.message, 500);
   }
 }
 
