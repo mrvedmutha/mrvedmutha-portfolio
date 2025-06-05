@@ -2,8 +2,9 @@ import { SuccessResponse, FailureResponse } from "@/lib/common/responses";
 import type { NextRequest } from "next/server";
 import { skillService } from "@/services/admin/pages/skill.services";
 import { Skill } from "@/models/admin/pages/skill.model";
-
+import { dbConnect } from "@/lib/db";
 export async function GET(req: NextRequest) {
+  await dbConnect();
   try {
     const { searchParams } = new URL(req.url);
     const page = parseInt(searchParams.get("page") || "1", 10);
@@ -15,6 +16,7 @@ export async function GET(req: NextRequest) {
     ]);
     return SuccessResponse({ data: skills, total }, 200);
   } catch (error: any) {
+    console.log(error);
     return FailureResponse(error.message || "Failed to fetch skills", 500);
   }
 }

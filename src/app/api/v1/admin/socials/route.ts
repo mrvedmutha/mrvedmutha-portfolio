@@ -2,8 +2,9 @@ import { SuccessResponse, FailureResponse } from "@/lib/common/responses";
 import type { NextRequest } from "next/server";
 import { socialService } from "@/services/admin/pages/social.services";
 import { Social } from "@/models/admin/pages/social.model";
-
+import { dbConnect } from "@/lib/db";
 export async function GET(req: NextRequest) {
+  await dbConnect();
   try {
     const { searchParams } = new URL(req.url);
     const page = parseInt(searchParams.get("page") || "1", 10);

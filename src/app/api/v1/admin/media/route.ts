@@ -2,7 +2,7 @@
 import { NextRequest } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
 import { SuccessResponse, FailureResponse } from "@/lib/common/responses";
-
+import { dbConnect } from "@/lib/db";
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API,
@@ -12,6 +12,7 @@ cloudinary.config({
 
 export async function GET(req: NextRequest) {
   try {
+    await dbConnect();
     const { resources } = await cloudinary.search
       .expression("folder:mrvedmutha/portfolio/blog/content")
       .sort_by("created_at", "desc")

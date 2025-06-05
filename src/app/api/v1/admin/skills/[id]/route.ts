@@ -4,11 +4,12 @@ import { skillZodSchema } from "@/schemas/zod/admin/pages/skill.zod.schema";
 import { getServerSession } from "next-auth";
 import { SuccessResponse, FailureResponse } from "@/lib/common/responses";
 import { skillService } from "@/services/admin/pages/skill.services";
-
+import { dbConnect } from "@/lib/db";
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  await dbConnect();
   try {
     const { id } = await params;
     const skill = await getSkillById(id);

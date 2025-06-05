@@ -3,11 +3,12 @@ import { authorService } from "@/services/admin/blogs/author.services";
 import { SuccessResponse, FailureResponse } from "@/lib/common/responses";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/options";
-
+import { dbConnect } from "@/lib/db";
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  await dbConnect();
   try {
     const { id } = await params;
     const author = await authorService.getById(id);

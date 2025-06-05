@@ -3,11 +3,12 @@ import { getServerSession } from "next-auth";
 import { SuccessResponse, FailureResponse } from "@/lib/common/responses";
 import { socialService } from "@/services/admin/pages/social.services";
 import { authOptions } from "@/lib/auth/options";
-
+import { dbConnect } from "@/lib/db";
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  await dbConnect();
   try {
     const { id } = await params;
     const social = await socialService.getById(id);

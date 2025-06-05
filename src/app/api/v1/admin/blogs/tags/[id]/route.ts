@@ -3,7 +3,7 @@ import { tagService } from "@/services/admin/blogs/tag.services";
 import { SuccessResponse, FailureResponse } from "@/lib/common/responses";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/options";
-
+import { dbConnect } from "@/lib/db";
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -48,6 +48,7 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  await dbConnect();
   const session = await getServerSession(authOptions);
   if (!session) {
     return FailureResponse(

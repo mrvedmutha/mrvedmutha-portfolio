@@ -2,11 +2,12 @@ import { NextRequest } from "next/server";
 import { SuccessResponse, FailureResponse } from "@/lib/common/responses";
 import { experienceService } from "@/services/admin/pages/experience.services";
 import { experienceZodSchema } from "@/schemas/zod/admin/pages/experience.zod.schema";
-
+import { dbConnect } from "@/lib/db";
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  await dbConnect();
   try {
     const { id } = await params;
     const experience = await experienceService.getById(id);

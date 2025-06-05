@@ -3,11 +3,13 @@ import { getServerSession } from "next-auth";
 import { SuccessResponse, FailureResponse } from "@/lib/common/responses";
 import { educationService } from "@/services/admin/pages/education.services";
 import { authOptions } from "@/lib/auth/options";
+import { dbConnect } from "@/lib/db";
 
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  await dbConnect();
   try {
     const { id } = await params;
     const education = await educationService.getById(id);

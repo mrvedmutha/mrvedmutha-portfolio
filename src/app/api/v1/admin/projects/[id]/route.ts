@@ -5,11 +5,12 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/options";
 import { projectService } from "@/services/admin/pages/project.services";
 import type { ProjectRequest } from "@/types/admin/pages/project.types";
-
+import { dbConnect } from "@/lib/db";
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  await dbConnect();
   try {
     const { id } = await params;
     const project = await projectService.getById(id);

@@ -3,11 +3,12 @@ import { categoryService } from "@/services/admin/blogs/category.services";
 import { SuccessResponse, FailureResponse } from "@/lib/common/responses";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/options";
-
+import { dbConnect } from "@/lib/db";
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  await dbConnect();
   try {
     const { id } = await params;
     const category = await categoryService.getById(id);
