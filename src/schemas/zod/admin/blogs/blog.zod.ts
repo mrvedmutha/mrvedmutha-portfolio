@@ -45,4 +45,8 @@ export const BlogZod = z.object({
   categories: z.array(CategoryZod).optional(),
   tags: z.array(TagZod),
   mainImage: z.string().optional(),
+  scheduledAt: z.preprocess(
+    (val) => (val ? new Date(val as string) : undefined),
+    z.date().optional()
+  ),
 });

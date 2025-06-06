@@ -43,12 +43,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { useSession, signOut } from "next-auth/react";
 import { AdminSidebarNav } from "@/context/constants/admin/sidebar";
-
+import { Skeleton } from "@/components/ui/skeleton";
 export default function AdminSidebar() {
   const { setTheme } = useTheme();
   const pathname = usePathname();
-  const { data: session } = useSession();
-  const userEmail = session?.user?.email || "user@example.com";
+  const { data: session, status } = useSession();
+  const userEmail = session?.user?.email;
 
   const isActive = (url: string) => url !== "#" && pathname === url;
   const hasActiveChild = (items: any[]) =>
@@ -162,10 +162,18 @@ export default function AdminSidebar() {
                 <User className="size-6" />
               </div>
               <div className="flex flex-col gap-0.5 leading-none overflow-hidden">
-                <span className="text-sm font-semibold truncate">
-                  {userEmail}
-                </span>
-                <span className="text-xs text-muted-foreground">Account</span>
+                {status === "loading" ? (
+                  <Skeleton className="w-24 h-4" />
+                ) : (
+                  <>
+                    <span className="text-sm font-semibold truncate">
+                      {userEmail}
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      Account
+                    </span>
+                  </>
+                )}
               </div>
               <Button
                 variant="ghost"

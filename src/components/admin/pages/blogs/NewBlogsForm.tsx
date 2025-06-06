@@ -193,7 +193,7 @@ export default function NewBlogsForm() {
   }, []);
 
   const form = useForm<BlogFormType>({
-    resolver: zodResolver(BlogZod),
+    resolver: zodResolver(BlogZod) as any,
     defaultValues,
   });
 
@@ -287,7 +287,34 @@ export default function NewBlogsForm() {
       if (!slug) {
         slug = generateSlug(values.title);
       }
-      const payload = { ...values, ...sidebarData, slug, mainImage };
+      // Combine scheduled fields into scheduledAt
+      let scheduledAt: Date | undefined = undefined;
+      if (
+        status === BlogStatus.SCHEDULED &&
+        scheduledDate &&
+        scheduledHour &&
+        scheduledMinute &&
+        scheduledPeriod
+      ) {
+        const hour = parseInt(scheduledHour, 10) % 12;
+        const hour24 = scheduledPeriod === "PM" ? hour + 12 : hour;
+        scheduledAt = new Date(
+          scheduledDate.getFullYear(),
+          scheduledDate.getMonth(),
+          scheduledDate.getDate(),
+          hour24,
+          parseInt(scheduledMinute, 10),
+          0,
+          0
+        );
+      }
+      const payload = {
+        ...values,
+        ...sidebarData,
+        slug,
+        mainImage,
+        scheduledAt,
+      };
       console.log("Blog create payload:", payload);
       await axios.post("/api/v1/admin/blogs/create", payload);
       toast({

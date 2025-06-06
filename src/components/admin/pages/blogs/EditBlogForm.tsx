@@ -125,7 +125,7 @@ export default function EditBlogForm({ blogId }: { blogId: string }) {
   }, [blogId]);
 
   const form = useForm<z.infer<typeof BlogZod>>({
-    resolver: zodResolver(BlogZod),
+    resolver: zodResolver(BlogZod) as any,
     defaultValues: {
       title: "",
       slug: "",
@@ -225,10 +225,44 @@ export default function EditBlogForm({ blogId }: { blogId: string }) {
   const onSidebarSave = async () => {
     setLoading(true);
     try {
+      // Prevent scheduling if already published
+      if (
+        form.getValues("status") === BlogStatus.PUBLISHED &&
+        status === BlogStatus.SCHEDULED
+      ) {
+        toast({
+          title: "Cannot schedule published post",
+          description: "A published post cannot be scheduled again.",
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
       const values = getValues();
       let slug = values.slug;
       if (!slug) {
         slug = generateSlug(values.title);
+      }
+      // Combine scheduled fields into scheduledAt
+      let scheduledAt: Date | undefined = undefined;
+      if (
+        status === BlogStatus.SCHEDULED &&
+        scheduledDate &&
+        scheduledHour &&
+        scheduledMinute &&
+        scheduledPeriod
+      ) {
+        const hour = parseInt(scheduledHour, 10) % 12;
+        const hour24 = scheduledPeriod === "PM" ? hour + 12 : hour;
+        scheduledAt = new Date(
+          scheduledDate.getFullYear(),
+          scheduledDate.getMonth(),
+          scheduledDate.getDate(),
+          hour24,
+          parseInt(scheduledMinute, 10),
+          0,
+          0
+        );
       }
       const payload = {
         ...values,
@@ -275,6 +309,7 @@ export default function EditBlogForm({ blogId }: { blogId: string }) {
         scheduledPeriod,
         isPasswordProtected,
         password,
+        scheduledAt,
       };
       await axios.patch(`/api/v1/admin/blogs/${blogId}`, payload);
       toast({

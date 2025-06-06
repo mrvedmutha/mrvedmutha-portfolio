@@ -21,7 +21,9 @@ export const blogService = {
     const parsed = BlogZod.safeParse(data);
     console.log(parsed);
     if (!parsed.success) {
-      throw new Error(parsed.error.errors.map((e: any) => e.message).join(", "));
+      throw new Error(
+        parsed.error.errors.map((e: any) => e.message).join(", ")
+      );
     }
     // Save to DB
     const blog = new Blog(parsed.data);

@@ -13,7 +13,6 @@ const getColumns = (
     header: "Image",
     cell: (cell) => {
       const src = cell.getValue() as string;
-      console.log("getColumns src:", src);
       return src ? (
         <Image
           src={src}
@@ -29,6 +28,24 @@ const getColumns = (
     accessorKey: "title",
     header: "Post Title",
     cell: (cell) => cell.getValue(),
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: (cell) => {
+      const status = cell.getValue() as string;
+      return status ? status.charAt(0).toUpperCase() + status.slice(1) : "-";
+    },
+  },
+  {
+    accessorKey: "scheduledAt",
+    header: "Scheduled For",
+    cell: (cell) => {
+      const row = cell.row.original;
+      if (row.status !== "scheduled") return "-";
+      const value = cell.getValue();
+      return value ? new Date(value as string).toLocaleString() : "-";
+    },
   },
   {
     accessorKey: "createdAt",

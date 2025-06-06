@@ -1,7 +1,7 @@
 export enum BlogStatus {
   DRAFT = "draft",
   PENDING = "pending",
-  PUBLIC = "public",
+  PUBLISHED = "published",
   PRIVATE = "private",
   SCHEDULED = "scheduled",
 }

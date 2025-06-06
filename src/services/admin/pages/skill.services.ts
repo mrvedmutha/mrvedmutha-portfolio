@@ -32,4 +32,20 @@ export const skillService = {
     await dbConnect();
     await Skill.findByIdAndDelete(id);
   },
+
+  async getAllTagIcons(): Promise<{ name: string; svg: string }[]> {
+    await dbConnect();
+    const skills = await Skill.find({}).lean();
+    // Flatten all tag objects from all skills
+    const allTags = skills.flatMap((skill: any) => skill.tags || []);
+    // Optionally deduplicate by name if needed:
+    // const uniqueTags = Array.from(new Map(allTags.map(tag => [tag.name, tag])).values());
+    return allTags;
+  },
+
+  async getAllSkillTitles(): Promise<string[]> {
+    await dbConnect();
+    const skills = await Skill.find({}, { title: 1, _id: 0 }).lean();
+    return skills.map((skill: any) => skill.title);
+  },
 };

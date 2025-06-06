@@ -3,21 +3,25 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Github, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { HeroSkills } from "@/context/constants/home/hero";
-import type { HeroSkill } from "@/types/home/hero";
+import { getHeroSkills } from "@/context/constants/home/hero";
 import TechStackGrid from "./TechStackGrid";
 
-const skills: HeroSkill[] = HeroSkills;
-
 export default function Hero() {
+  const [skills, setSkills] = React.useState<string[]>([]);
   const [skillIndex, setSkillIndex] = React.useState(0);
   const [showSkill, setShowSkill] = React.useState("");
   const [typing, setTyping] = React.useState(true);
 
+  // Fetch skills dynamically
+  React.useEffect(() => {
+    getHeroSkills().then(setSkills);
+  }, []);
+
   // Typing and erasing effect for skills
   React.useEffect(() => {
+    if (skills.length === 0) return;
     let timeout: NodeJS.Timeout;
-    const currentSkill = skills[skillIndex];
+    const currentSkill = skills[skillIndex] || "";
     if (typing) {
       if (showSkill.length < currentSkill.length) {
         timeout = setTimeout(() => {
@@ -39,7 +43,7 @@ export default function Hero() {
       }
     }
     return () => clearTimeout(timeout);
-  }, [showSkill, typing, skillIndex]);
+  }, [showSkill, typing, skillIndex, skills]);
 
   return (
     <section className="w-full max-w-7xl mx-auto px-4 py-16 flex flex-col md:flex-row items-center justify-between gap-8 min-h-[60vh]">

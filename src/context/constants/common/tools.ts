@@ -8,7 +8,7 @@ export const deviconTools = [
     svg: "/assets/devicon-master/icons/adonisjs/adonisjs-original.svg",
   },
   {
-    name: "After Effects",
+    name: "Adobe After Effects",
     svg: "/assets/devicon-master/icons/aftereffects/aftereffects-original.svg",
   },
   { name: "Akka", svg: "/assets/devicon-master/icons/akka/akka-original.svg" },
@@ -1002,7 +1002,7 @@ export const deviconTools = [
     svg: "/assets/devicon-master/icons/photonengine/photonengine-original.svg",
   },
   {
-    name: "Photoshop",
+    name: "Adobe Photoshop",
     svg: "/assets/devicon-master/icons/photoshop/photoshop-original.svg",
   },
   { name: "Php", svg: "/assets/devicon-master/icons/php/php-original.svg" },
@@ -1052,7 +1052,7 @@ export const deviconTools = [
     svg: "/assets/devicon-master/icons/powershell/powershell-original.svg",
   },
   {
-    name: "Premierepro",
+    name: "Adobe Premiere Pro",
     svg: "/assets/devicon-master/icons/premierepro/premierepro-original.svg",
   },
   {
@@ -1585,7 +1585,7 @@ export const deviconTools = [
   { name: "Zend", svg: "/assets/devicon-master/icons/zend/zend-original.svg" },
   { name: "Zig", svg: "/assets/devicon-master/icons/zig/zig-original.svg" },
   {
-    name: "Illustrator",
+    name: "Adobe Illustrator",
     svg: "/assets/devicon-master/icons/illustrator/illustrator-original.svg",
   },
   {
@@ -1607,5 +1607,9 @@ export const deviconTools = [
   {
     name: "Adobe Creative Cloud",
     svg: "/assets/devicon-master/icons/creativecloud/creativecloud-original.svg",
+  },
+  {
+    name: "Adobe Dimension",
+    svg: "/assets/devicon-master/icons/dimension/dimension-original.svg",
   },
 ];

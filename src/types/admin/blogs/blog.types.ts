@@ -48,4 +48,5 @@ export interface Blog {
   categories?: Category[];
   tags?: Tag[];
   mainImage?: string;
+  scheduledAt?: Date;
 }

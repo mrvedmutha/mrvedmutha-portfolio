@@ -16,6 +16,7 @@ export const BlogSchema = new Schema<Blog>(
     categories: [{ type: CategorySchema }],
     tags: [{ type: TagSchema }],
     mainImage: { type: String, required: false },
+    scheduledAt: { type: Date, required: false },
   },
   { timestamps: true }
 );
