@@ -33,13 +33,27 @@ export const blogService = {
 
   async getAll(limit = 25, skip = 0): Promise<BlogType[]> {
     await dbConnect();
-    const blogs = await Blog.find({}).skip(skip).limit(limit).lean();
+    const blogs = await Blog.find({})
+      .populate({ path: "author", select: "name avatarUrl" })
+      .skip(skip)
+      .limit(limit)
+      .lean();
     return blogs as unknown as BlogType[];
   },
 
   async getById(id: string): Promise<BlogType | null> {
     await dbConnect();
-    const blog = await Blog.findById(id).lean();
+    const blog = await Blog.findById(id)
+      .populate({ path: "author", select: "name avatarUrl" })
+      .lean();
+    return blog ? (blog as unknown as BlogType) : null;
+  },
+
+  async getBySlug(slug: string): Promise<BlogType | null> {
+    await dbConnect();
+    const blog = await Blog.findOne({ slug })
+      .populate({ path: "author", select: "name avatarUrl" })
+      .lean();
     return blog ? (blog as unknown as BlogType) : null;
   },
 
