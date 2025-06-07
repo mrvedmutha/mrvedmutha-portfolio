@@ -268,14 +268,7 @@ export default function EditBlogForm({ blogId }: { blogId: string }) {
         ...values,
         slug,
         mainImage,
-        author: authorId
-          ? {
-              name: authors.find((a) => a._id === authorId)?.name || "",
-              email: authors.find((a) => a._id === authorId)?.email || "",
-              avatarUrl:
-                authors.find((a) => a._id === authorId)?.avatarUrl || "",
-            }
-          : undefined,
+        author: authorId || undefined,
         tags: selectedTags
           .map((tagId) => {
             const tag = tags.find((t) => t.id === tagId);

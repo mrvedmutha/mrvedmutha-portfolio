@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/sheet";
 import { Menu, Sun, Moon } from "lucide-react";
 import { NavigationLinks } from "@/context/constants/home/navigation";
+import SearchBar from "@/components/home/search/SearchBar";
+import Link from "next/link";
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -24,15 +26,15 @@ export default function Navbar() {
     <nav className="w-full bg-background/80 backdrop-blur border-b border-border sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between gap-4">
         {/* Logo */}
-        <div className="font-bold text-xl tracking-tight select-none">
+        <Link
+          href="/"
+          className="font-bold text-xl tracking-tight select-none hover:text-primary transition-colors"
+        >
           Mr.Vedmutha
-        </div>
+        </Link>
         {/* Search Bar */}
         <div className="hidden md:flex flex-1 min-w-0 justify-center">
-          <Input
-            placeholder="Search..."
-            className="rounded-full w-full min-w-0"
-          />
+          <SearchBar />
         </div>
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-6">
@@ -89,7 +91,13 @@ export default function Navbar() {
           >
             <SheetTitle className="sr-only">Menu</SheetTitle>
             <div className="flex items-center justify-between px-4 py-3 border-b border-border">
-              <div className="font-bold text-xl">Mr.Vedmutha</div>
+              <Link
+                href="/"
+                className="font-bold text-xl hover:text-primary transition-colors"
+                onClick={() => setMobileOpen(false)}
+              >
+                Mr.Vedmutha
+              </Link>
             </div>
             <div className="px-4 py-3 border-b border-border">
               <Input placeholder="Search..." className="rounded-full w-full" />
