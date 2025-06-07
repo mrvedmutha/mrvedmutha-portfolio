@@ -5,7 +5,7 @@ import {
   ProjectsSection,
   ExperienceSection,
   BlogSection,
-  ConnectSection,
+  SocialSection,
 } from "@/components/home";
 
 export default function Home() {
@@ -17,7 +17,7 @@ export default function Home() {
       <ProjectsSection />
       <ExperienceSection />
       <BlogSection />
-      <ConnectSection />
+      <SocialSection />
     </div>
   );
 }
