@@ -4,10 +4,11 @@ import { contactusService } from "@/services/home/contactus.services";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const message = await contactusService.getById(params.id);
+    const { id } = await params;
+    const message = await contactusService.getById(id);
     if (!message) {
       return FailureResponse("Contact message not found.", 404);
     }
