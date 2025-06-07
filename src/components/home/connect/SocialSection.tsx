@@ -2,8 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { getSocials, SocialLink } from "@/context/constants/home/socials";
-import { SocialIcon } from "react-social-icons";
+import { IconMap } from "@/context/constants/socials";
 import Link from "next/link";
+import { SocialIcon } from "react-social-icons";
 
 export default function SocialSection() {
   const [socials, setSocials] = useState<SocialLink[]>([]);
@@ -47,35 +48,38 @@ export default function SocialSection() {
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 justify-items-center">
         {socials.map((social, idx) => (
-          <motion.a
+          <motion.div
             key={social._id}
-            href={social.url}
-            target="_blank"
-            rel="noopener noreferrer"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 * idx }}
             className="w-full max-w-xs bg-muted rounded-xl shadow p-8 flex flex-col items-start border border-border min-h-[160px] hover:scale-105 hover:shadow-lg transition-transform cursor-pointer group"
           >
-            <div className="flex items-center gap-4 mb-2">
+            <Link
+              href={social.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-4 mb-2 no-underline"
+            >
               <span className="text-3xl group-hover:scale-110 transition-transform">
                 <SocialIcon
                   url={social.url}
+                  as="span"
                   style={{ height: 32, width: 32 }}
                 />
               </span>
               <span className="text-xl font-semibold text-muted-foreground">
                 {social.name}
               </span>
-            </div>
+            </Link>
             <span className="text-base text-primary font-medium mb-1">
               {social.username}
             </span>
             <span className="text-xs text-muted-foreground break-all">
               {social.url.replace(/^https?:\/\//, "")}
             </span>
-          </motion.a>
+          </motion.div>
         ))}
       </div>
       <div className="flex flex-col items-center mt-12 gap-4">

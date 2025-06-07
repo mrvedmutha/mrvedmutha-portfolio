@@ -29,6 +29,77 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 
+function ContactActionsCell({
+  message,
+  onDelete,
+  id,
+}: {
+  message: string;
+  onDelete?: (id: string) => void;
+  id: string;
+}) {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [alertOpen, setAlertOpen] = useState(false);
+  return (
+    <>
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <AlertDialog open={alertOpen} onOpenChange={setAlertOpen}>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <MoreVertical className="w-4 h-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setDialogOpen(true)}>
+                <Eye className="w-4 h-4 mr-2" /> View Message
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onSelect={(e) => e.preventDefault()}
+                onClick={() => setAlertOpen(true)}
+                className="text-red-500 data-[highlighted]:bg-red-50 data-[highlighted]:text-red-700 dark:data-[highlighted]:bg-red-900 dark:data-[highlighted]:text-red-400"
+              >
+                <Trash2 className="w-4 h-4 mr-2" /> Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          {/* View Message Dialog */}
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Message</DialogTitle>
+              <DialogDescription>{message}</DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+          {/* Delete Confirmation Dialog */}
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                Are you sure you want to delete this contact message?
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete the
+                contact message.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => {
+                  setAlertOpen(false);
+                  if (onDelete) onDelete(id);
+                }}
+                className="bg-red-600 hover:bg-red-700"
+              >
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </Dialog>
+    </>
+  );
+}
+
 const getColumns = (
   onDelete?: (id: string) => void
 ): ColumnDef<IContactMessage>[] => [
@@ -45,69 +116,13 @@ const getColumns = (
   {
     accessorKey: "actions",
     header: "Actions",
-    cell: ({ row }) => {
-      const [dialogOpen, setDialogOpen] = useState(false);
-      const [alertOpen, setAlertOpen] = useState(false);
-      const message = row.original.message;
-      return (
-        <>
-          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <AlertDialog open={alertOpen} onOpenChange={setAlertOpen}>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <MoreVertical className="w-4 h-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => setDialogOpen(true)}>
-                    <Eye className="w-4 h-4 mr-2" /> View Message
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onSelect={(e) => e.preventDefault()}
-                    onClick={() => setAlertOpen(true)}
-                    className="text-red-500 data-[highlighted]:bg-red-50 data-[highlighted]:text-red-700 dark:data-[highlighted]:bg-red-900 dark:data-[highlighted]:text-red-400"
-                  >
-                    <Trash2 className="w-4 h-4 mr-2" /> Delete
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              {/* View Message Dialog */}
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Message</DialogTitle>
-                  <DialogDescription>{message}</DialogDescription>
-                </DialogHeader>
-              </DialogContent>
-              {/* Delete Confirmation Dialog */}
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    Are you sure you want to delete this contact message?
-                  </AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    the contact message.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={() => {
-                      setAlertOpen(false);
-                      if (onDelete) onDelete(row.original._id);
-                    }}
-                    className="bg-red-600 hover:bg-red-700"
-                  >
-                    Delete
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </Dialog>
-        </>
-      );
-    },
+    cell: ({ row }) => (
+      <ContactActionsCell
+        message={row.original.message}
+        onDelete={onDelete}
+        id={row.original._id}
+      />
+    ),
   },
 ];
 
