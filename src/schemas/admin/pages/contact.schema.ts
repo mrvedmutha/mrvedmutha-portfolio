@@ -15,4 +15,3 @@ const ContactMessageSchema = new Schema<IContactMessageDoc>({
 });
 
 export default ContactMessageSchema;
-export type { IContactMessageDoc };
