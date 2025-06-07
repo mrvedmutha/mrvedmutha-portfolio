@@ -20,10 +20,11 @@ export async function GET(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await contactusService.deleteById(params.id);
+    const { id } = await params;
+    await contactusService.deleteById(id);
     return SuccessResponse({ success: true });
   } catch (error: any) {
     return FailureResponse(
