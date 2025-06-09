@@ -1,18 +1,45 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function AboutMe() {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [section, setSection] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setImageLoaded(true);
-    }, 1200); // 1.2s delay for demo, adjust as needed
+    }, 1200);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    async function fetchSection() {
+      setLoading(true);
+      try {
+        const res = await axios.get("/api/v1/admin/sections");
+        const data = res.data?.data?.data?.[0];
+        setSection(data || null);
+      } catch {
+        setSection(null);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchSection();
+  }, []);
+
+  function getAge(dob) {
+    if (!dob) return null;
+    const birthYear = new Date(dob).getFullYear();
+    const currentYear = new Date().getFullYear();
+    if (isNaN(birthYear)) return null;
+    return currentYear - birthYear;
+  }
 
   return (
     <>
@@ -35,11 +62,32 @@ export default function AboutMe() {
           className="flex-1 bg-muted rounded-xl shadow p-8 flex flex-col justify-center items-start border border-border min-h-[220px]"
         >
           <h2 className="text-2xl font-bold mb-5">About Me</h2>
-          <p className="text-muted-foreground text-base md:text-lg">
-            {/* Dynamic content will go here */}
-            Hi! I&apos;m Shreyans, a passionate developer and creative
-            technologist. (Dynamic content placeholder)
-          </p>
+          <div className="text-muted-foreground text-base md:text-lg">
+            {loading && "Loading..."}
+            {!loading && section && (
+              <div className="flex flex-col gap-2">
+                <div>
+                  <strong>Name:</strong> {section.name}
+                </div>
+                <div>
+                  <strong>Current City:</strong> {section.currentCity}
+                </div>
+                <div>
+                  <strong>Country:</strong> {section.country}
+                </div>
+                <div>
+                  <strong>Degree:</strong> {section.degree}
+                </div>
+                <div>
+                  <strong>Date of Birth:</strong> {section.dob}
+                </div>
+                <div>
+                  <strong>Age:</strong> {getAge(section.dob)} years
+                </div>
+              </div>
+            )}
+            {!loading && !section && <span>No information available.</span>}
+          </div>
         </motion.div>
         {/* Block 2: Fun Facts or Skills */}
         <motion.div
@@ -50,10 +98,13 @@ export default function AboutMe() {
           className="flex-1 bg-muted rounded-xl shadow p-8 flex flex-col justify-center items-start border border-border min-h-[220px]"
         >
           <h2 className="text-2xl font-bold mb-2">More About Me</h2>
-          <p className="text-muted-foreground text-base md:text-lg">
-            {/* Dynamic content will go here */}I love building interactive web
-            experiences and exploring new tech. (Dynamic content placeholder)
-          </p>
+          <div className="text-muted-foreground text-base md:text-lg">
+            {loading && "Loading..."}
+            {!loading && section && section.about}
+            {!loading && (!section || !section.about) && (
+              <span>No about information available.</span>
+            )}
+          </div>
         </motion.div>
       </motion.section>
       <motion.section
