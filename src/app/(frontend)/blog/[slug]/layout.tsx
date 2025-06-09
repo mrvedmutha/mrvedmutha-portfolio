@@ -27,10 +27,11 @@ type Props = {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
+  const { slug } = await params;
   const apiUrl = process.env.NEXTAUTH_URL || "";
-  const res = await fetch(`${apiUrl}/api/v1/admin/blogs?slug=${params.slug}`, {
+  const res = await fetch(`${apiUrl}/api/v1/admin/blogs?slug=${slug}`, {
     cache: "no-store",
   });
   const data = await res.json();
