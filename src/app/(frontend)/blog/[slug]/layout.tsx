@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Blog as BlogBase } from "@/context/constants/home/blogs";
 import { BlogStatus } from "@/enums/admin/blogs/status.enum";
+import "@/app/globals.css";
 
 // Extend Blog type for post page
 type BlogType = BlogBase & {

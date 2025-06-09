@@ -113,7 +113,7 @@ export default function BlogPostPage() {
         )}
         {/* Description/Post Content */}
         <div
-          className="prose prose-lg max-w-none mb-8"
+          className="prose prose-lg max-w-none mb-8 dark:prose-invert"
           dangerouslySetInnerHTML={{ __html: blog?.description || "" }}
         />
         {/* Author */}

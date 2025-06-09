@@ -553,7 +553,7 @@ export default function TipTapEditor({
         >
           <EditorContent
             editor={editor}
-            className="prose prose-sm max-w-none custom-tiptap-content"
+            className="prose prose-sm max-w-none custom-tiptap-content dark:prose-invert"
           />
         </div>
       )}
