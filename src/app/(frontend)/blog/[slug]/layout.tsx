@@ -21,7 +21,7 @@ function isAuthorObject(
 
 type Props = {
   children: React.ReactNode;
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
 export async function generateMetadata({
@@ -81,6 +81,8 @@ export async function generateMetadata({
   };
 }
 
-export default function BlogSlugLayout({ children }: Props) {
+export default async function BlogSlugLayout({ children, params }: Props) {
+  const { slug } = await params;
+  // You can use slug if needed
   return <>{children}</>;
 }
