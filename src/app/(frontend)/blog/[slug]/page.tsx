@@ -128,6 +128,17 @@ export default function BlogPostPage() {
             By {blog.author.name}
           </div>
         )}
+        {/* Updated At */}
+        {blog?.updatedAt && (
+          <div className="mb-6 text-xs text-muted-foreground">
+            Last updated:{" "}
+            {new Date(blog.updatedAt).toLocaleDateString(undefined, {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </div>
+        )}
         {/* Comments */}
         {blog?.allowComments === false ? (
           <div className="text-center text-muted-foreground">

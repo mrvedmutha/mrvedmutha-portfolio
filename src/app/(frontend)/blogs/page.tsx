@@ -72,11 +72,19 @@ export default function BlogsPage() {
                   className="w-full h-40 object-cover"
                 />
               )}
-              {/* Blog Title */}
+              {/* Blog Title and Date */}
               <div className="p-6 flex flex-col flex-1 justify-between">
-                <h2 className="text-xl font-bold mb-4 line-clamp-2">
+                <h2 className="text-xl font-bold mb-2 line-clamp-2">
                   {blog.title}
                 </h2>
+                <div className="text-sm text-muted-foreground mb-4">
+                  Created on:{" "}
+                  {new Date(blog.createdAt).toLocaleDateString(undefined, {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </div>
                 <Link href={`/blog/${blog.slug}`}>
                   <button className="mt-auto px-4 py-2 rounded bg-primary text-primary-foreground font-semibold shadow hover:bg-primary/90 transition">
                     Read more
