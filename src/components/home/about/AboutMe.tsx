@@ -5,9 +5,18 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
 
+interface SectionData {
+  name?: string;
+  currentCity?: string;
+  country?: string;
+  degree?: string;
+  dob?: string;
+  about?: string;
+}
+
 export default function AboutMe() {
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [section, setSection] = useState(null);
+  const [section, setSection] = useState<SectionData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
