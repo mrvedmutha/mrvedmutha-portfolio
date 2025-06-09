@@ -18,6 +18,7 @@ type BlogType = BlogBase & {
   description?: string;
   author?: string;
   allowComments?: boolean;
+  updatedAt?: string;
 };
 
 // Type guard for author object
