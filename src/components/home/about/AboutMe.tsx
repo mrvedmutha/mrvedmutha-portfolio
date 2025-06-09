@@ -33,7 +33,7 @@ export default function AboutMe() {
     fetchSection();
   }, []);
 
-  function getAge(dob) {
+  function getAge(dob: string | undefined) {
     if (!dob) return null;
     const birthYear = new Date(dob).getFullYear();
     const currentYear = new Date().getFullYear();
