@@ -40,6 +40,7 @@ export async function POST(
   try {
     const { blogId } = await params;
     const body = await request.json();
+    console.log('Comment API - Request body:', body);
 
     // Check both admin and public auth sessions
     let token = await getToken({ 
@@ -57,6 +58,8 @@ export async function POST(
         secret: process.env.NEXTAUTH_SECRET
       });
     }
+
+    console.log('Comment API - Token found:', !!token, token ? 'Has token' : 'No token');
 
     if (!token) {
       return NextResponse.json(

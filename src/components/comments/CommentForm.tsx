@@ -27,6 +27,7 @@ interface CommentFormProps {
     email: string;
     image: string;
     provider: string;
+    isAdmin?: boolean;
   } | null;
 }
 
@@ -38,13 +39,15 @@ export function CommentForm({
   currentUser,
 }: CommentFormProps) {
   const [content, setContent] = useState('');
-  // Default to true for admin users, true for regular users
-  const [useRealName, setUseRealName] = useState(true);
   const [showEmail, setShowEmail] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Check if user is admin (has adminId or role)
-  const isAdmin = !!(currentUser as any)?.isAdmin || !!(currentUser as any)?.adminId;
+  // Check if user is admin
+  const isAdmin = currentUser?.isAdmin || false;
+  
+  // Admin users must use real name, regular users can choose
+  const [useRealName, setUseRealName] = useState(true);
+  const canToggleAnonymous = !isAdmin;
 
   // Generate anonymous name for preview
   const anonymousName = currentUser 
@@ -147,14 +150,22 @@ export function CommentForm({
                 {useRealName ? <User className="h-4 w-4" /> : <UserX className="h-4 w-4" />}
                 <Label htmlFor="use-real-name" className="text-sm">
                   Use real name ({currentUser.name})
+                  {isAdmin && <Badge variant="destructive" className="ml-2 text-xs">Admin</Badge>}
                 </Label>
               </div>
               <Switch
                 id="use-real-name"
                 checked={useRealName}
-                onCheckedChange={setUseRealName}
+                onCheckedChange={canToggleAnonymous ? setUseRealName : undefined}
+                disabled={!canToggleAnonymous}
               />
             </div>
+
+            {isAdmin && (
+              <div className="text-xs text-muted-foreground p-2 bg-muted/30 rounded">
+                🔒 Admin users must use their real name and cannot comment anonymously
+              </div>
+            )}
 
             {useRealName && (
               <div className="flex items-center justify-between">

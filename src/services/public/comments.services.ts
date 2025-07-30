@@ -77,26 +77,34 @@ export class CommentService {
 
   static async createComment(data: CreateCommentData) {
     await dbConnect();
+    console.log('CommentService.createComment - Input data:', data);
 
     const { content, parentId, useRealName, showEmail, blogId, user } = data;
 
     // Validate content
     if (!content?.trim()) {
+      console.log('CommentService - Validation failed: Content is required');
       throw new Error("Content is required");
     }
 
     if (content.length > 1000) {
+      console.log('CommentService - Validation failed: Content too long');
       throw new Error("Content too long (max 1000 characters)");
     }
 
     // Find the blog
+    console.log('CommentService - Looking for blog:', blogId);
     const blog = await Blog.findById(blogId);
     if (!blog) {
+      console.log('CommentService - Blog not found:', blogId);
       throw new Error("Blog not found");
     }
 
+    console.log('CommentService - Blog found:', blog.title, 'Status:', blog.status, 'AllowComments:', blog.allowComments);
+
     // Check if comments are allowed
     if (blog.status !== BlogStatus.PUBLISHED || !blog.allowComments) {
+      console.log('CommentService - Comments not allowed for this blog');
       throw new Error("Comments are not allowed for this blog");
     }
 
@@ -111,6 +119,9 @@ export class CommentService {
     }
 
     // Generate display name and avatar
+    console.log('CommentService - User data:', { id: user.id, name: user.name, email: user.email });
+    console.log('CommentService - useRealName:', useRealName);
+    
     const displayName = useRealName 
       ? user.name || 'Anonymous User'
       : AnonymousNameGenerator.generateForUser(user.id);
@@ -118,6 +129,8 @@ export class CommentService {
     const avatar = useRealName 
       ? user.image || ''
       : AnonymousNameGenerator.getAvatarUrl(displayName);
+
+    console.log('CommentService - Generated displayName:', displayName, 'avatar:', avatar);
 
     // Create the comment
     const newComment = new Comment({

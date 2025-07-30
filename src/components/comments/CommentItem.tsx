@@ -21,6 +21,8 @@ import { Separator } from '@/components/ui/separator';
 import { Comment, CommentActionProps } from '@/types/comments/comment.types';
 import { CommentForm } from './CommentForm';
 import { CommentEditForm } from './CommentEditForm';
+import { DeleteCommentDialog } from './DeleteCommentDialog';
+import { ReportCommentDialog } from './ReportCommentDialog';
 
 interface CommentItemProps extends CommentActionProps {
   replies?: Comment[];
@@ -43,6 +45,8 @@ export function CommentItem({
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showReportDialog, setShowReportDialog] = useState(false);
   const [userVote, setUserVote] = useState<'up' | 'down' | null>(
     currentUserId 
       ? comment.votes.userVotes.find(v => v.userId === currentUserId)?.vote || null
@@ -77,16 +81,19 @@ export function CommentItem({
   };
 
   const handleDelete = () => {
-    if (window.confirm('Are you sure you want to delete this comment?')) {
-      onDelete(comment._id);
-    }
+    setShowDeleteDialog(true);
+  };
+
+  const handleConfirmDelete = async (reason?: string) => {
+    await onDelete(comment._id);
   };
 
   const handleReport = () => {
-    const reason = window.prompt('Why are you reporting this comment?');
-    if (reason) {
-      onReport(comment._id, reason);
-    }
+    setShowReportDialog(true);
+  };
+
+  const handleConfirmReport = async (reason: string) => {
+    await onReport(comment._id, reason);
   };
 
   const renderDeletedComment = () => (
@@ -309,7 +316,7 @@ export function CommentItem({
                   setShowReplyForm(false);
                 }}
                 onCancel={() => setShowReplyForm(false)}
-                currentUser={currentUser}
+                currentUser={currentUser ? { ...currentUser, isAdmin } : null}
                 placeholder={`Reply to ${comment.author.displayName}...`}
               />
             </div>
@@ -342,6 +349,23 @@ export function CommentItem({
           </CollapsibleContent>
         </Collapsible>
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <DeleteCommentDialog
+        open={showDeleteDialog}
+        onOpenChange={setShowDeleteDialog}
+        onConfirm={handleConfirmDelete}
+        isAdmin={isAdmin}
+        commentAuthor={comment.author.displayName}
+      />
+
+      {/* Report Comment Dialog */}
+      <ReportCommentDialog
+        open={showReportDialog}
+        onOpenChange={setShowReportDialog}
+        onConfirm={handleConfirmReport}
+        commentAuthor={comment.author.displayName}
+      />
     </div>
   );
 }
