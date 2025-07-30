@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Blog as BlogBase } from "@/context/constants/home/blogs";
 import { BlogStatus } from "@/enums/admin/blogs/status.enum";
+import { BlogPostStructuredData } from "@/components/seo/StructuredData";
 import "@/app/globals.css";
 
 // Extend Blog type for post page
@@ -8,6 +9,7 @@ type BlogType = BlogBase & {
   description?: string;
   author?: string;
   allowComments?: boolean;
+  updatedAt?: string;
 };
 
 function isAuthorObject(
@@ -85,6 +87,29 @@ export async function generateMetadata({
 
 export default async function BlogSlugLayout({ children, params }: Props) {
   const { slug } = await params;
-  // You can use slug if needed
-  return <>{children}</>;
+  const apiUrl = process.env.NEXTAUTH_URL || "";
+  
+  // Fetch blog data for structured data
+  const res = await fetch(`${apiUrl}/api/v1/admin/blogs?slug=${slug}`, {
+    cache: "no-store",
+  });
+  const data = await res.json();
+  const blog: BlogType | null = data?.data || null;
+
+  return (
+    <>
+      {blog && blog.status === BlogStatus.PUBLISHED && (
+        <BlogPostStructuredData
+          title={blog.title}
+          description={blog.description ? blog.description.replace(/<[^>]*>/g, "").slice(0, 160) : ""}
+          author={blog.author && isAuthorObject(blog.author) ? blog.author.name || "Mrvedmutha" : "Mrvedmutha"}
+          publishDate={blog.createdAt}
+          modifiedDate={blog.updatedAt}
+          image={blog.mainImage}
+          url={`${apiUrl}/blog/${blog.slug}`}
+        />
+      )}
+      {children}
+    </>
+  );
 }
