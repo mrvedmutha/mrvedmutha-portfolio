@@ -311,9 +311,25 @@ export function CommentItem({
             <div className="mt-4 pt-4 border-t">
               <CommentForm
                 parentId={comment._id}
-                onSubmit={(data) => {
-                  onReply(comment._id);
-                  setShowReplyForm(false);
+                onSubmit={async (data) => {
+                  try {
+                    const response = await fetch(`/api/v1/public/blogs/${comment.blogId}/comments`, {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify(data),
+                    });
+
+                    if (response.ok) {
+                      setShowReplyForm(false);
+                      // Trigger parent to refresh comments
+                      onReply(comment._id);
+                    } else {
+                      const errorData = await response.json();
+                      console.error('Reply submission failed:', errorData);
+                    }
+                  } catch (error) {
+                    console.error('Error submitting reply:', error);
+                  }
                 }}
                 onCancel={() => setShowReplyForm(false)}
                 currentUser={currentUser ? { ...currentUser, isAdmin } : null}

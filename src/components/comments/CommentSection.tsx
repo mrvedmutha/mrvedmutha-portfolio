@@ -95,9 +95,9 @@ export function CommentSection({
     }
   };
 
-  const handleReply = (parentId: string) => {
-    // Handle reply logic
-    console.log('Reply to:', parentId);
+  const handleReply = async (parentId: string) => {
+    // Refresh comments after reply is posted
+    await loadComments();
   };
 
   const handleEdit = (commentId: string) => {
