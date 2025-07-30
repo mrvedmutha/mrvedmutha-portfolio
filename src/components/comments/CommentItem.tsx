@@ -278,8 +278,8 @@ export function CommentItem({
                 </Button>
               </div>
 
-              {/* Reply Button */}
-              {currentUserId && comment.depth < maxDepth && (
+              {/* Reply Button - Only allow replies to top-level comments */}
+              {currentUserId && comment.depth === 0 && (
                 <Button
                   variant="ghost"
                   size="sm"

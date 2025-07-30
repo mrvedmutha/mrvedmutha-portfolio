@@ -107,7 +107,13 @@ export class CommentService {
       if (!parentComment) {
         throw new Error("Parent comment not found");
       }
-      depth = Math.min(parentComment.depth + 1, 5); // Max 5 levels deep
+      
+      // Only allow 2 levels: Comment (depth 0) and Reply (depth 1)
+      if (parentComment.depth > 0) {
+        throw new Error("Cannot reply to a reply. Only replies to main comments are allowed.");
+      }
+      
+      depth = 1; // All replies are depth 1
     }
 
     // Generate display name and avatar
