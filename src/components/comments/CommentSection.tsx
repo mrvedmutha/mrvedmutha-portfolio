@@ -78,7 +78,6 @@ export function CommentSection({
 
   const handleCommentSubmit = async (formData: CommentFormData) => {
     try {
-      console.log('Submitting comment:', formData);
       const response = await fetch(`/api/v1/public/blogs/${blogId}/comments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -89,7 +88,7 @@ export function CommentSection({
         await loadComments(); // Refresh comments
       } else {
         const errorData = await response.json();
-        console.error('Comment submission failed:', response.status, errorData);
+        console.error('Comment submission failed:', errorData);
       }
     } catch (error) {
       console.error('Error submitting comment:', error);
