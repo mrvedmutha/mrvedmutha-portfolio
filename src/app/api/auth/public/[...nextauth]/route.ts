@@ -6,7 +6,7 @@ import { dbConnect } from "@/lib/db";
 import { User } from "@/models/admin/user.model";
 
 // Public authentication for comment users only (Google & GitHub)
-export const publicAuthOptions: NextAuthOptions = {
+const publicAuthOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
