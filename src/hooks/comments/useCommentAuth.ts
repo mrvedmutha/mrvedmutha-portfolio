@@ -6,7 +6,7 @@ export function useCommentAuth() {
   const { data: session, status } = useSession();
 
   const currentUser = session?.user ? {
-    id: session.user._id || session.user.id || '',
+    id: session.user._id || '',
     name: session.user.name || 'Anonymous User',
     email: session.user.email || '',
     image: session.user.image || '',
