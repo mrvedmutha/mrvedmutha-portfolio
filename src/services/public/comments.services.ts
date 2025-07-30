@@ -46,10 +46,9 @@ export class CommentService {
       throw new Error("Comments not available for this blog");
     }
 
-    // Get all comments for this blog
+    // Get all comments for this blog (including deleted ones to show deletion message)
     let commentsQuery = Comment.find({ 
-      blogId,
-      status: { $in: ['active', 'edited'] } // Don't show deleted comments
+      blogId
     });
 
     // Apply sorting

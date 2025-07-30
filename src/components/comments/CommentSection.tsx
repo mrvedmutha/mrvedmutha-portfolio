@@ -215,8 +215,8 @@ export function CommentSection({
   }
 
   const threadedComments = buildCommentTree(sortComments(comments));
-  const totalComments = comments.length;
-  const activeComments = comments.filter(c => c.status === 'active').length;
+  const activeComments = comments.filter(c => c.status === 'active' || c.status === 'edited').length;
+  const totalComments = comments.length; // Total includes deleted comments
 
   return (
     <div className="space-y-6">
