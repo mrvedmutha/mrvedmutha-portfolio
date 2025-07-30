@@ -4,6 +4,8 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { dbConnect } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import GoogleProvider from "next-auth/providers/google";
+import GitHubProvider from "next-auth/providers/github";
+
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -43,13 +45,18 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
+    GitHubProvider({
+      clientId: process.env.GITHUB_CLIENT_ID as string,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+    }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       if (user) {
-        token.id = user._id;
+        token.id = user._id || user.id;
         token.role = user.role;
         token.email = user.email;
+        token.provider = account?.provider;
       }
       return token;
     },
@@ -58,6 +65,7 @@ export const authOptions: NextAuthOptions = {
         session.user._id = token.id as string;
         session.user.role = token.role as string;
         session.user.email = token.email as string;
+        session.user.provider = token.provider as string;
       }
       return session;
     },
