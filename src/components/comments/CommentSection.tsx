@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { MessageCircle, SortAsc, Filter, RefreshCw } from 'lucide-react';
+import { MessageCircle, SortAsc, RefreshCw, LogOut } from 'lucide-react';
+import { signOut } from 'next-auth/react';
 import { useCommentAuth } from '@/hooks/comments/useCommentAuth';
 
 import { Button } from '@/components/ui/button';
@@ -37,6 +38,16 @@ export function CommentSection({
   const [refreshing, setRefreshing] = useState(false);
 
   const { currentUser, isAdmin } = useCommentAuth();
+
+  const handleSignOut = async () => {
+    // If user is admin, sign out from admin session
+    if (isAdmin) {
+      await signOut({ callbackUrl: '/auth' });
+    } else {
+      // Sign out from public session
+      await signOut();
+    }
+  };
 
   const loadComments = useCallback(async () => {
     try {
@@ -224,6 +235,25 @@ export function CommentSection({
                   {activeComments} active
                 </Badge>
               )}
+
+              {/* User Info and Signout */}
+              {currentUser && (
+                <div className="flex items-center gap-2 ml-4">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleSignOut}
+                    className="h-8"
+                  >
+                    <LogOut className="h-4 w-4 mr-1" />
+                    Sign Out
+                  </Button>
+                  <span className="text-xs text-muted-foreground">
+                    Signed in as {currentUser.email}
+                    {isAdmin && <Badge variant="destructive" className="ml-2 text-xs">Admin</Badge>}
+                  </span>
+                </div>
+              )}
             </div>
 
             <div className="flex items-center gap-2">
@@ -288,6 +318,7 @@ export function CommentSection({
               comment={comment}
               replies={(comment as any).replies || []}
               currentUserId={currentUser?.id || null}
+              currentUser={currentUser}
               isAdmin={isAdmin}
               onReply={handleReply}
               onEdit={handleEdit}

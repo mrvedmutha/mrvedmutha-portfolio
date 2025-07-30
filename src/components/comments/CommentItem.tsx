@@ -31,6 +31,7 @@ export function CommentItem({
   comment,
   replies = [],
   currentUserId,
+  currentUser,
   isAdmin,
   maxDepth = 5,
   onReply,
@@ -125,6 +126,7 @@ export function CommentItem({
                 comment={reply}
                 replies={[]} // Replies will be loaded separately
                 currentUserId={currentUserId}
+                currentUser={currentUser}
                 isAdmin={isAdmin}
                 maxDepth={maxDepth}
                 onReply={onReply}
@@ -302,6 +304,7 @@ export function CommentItem({
                   setShowReplyForm(false);
                 }}
                 onCancel={() => setShowReplyForm(false)}
+                currentUser={currentUser}
                 placeholder={`Reply to ${comment.author.displayName}...`}
               />
             </div>
@@ -320,6 +323,7 @@ export function CommentItem({
                   comment={reply}
                   replies={[]} // Replies will be loaded separately for performance
                   currentUserId={currentUserId}
+                  currentUser={currentUser}
                   isAdmin={isAdmin}
                   maxDepth={maxDepth}
                   onReply={onReply}

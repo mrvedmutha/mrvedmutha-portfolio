@@ -76,6 +76,13 @@ export interface CommentFormData {
 export interface CommentActionProps {
   comment: Comment;
   currentUserId: string | null;
+  currentUser?: {
+    id: string;
+    name: string;
+    email: string;
+    image: string;
+    provider: string;
+  } | null;
   isAdmin: boolean;
   onReply: (parentId: string) => void;
   onEdit: (commentId: string) => void;
