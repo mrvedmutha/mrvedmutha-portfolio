@@ -15,6 +15,12 @@ export const userSchema = new Schema<IUser>(
       type: String,
       required: [true, "Password is required"],
     },
+    name: {
+      type: String,
+      required: false,
+      default: "Admin",
+      trim: true,
+    },
     role: {
       type: String,
       enum: {

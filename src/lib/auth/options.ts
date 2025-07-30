@@ -53,8 +53,33 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user, account }) {
       if (user) {
-        token.id = user._id || user.id;
-        token.role = user.role;
+        // For OAuth providers (Google/GitHub), find the admin user in database
+        if (account?.provider && (account.provider === 'google' || account.provider === 'github')) {
+          try {
+            await dbConnect();
+            const adminUser = await User.findOne({ email: user.email?.toLowerCase() });
+            if (adminUser) {
+              token.id = adminUser._id.toString();
+              token.role = adminUser.role;
+              token.name = adminUser.name || user.name || 'Admin';
+            } else {
+              // If no admin user found, use OAuth user info but set role as 'public'
+              token.id = user.id;
+              token.role = 'public';
+              token.name = user.name;
+            }
+          } catch (error) {
+            console.error('Error finding admin user:', error);
+            token.id = user.id;
+            token.role = 'public';
+            token.name = user.name;
+          }
+        } else {
+          // For credentials login, use user data directly
+          token.id = user._id || user.id;
+          token.role = user.role;
+          token.name = user.name;
+        }
         token.email = user.email;
         token.provider = account?.provider;
       }
@@ -64,6 +89,7 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user._id = token.id as string;
         session.user.role = token.role as string;
+        session.user.name = token.name as string;
         session.user.email = token.email as string;
         session.user.provider = token.provider as string;
       }

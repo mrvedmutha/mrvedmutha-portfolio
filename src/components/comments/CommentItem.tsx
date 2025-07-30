@@ -49,7 +49,12 @@ export function CommentItem({
       : null
   );
 
-  const isOwnComment = currentUserId === comment.author.userId;
+  // More robust comparison for user IDs (handle both string and ObjectId formats)
+  const isOwnComment = currentUserId && comment.author.userId && 
+    (currentUserId === comment.author.userId || 
+     currentUserId === comment.author.userId.toString() ||
+     currentUserId.toString() === comment.author.userId);
+  
   const canEdit = isOwnComment && comment.status === 'active';
   const canDelete = isOwnComment || isAdmin;
   const hasReplies = replies.length > 0;
