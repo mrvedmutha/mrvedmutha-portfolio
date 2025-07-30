@@ -1,0 +1,60 @@
+import { NextRequest, NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
+import { CommentService } from "@/services/public/comments.services";
+
+// POST: Vote on a comment
+export async function POST(
+  request: NextRequest,
+  { params }: { params: Promise<{ commentId: string }> }
+) {
+  try {
+    const { commentId } = await params;
+    const body = await request.json();
+
+    // Get user session
+    const token = await getToken({ 
+      req: request, 
+      secret: process.env.NEXTAUTH_SECRET,
+      cookieName: process.env.NODE_ENV === 'production' 
+        ? '__Secure-next-auth.session-token' 
+        : 'next-auth.session-token'
+    });
+
+    if (!token) {
+      return NextResponse.json(
+        { success: false, message: "Authentication required" },
+        { status: 401 }
+      );
+    }
+
+    const { vote } = body;
+
+    if (!vote || !['up', 'down'].includes(vote)) {
+      return NextResponse.json(
+        { success: false, message: "Invalid vote. Must be 'up' or 'down'" },
+        { status: 400 }
+      );
+    }
+
+    const updatedComment = await CommentService.voteComment(
+      commentId, 
+      token.id as string, 
+      vote
+    );
+
+    return NextResponse.json({
+      success: true,
+      data: updatedComment,
+      message: `Comment ${vote}voted successfully`,
+    });
+  } catch (error) {
+    console.error("Error voting on comment:", error);
+    const message = error instanceof Error ? error.message : "Internal server error";
+    const status = message.includes("not found") ? 404 : 500;
+    
+    return NextResponse.json(
+      { success: false, message },
+      { status }
+    );
+  }
+}

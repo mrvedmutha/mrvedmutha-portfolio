@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { MessageCircle, SortAsc, Filter, RefreshCw } from 'lucide-react';
 import { useCommentAuth } from '@/hooks/comments/useCommentAuth';
 
@@ -38,16 +38,10 @@ export function CommentSection({
 
   const { currentUser, isAdmin } = useCommentAuth();
 
-  // Load comments
-  useEffect(() => {
-    loadComments();
-  }, [blogId, sortBy]);
-
-  const loadComments = async () => {
+  const loadComments = useCallback(async () => {
     try {
       setLoading(true);
-      // TODO: Replace with actual API call
-      const response = await fetch(`/api/v1/admin/blogs/${blogId}/comments?sort=${sortBy}`);
+      const response = await fetch(`/api/v1/public/blogs/${blogId}/comments?sort=${sortBy}`);
       const data = await response.json();
       
       if (data.success) {
@@ -58,7 +52,12 @@ export function CommentSection({
     } finally {
       setLoading(false);
     }
-  };
+  }, [blogId, sortBy]);
+
+  // Load comments
+  useEffect(() => {
+    loadComments();
+  }, [loadComments]);
 
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -68,8 +67,7 @@ export function CommentSection({
 
   const handleCommentSubmit = async (formData: CommentFormData) => {
     try {
-      // TODO: Replace with actual API call
-      const response = await fetch(`/api/v1/admin/blogs/${blogId}/comments`, {
+      const response = await fetch(`/api/v1/public/blogs/${blogId}/comments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -95,8 +93,7 @@ export function CommentSection({
 
   const handleDelete = async (commentId: string) => {
     try {
-      // TODO: Replace with actual API call
-      const response = await fetch(`/api/v1/admin/blogs/${blogId}/comments/${commentId}`, {
+      const response = await fetch(`/api/v1/public/comments/${commentId}`, {
         method: 'DELETE',
       });
 
@@ -110,8 +107,7 @@ export function CommentSection({
 
   const handleVote = async (commentId: string, vote: 'up' | 'down') => {
     try {
-      // TODO: Replace with actual API call
-      const response = await fetch(`/api/v1/admin/blogs/${blogId}/comments/${commentId}/vote`, {
+      const response = await fetch(`/api/v1/public/comments/${commentId}/vote`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ vote }),
@@ -127,8 +123,7 @@ export function CommentSection({
 
   const handleReport = async (commentId: string, reason: string) => {
     try {
-      // TODO: Replace with actual API call
-      const response = await fetch(`/api/v1/admin/blogs/${blogId}/comments/${commentId}/report`, {
+      const response = await fetch(`/api/v1/public/comments/${commentId}/report`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason }),

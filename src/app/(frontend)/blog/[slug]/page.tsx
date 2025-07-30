@@ -4,7 +4,6 @@ import { useParams } from "next/navigation";
 import axios from "axios";
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -12,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Blog as BlogBase } from "@/context/constants/home/blogs";
 import { BlogStatus } from "@/enums/admin/blogs/status.enum";
+import { CommentProvider, CommentSection } from "@/components/comments";
 
 // Extend Blog type for post page
 type BlogType = BlogBase & {
@@ -141,18 +141,14 @@ export default function BlogPostPage() {
           </div>
         )}
         {/* Comments */}
-        {blog?.allowComments === false ? (
-          <div className="text-center text-muted-foreground">
-            Comments are disabled for this post.
-          </div>
-        ) : (
-          <div className="mt-8">
-            {/* Comments section placeholder */}
-            <div className="text-center text-muted-foreground">
-              Comments section coming soon...
-            </div>
-          </div>
-        )}
+        <div className="mt-12">
+          <CommentProvider>
+            <CommentSection 
+              blogId={blog._id} 
+              allowComments={blog?.allowComments !== false} 
+            />
+          </CommentProvider>
+        </div>
       </div>
       {/* Private Blog Password Dialog */}
       {showPasswordDialog && !authorized && (
