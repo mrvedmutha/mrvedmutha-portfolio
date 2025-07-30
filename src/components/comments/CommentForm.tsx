@@ -38,9 +38,13 @@ export function CommentForm({
   currentUser,
 }: CommentFormProps) {
   const [content, setContent] = useState('');
+  // Default to true for admin users, true for regular users
   const [useRealName, setUseRealName] = useState(true);
   const [showEmail, setShowEmail] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Check if user is admin (has adminId or role)
+  const isAdmin = !!(currentUser as any)?.isAdmin || !!(currentUser as any)?.adminId;
 
   // Generate anonymous name for preview
   const anonymousName = currentUser 

@@ -41,14 +41,22 @@ export async function POST(
     const { blogId } = await params;
     const body = await request.json();
 
-    // Get user session from public auth
-    const token = await getToken({ 
+    // Check both admin and public auth sessions
+    let token = await getToken({ 
       req: request, 
       secret: process.env.NEXTAUTH_SECRET,
       cookieName: process.env.NODE_ENV === 'production' 
         ? '__Secure-next-auth.session-token' 
         : 'next-auth.session-token'
     });
+
+    // If no public session, check admin session
+    if (!token) {
+      token = await getToken({ 
+        req: request, 
+        secret: process.env.NEXTAUTH_SECRET
+      });
+    }
 
     if (!token) {
       return NextResponse.json(
@@ -66,12 +74,12 @@ export async function POST(
       showEmail,
       blogId,
       user: {
-        id: token.id as string,
+        id: (token.id || token._id) as string,
         name: token.name as string,
         email: token.email as string,
         image: token.image as string,
         provider: token.provider as string,
-        isAdmin: token.isAdmin as boolean,
+        isAdmin: (token.isAdmin || token.role === 'admin') as boolean,
       }
     });
 

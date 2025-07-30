@@ -2,6 +2,28 @@ import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { CommentService } from "@/services/public/comments.services";
 
+// Helper function to get token from either admin or public session
+async function getAuthToken(request: NextRequest) {
+  // Try public session first
+  let token = await getToken({ 
+    req: request, 
+    secret: process.env.NEXTAUTH_SECRET,
+    cookieName: process.env.NODE_ENV === 'production' 
+      ? '__Secure-next-auth.session-token' 
+      : 'next-auth.session-token'
+  });
+
+  // If no public session, try admin session
+  if (!token) {
+    token = await getToken({ 
+      req: request, 
+      secret: process.env.NEXTAUTH_SECRET
+    });
+  }
+
+  return token;
+}
+
 // GET: Get a specific comment
 export async function GET(
   request: NextRequest,
@@ -36,14 +58,8 @@ export async function PUT(
     const { commentId } = await params;
     const body = await request.json();
 
-    // Get user session
-    const token = await getToken({ 
-      req: request, 
-      secret: process.env.NEXTAUTH_SECRET,
-      cookieName: process.env.NODE_ENV === 'production' 
-        ? '__Secure-next-auth.session-token' 
-        : 'next-auth.session-token'
-    });
+    // Get user session (check both admin and public)
+    const token = await getAuthToken(request);
 
     if (!token) {
       return NextResponse.json(
@@ -56,7 +72,7 @@ export async function PUT(
 
     const updatedComment = await CommentService.updateComment(
       commentId, 
-      token.id as string, 
+      (token.id || token._id) as string, 
       { content, editReason }
     );
 
@@ -89,14 +105,8 @@ export async function DELETE(
     const { searchParams } = new URL(request.url);
     const reason = searchParams.get('reason');
 
-    // Get user session
-    const token = await getToken({ 
-      req: request, 
-      secret: process.env.NEXTAUTH_SECRET,
-      cookieName: process.env.NODE_ENV === 'production' 
-        ? '__Secure-next-auth.session-token' 
-        : 'next-auth.session-token'
-    });
+    // Get user session (check both admin and public)
+    const token = await getAuthToken(request);
 
     if (!token) {
       return NextResponse.json(
@@ -105,9 +115,10 @@ export async function DELETE(
       );
     }
 
+    const isAdmin = token.isAdmin || token.role === 'admin';
     const deletedComment = await CommentService.deleteComment(commentId, {
-      userId: token.id as string,
-      userRole: token.isAdmin ? 'admin' : 'user',
+      userId: (token.id || token._id) as string,
+      userRole: isAdmin ? 'admin' : 'user',
       displayName: token.name as string,
       reason: reason || undefined,
     });

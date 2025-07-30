@@ -2,6 +2,28 @@ import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { CommentService } from "@/services/public/comments.services";
 
+// Helper function to get token from either admin or public session
+async function getAuthToken(request: NextRequest) {
+  // Try public session first
+  let token = await getToken({ 
+    req: request, 
+    secret: process.env.NEXTAUTH_SECRET,
+    cookieName: process.env.NODE_ENV === 'production' 
+      ? '__Secure-next-auth.session-token' 
+      : 'next-auth.session-token'
+  });
+
+  // If no public session, try admin session
+  if (!token) {
+    token = await getToken({ 
+      req: request, 
+      secret: process.env.NEXTAUTH_SECRET
+    });
+  }
+
+  return token;
+}
+
 // POST: Report a comment
 export async function POST(
   request: NextRequest,
@@ -11,14 +33,8 @@ export async function POST(
     const { commentId } = await params;
     const body = await request.json();
 
-    // Get user session
-    const token = await getToken({ 
-      req: request, 
-      secret: process.env.NEXTAUTH_SECRET,
-      cookieName: process.env.NODE_ENV === 'production' 
-        ? '__Secure-next-auth.session-token' 
-        : 'next-auth.session-token'
-    });
+    // Get user session (check both admin and public)
+    const token = await getAuthToken(request);
 
     if (!token) {
       return NextResponse.json(
@@ -38,7 +54,7 @@ export async function POST(
 
     const updatedComment = await CommentService.reportComment(
       commentId, 
-      token.id as string, 
+      (token.id || token._id) as string, 
       reason
     );
 
