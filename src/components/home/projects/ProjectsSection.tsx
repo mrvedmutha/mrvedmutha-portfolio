@@ -16,7 +16,7 @@ export default function ProjectsSection() {
 
   useEffect(() => {
     getProjects().then((data) => {
-      setProjects(data);
+      setProjects(data.reverse());
       setLoading(false);
     });
   }, []);
