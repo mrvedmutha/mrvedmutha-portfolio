@@ -15,7 +15,7 @@ export default function ProjectsPage() {
 
   useEffect(() => {
     getProjects().then((data) => {
-      setProjects(data);
+      setProjects(data.reverse());
       setLoading(false);
     });
   }, []);
