@@ -1,22 +1,18 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import axios from "axios";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import { Blog as BlogBase } from "@/context/constants/home/blogs";
+import React from "react";
 import { BlogStatus } from "@/enums/admin/blogs/status.enum";
 import { CommentProvider, CommentSection } from "@/components/comments";
+import { notFound } from "next/navigation";
 
 // Extend Blog type for post page
-type BlogType = BlogBase & {
+type BlogType = {
+  _id: string;
+  title: string;
+  mainImage?: string;
+  slug: string;
+  status: string;
+  createdAt: string;
   description?: string;
-  author?: string;
+  author?: any;
   allowComments?: boolean;
   updatedAt?: string;
 };
@@ -32,70 +28,32 @@ function isAuthorObject(
   );
 }
 
-export default function BlogPostPage() {
-  const { slug } = useParams<{ slug: string }>();
-  const [blog, setBlog] = useState<BlogType | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [showPasswordDialog, setShowPasswordDialog] = useState(false);
-  const [password, setPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [authorized, setAuthorized] = useState(false);
-
-  useEffect(() => {
-    if (!slug) return;
-    axios
-      .get(`/api/v1/admin/blogs?slug=${slug}`)
-      .then((res) => {
-        const found = res.data?.data || null;
-        if (found?.status === BlogStatus.PRIVATE) {
-          setShowPasswordDialog(true);
-        }
-        setBlog(found as BlogType);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, [slug]);
-
-  const handlePasswordSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // Replace with your real password check API
-    try {
-      const res = await axios.post(`/api/v1/admin/blogs/check-password`, {
-        slug,
-        password,
-      });
-      if (res.data?.success) {
-        setAuthorized(true);
-        setShowPasswordDialog(false);
-        setPasswordError("");
-      } else {
-        setPasswordError("Incorrect password");
-      }
-    } catch {
-      setPasswordError("Incorrect password");
-    }
-  };
-
-  if (loading) {
-    return (
-      <main className="w-full min-h-screen bg-background flex items-center justify-center">
-        <div className="text-lg text-muted-foreground">Loading...</div>
-      </main>
-    );
+// Server function to fetch blog data
+async function getBlogBySlug(slug: string): Promise<BlogType | null> {
+  try {
+    const apiUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+    const res = await fetch(`${apiUrl}/api/v1/admin/blogs?slug=${slug}`, {
+      cache: "no-store",
+    });
+    const data = await res.json();
+    return data?.data || null;
+  } catch (error) {
+    console.error("Error fetching blog:", error);
+    return null;
   }
+}
 
-  if (
-    !blog ||
-    (blog.status !== BlogStatus.PUBLISHED &&
-      !(blog.status === BlogStatus.PRIVATE && authorized))
-  ) {
-    return (
-      <main className="w-full min-h-screen bg-background flex items-center justify-center">
-        <div className="text-lg text-muted-foreground">
-          Blog not found or not accessible.
-        </div>
-      </main>
-    );
+type Props = {
+  params: Promise<{ slug: string }>;
+};
+
+export default async function BlogPostPage({ params }: Props) {
+  const { slug } = await params;
+  const blog = await getBlogBySlug(slug);
+
+  // If blog doesn't exist or is not published, show 404
+  if (!blog || blog.status !== BlogStatus.PUBLISHED) {
+    notFound();
   }
 
   return (
@@ -150,40 +108,6 @@ export default function BlogPostPage() {
           </CommentProvider>
         </div>
       </div>
-      {/* Private Blog Password Dialog */}
-      {showPasswordDialog && !authorized && (
-        <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>This blog is private</DialogTitle>
-            </DialogHeader>
-            <DialogDescription>
-              <form
-                onSubmit={handlePasswordSubmit}
-                className="flex flex-col gap-4 mt-4"
-              >
-                <input
-                  type="password"
-                  placeholder="Enter password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="border rounded px-3 py-2"
-                  required
-                />
-                {passwordError && (
-                  <div className="text-red-500 text-sm">{passwordError}</div>
-                )}
-                <button
-                  type="submit"
-                  className="px-4 py-2 rounded bg-primary text-primary-foreground font-semibold shadow hover:bg-primary/90 transition"
-                >
-                  Submit
-                </button>
-              </form>
-            </DialogDescription>
-          </DialogContent>
-        </Dialog>
-      )}
     </main>
   );
 }
