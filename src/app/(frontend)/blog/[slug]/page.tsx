@@ -77,13 +77,9 @@ export default async function BlogPostPage({ params }: Props) {
         {/* Author */}
         {blog?.author && isAuthorObject(blog.author) && (
           <div className="mb-6 text-muted-foreground text-sm flex items-center gap-2">
-            {blog.author.avatarUrl && (
-              <img
-                src={blog.author.avatarUrl}
-                alt={blog.author.name || "Author"}
-                className="w-7 h-7 rounded-full object-cover"
-              />
-            )}
+            <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center text-xs font-semibold">
+              {blog.author.name?.charAt(0)?.toUpperCase() || 'A'}
+            </div>
             By {blog.author.name}
           </div>
         )}
