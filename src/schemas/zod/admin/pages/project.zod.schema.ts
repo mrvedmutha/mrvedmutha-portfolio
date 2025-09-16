@@ -7,6 +7,7 @@ export const projectZodSchema = z.object({
   githubLink: z.string().url().optional().or(z.literal("")),
   behanceLink: z.string().url().optional().or(z.literal("")),
   demoLink: z.string().url().optional().or(z.literal("")),
+  image: z.string().optional(),
   techstack: z
     .array(z.object({ name: z.string(), svg: z.string() }))
     .min(1, "Select at least one tool"),

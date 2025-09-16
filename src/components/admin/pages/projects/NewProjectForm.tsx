@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/select";
 import { EProjectType } from "@/enums/admin/pages/EProjectType";
 import ToolSelect from "@/components/common/admin/pages/ToolSelect";
+import ProjectImageSelector from "@/components/admin/pages/projects/components/ProjectImageSelector";
 import { Brush, CodeXml } from "lucide-react";
 import { z } from "zod";
 import { deviconTools } from "@/context/constants/common/tools";
@@ -41,6 +42,7 @@ const newProjectSchema = z.object({
   githubLink: z.string().url().optional().or(z.literal("")),
   behanceLink: z.string().url().optional().or(z.literal("")),
   demoLink: z.string().url().optional().or(z.literal("")),
+  image: z.string().optional(),
   techstack: z
     .array(z.object({ name: z.string(), svg: z.string() }))
     .min(1, "Select at least one tool"),
@@ -52,6 +54,7 @@ export function NewProjectForm() {
   const [type, setType] = React.useState<EProjectType>(EProjectType.CODE);
   const [toolsOpen, setToolsOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [projectImage, setProjectImage] = React.useState<string>("");
   const { toast } = useToast();
   const router = useRouter();
 
@@ -64,6 +67,7 @@ export function NewProjectForm() {
       githubLink: "",
       behanceLink: "",
       demoLink: "",
+      image: "",
       techstack: [],
     },
   });
@@ -74,7 +78,11 @@ export function NewProjectForm() {
   const onSubmit = async (data: NewProjectFormValues) => {
     setLoading(true);
     try {
-      await axios.post("/api/v1/admin/projects/create", data);
+      const payload = {
+        ...data,
+        image: projectImage,
+      };
+      await axios.post("/api/v1/admin/projects/create", payload);
       toast({
         title: "Project created!",
         description: "Your project has been added.",
@@ -197,6 +205,14 @@ export function NewProjectForm() {
             )}
           />
         )}
+        {/* Project Image */}
+        <div className="space-y-2">
+          <FormLabel>Project Image</FormLabel>
+          <ProjectImageSelector
+            projectImage={projectImage}
+            setProjectImage={setProjectImage}
+          />
+        </div>
         {/* Demo Link */}
         <FormField
           control={control}

@@ -8,6 +8,7 @@ const ProjectSchema = new Schema(
     githubLink: { type: String },
     behanceLink: { type: String },
     demoLink: { type: String },
+    image: { type: String, required: false },
     techstack: [
       {
         name: { type: String, required: true },

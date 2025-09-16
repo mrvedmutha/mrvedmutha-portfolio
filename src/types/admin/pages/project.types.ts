@@ -11,6 +11,7 @@ export interface IProject {
   githubLink?: string;
   behanceLink?: string;
   demoLink?: string;
+  image?: string;
   techstack: IToolTag[];
 }
 

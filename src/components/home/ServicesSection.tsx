@@ -155,7 +155,7 @@ export default function ServicesSection() {
           </div>
 
           <PrimaryButton size="lg" onClick={() => window.location.href = "/services"}>
-            VIEW ALL SERVICES
+            ALL SERVICES
           </PrimaryButton>
         </div>
 
