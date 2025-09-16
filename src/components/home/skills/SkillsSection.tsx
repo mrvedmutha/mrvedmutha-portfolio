@@ -265,11 +265,11 @@ export default function SkillsSection({ showAll = false }: SkillsSectionProps) {
               const LucideIcon = lucideIconMap[iconName] || Circle;
               return (
                 <CarouselItem key={skill.title} className="pl-0 basis-full">
-                  <div className="text-center py-8 lg:py-12">
-                    <div className="flex items-center justify-center gap-3 mb-8">
-                      <div className="flex items-center gap-3 text-xl sm:text-2xl lg:text-4xl font-bold">
-                        <LucideIcon className="text-brand-green w-8 h-8 lg:w-12 lg:h-12" />
-                        <span className="text-black break-words max-w-2xl">{skill.title}</span>
+                  <div className="text-center py-8 lg:py-12 px-4">
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-8">
+                      <div className="flex items-center gap-2 sm:gap-3 text-lg sm:text-xl md:text-2xl lg:text-4xl font-bold">
+                        <LucideIcon className="text-brand-green w-6 h-6 sm:w-8 sm:h-8 lg:w-12 lg:h-12 flex-shrink-0" />
+                        <span className="text-black text-center leading-tight max-w-xs sm:max-w-md lg:max-w-2xl">{skill.title}</span>
                       </div>
                     </div>
                   </div>
@@ -281,7 +281,7 @@ export default function SkillsSection({ showAll = false }: SkillsSectionProps) {
       </div>
 
       {/* Tech Stack Capsules */}
-      <div className="grid grid-cols-2 md:flex md:justify-center gap-4 md:gap-8 lg:gap-12 mb-16 lg:mb-20 px-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 md:flex md:justify-center gap-3 sm:gap-4 md:gap-6 lg:gap-8 mb-16 lg:mb-20 px-4 max-w-4xl mx-auto">
         {displaySkills.length > 0 && displaySkills[currentSkillIndex] && (displaySkills[currentSkillIndex].tags || displaySkills[currentSkillIndex].tools || []).slice(0, 4).map((tool: any, index: number) => (
           <motion.div
             key={`${currentSkillIndex}-${tool.name}`}
@@ -289,19 +289,19 @@ export default function SkillsSection({ showAll = false }: SkillsSectionProps) {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
             viewport={{ once: true }}
-            className="flex flex-col items-center p-4 lg:p-6 bg-[#f5f5f5] border border-[#cecece] rounded-full min-w-[90px] lg:min-w-[120px]"
+            className="flex flex-col items-center p-3 sm:p-4 lg:p-6 bg-[#f5f5f5] border border-[#cecece] rounded-full min-w-[80px] sm:min-w-[90px] lg:min-w-[120px] max-w-[120px] mx-auto"
           >
-            <div className="w-14 h-14 lg:w-16 lg:h-16 bg-white rounded-full flex items-center justify-center mb-3">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-white rounded-full flex items-center justify-center mb-2 sm:mb-3">
               <img
                 src={tool.svg}
                 alt={tool.name}
-                width={28}
-                height={28}
-                className="lg:w-8 lg:h-8"
+                width={24}
+                height={24}
+                className="sm:w-7 sm:h-7 lg:w-8 lg:h-8"
               />
             </div>
-            <span className="text-xs lg:text-sm font-medium text-gray-700 text-center leading-tight">
-              {tool.name.length > 12 ? `${tool.name.substring(0, 12)}...` : tool.name}
+            <span className="text-xs sm:text-xs lg:text-sm font-medium text-gray-700 text-center leading-tight px-1">
+              {tool.name.length > 10 ? `${tool.name.substring(0, 10)}...` : tool.name}
             </span>
           </motion.div>
         ))}
