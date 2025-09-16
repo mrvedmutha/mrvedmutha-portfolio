@@ -24,8 +24,6 @@ export default function PrimaryButton({
       onClick={onClick}
       disabled={disabled}
       className={`relative overflow-hidden rounded-full h-12 min-w-[180px] flex items-center justify-between bg-brand-yellow border-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
-      whileHover={{ scale: disabled ? 1 : 1.02 }}
-      whileTap={{ scale: disabled ? 1 : 0.98 }}
     >
       {/* Green Background Section */}
       <motion.div
@@ -35,14 +33,9 @@ export default function PrimaryButton({
         transition={{ duration: 0.3, ease: "easeInOut" }}
       >
         {/* Button Text */}
-        <motion.span
-          className="text-white font-semibold text-sm whitespace-nowrap"
-          initial={{ x: 0 }}
-          whileHover={{ x: disabled ? 0 : 20 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-        >
+        <span className="text-white font-semibold text-xs whitespace-nowrap">
           {children}
-        </motion.span>
+        </span>
       </motion.div>
 
       {/* Arrow Circle */}
