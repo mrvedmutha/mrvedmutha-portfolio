@@ -22,8 +22,8 @@ export default function TechStackMarquee() {
     <div className="w-full relative overflow-hidden py-8">
       {/* Green Skewed Stripe Background */}
       <div 
-        className="absolute inset-0 bg-brand-green transform skew-y-2"
-        style={{ transformOrigin: 'center center' }}
+        className="absolute inset-0 bg-brand-green"
+        style={{ clipPath: 'polygon(0 68%, 100% 0, 100% 32%, 0 100%)' }}
       ></div>
       
       {/* Yellow Stripe for Tech Stack */}
