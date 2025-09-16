@@ -143,7 +143,7 @@ export default function Hero() {
         </div>
         
         {/* Action Buttons */}
-        <div className="flex gap-4 mt-6">
+        <div className="flex gap-4 mt-6 justify-center lg:justify-start">
           <Button 
             className="btn-secondary gap-2 px-6 py-3"
             style={{ backgroundColor: '#4A6034', color: '#FFFFFF' }}
