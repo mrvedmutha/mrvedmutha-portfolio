@@ -2,8 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Github } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { PrimaryButton } from "@/components/home/ui/buttons";
+import { PrimaryButton, SecondaryButton } from "@/components/home/ui/buttons";
 import { getHeroSkills } from "@/context/constants/home/hero";
 import Image from "next/image";
 
@@ -147,20 +146,14 @@ export default function Hero() {
           <PrimaryButton>
             DOWNLOAD CV
           </PrimaryButton>
-          <Button 
-            asChild
-            variant="outline" 
-            className="gap-2 px-6 py-3 border-brand-green text-brand-green hover:bg-brand-green hover:text-white"
+          <SecondaryButton
+            onClick={() => window.open("https://github.com/mrvedmutha", "_blank")}
           >
-            <a
-              href="https://github.com/mrvedmutha"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Github className="w-5 h-5" />
-              GitHub
-            </a>
-          </Button>
+            <div className="flex items-center gap-2">
+              <Github className="w-4 h-4" />
+              GITHUB
+            </div>
+          </SecondaryButton>
         </div>
       </div>
     </section>
