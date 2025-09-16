@@ -7,6 +7,7 @@ import {
   BlogSection,
   SocialSection,
 } from "@/components/home";
+import SkillsMarquee from "@/components/home/SkillsMarquee";
 import type { Metadata } from "next";
 import { PersonStructuredData, WebsiteStructuredData } from "@/components/seo/StructuredData";
 
@@ -48,14 +49,17 @@ export default function Home() {
         description="Personal blog and portfolio showcasing creative journey, professional experiences, and expertise across multiple digital disciplines"
         author="Mrvedmutha"
       />
-      <div className="min-h-screen w-full flex flex-col items-center justify-center">
-        <Hero />
-        <AboutMe />
-        <SkillsSection />
-        <ProjectsSection />
-        <ExperienceSection />
-        <BlogSection />
-        <SocialSection />
+      <div className="min-h-screen w-full flex flex-col">
+        <SkillsMarquee />
+        <div className="flex flex-col items-center justify-center">
+          <Hero />
+          <AboutMe />
+          <SkillsSection />
+          <ProjectsSection />
+          <ExperienceSection />
+          <BlogSection />
+          <SocialSection />
+        </div>
       </div>
     </>
   );

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import { Github, FileText } from "lucide-react";
+import { Github, FileText, ArrowDownRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getHeroSkills } from "@/context/constants/home/hero";
 import TechStackGrid from "./TechStackGrid";
@@ -61,41 +61,6 @@ export default function Hero() {
               priority
             />
           </div>
-          
-          {/* Floating Skill Badges */}
-          {skills.slice(0, 7).map((skill, index) => {
-            const positions = [
-              { top: '10%', left: '15%', rotate: '-15deg' },
-              { top: '25%', right: '5%', rotate: '10deg' },
-              { top: '45%', left: '0%', rotate: '-8deg' },
-              { top: '60%', right: '10%', rotate: '12deg' },
-              { bottom: '20%', left: '20%', rotate: '-10deg' },
-              { bottom: '10%', right: '15%', rotate: '8deg' },
-              { top: '5%', right: '25%', rotate: '-12deg' },
-            ];
-            
-            const position = positions[index] || positions[0];
-            
-            return (
-              <motion.div
-                key={skill}
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.2, duration: 0.5 }}
-                whileHover={{ scale: 1.1 }}
-                className="absolute bg-brand-green text-white px-3 py-1.5 rounded-full text-sm font-medium shadow-lg cursor-pointer"
-                style={{
-                  ...position,
-                  transform: `rotate(${position.rotate})`,
-                  maxWidth: '120px'
-                }}
-              >
-                <span className="block truncate">
-                  {skill.length > 12 ? skill.substring(0, 12) + '...' : skill}
-                </span>
-              </motion.div>
-            );
-          })}
         </div>
       </div>
       
@@ -132,11 +97,28 @@ export default function Hero() {
           </div>
         </div>
         
-        {/* Download CV Button */}
-        <div className="mt-6">
-          <Button className="btn-secondary gap-2 px-6 py-3">
-            <FileText className="w-5 h-5" />
+        {/* Action Buttons */}
+        <div className="flex gap-4 mt-6">
+          <Button 
+            className="btn-secondary gap-2 px-6 py-3"
+            style={{ backgroundColor: '#4A6034', color: '#FFFFFF' }}
+          >
             Download CV
+            <ArrowDownRight className="w-5 h-5" />
+          </Button>
+          <Button 
+            asChild
+            variant="outline" 
+            className="gap-2 px-6 py-3 border-brand-green text-brand-green hover:bg-brand-green hover:text-white"
+          >
+            <a
+              href="https://github.com/mrvedmutha"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Github className="w-5 h-5" />
+              GitHub
+            </a>
           </Button>
         </div>
       </div>
