@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1366 768">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        font-size: 80px;
+      }
+
+      .cls-1, .cls-3, .cls-4 {
+        font-family: Montserrat-SemiBold, Montserrat;
+        font-weight: 600;
+      }
+
+      .cls-5 {
+        fill: #344c35;
+      }
+
+      .cls-6 {
+        letter-spacing: 0em;
+      }
+
+      .cls-2 {
+        fill: #fbb03b;
+        font-family: Montserrat-MediumItalic, Montserrat;
+        font-style: italic;
+      }
+
+      .cls-2, .cls-7 {
+        font-weight: 500;
+      }
+
+      .cls-8 {
+        fill: #faad1a;
+      }
+
+      .cls-9 {
+        fill: #f5f5f5;
+        stroke: #cecece;
+      }
+
+      .cls-9, .cls-10 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-11, .cls-12 {
+        isolation: isolate;
+      }
+
+      .cls-13 {
+        stroke: #344c36;
+      }
+
+      .cls-13, .cls-14 {
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 2px;
+      }
+
+      .cls-13, .cls-14, .cls-10 {
+        fill: none;
+      }
+
+      .cls-14, .cls-10 {
+        stroke: #fbb03b;
+      }
+
+      .cls-15 {
+        letter-spacing: 0em;
+      }
+
+      .cls-7 {
+        font-family: Montserrat-Medium, Montserrat;
+        font-size: 25px;
+      }
+
+      .cls-16 {
+        letter-spacing: 0em;
+      }
+
+      .cls-17, .cls-12 {
+        fill: #fff;
+      }
+
+      .cls-18 {
+        letter-spacing: 0em;
+      }
+
+      .cls-19 {
+        letter-spacing: 0em;
+      }
+
+      .cls-20 {
+        fill: #f7f7f7;
+      }
+
+      .cls-3 {
+        font-size: 26.09px;
+      }
+
+      .cls-4 {
+        fill: #344c36;
+        font-size: 18.16px;
+      }
+
+      .cls-21 {
+        font-family: Montserrat-Light, Montserrat;
+        font-size: 20px;
+        font-weight: 300;
+      }
+
+      .cls-22 {
+        letter-spacing: -.02em;
+      }
+
+      .cls-23 {
+        letter-spacing: -.01em;
+      }
+
+      .cls-24 {
+        letter-spacing: -.02em;
+      }
+
+      .cls-25 {
+        letter-spacing: -.02em;
+      }
+
+      .cls-26 {
+        letter-spacing: -.01em;
+      }
+
+      .cls-27 {
+        letter-spacing: 0em;
+      }
+
+      .cls-28 {
+        letter-spacing: 0em;
+      }
+
+      .cls-29 {
+        letter-spacing: 0em;
+      }
+
+      .cls-30 {
+        letter-spacing: 0em;
+      }
+
+      .cls-31 {
+        letter-spacing: 0em;
+      }
+
+      .cls-32 {
+        letter-spacing: 0em;
+      }
+
+      .cls-33 {
+        letter-spacing: 0em;
+      }
+
+      .cls-10 {
+        stroke-width: 3px;
+      }
+
+      .cls-34 {
+        letter-spacing: 0em;
+      }
+
+      .cls-35 {
+        letter-spacing: 0em;
+      }
+
+      .cls-36 {
+        letter-spacing: 0em;
+      }
+
+      .cls-12 {
+        font-family: Montserrat-Bold, Montserrat;
+        font-size: 16.95px;
+        font-weight: 700;
+      }
+
+      .cls-37 {
+        letter-spacing: .01em;
+      }
+
+      .cls-38 {
+        letter-spacing: .01em;
+      }
+
+      .cls-39 {
+        letter-spacing: .01em;
+      }
+
+      .cls-40 {
+        letter-spacing: .01em;
+      }
+    </style>
+  </defs>
+  <line class="cls-10" x1="88.25" y1="164.5" x2="113.25" y2="164.5"/>
+  <text class="cls-7" transform="translate(123.42 170.17)"><tspan x="0" y="0">Se</tspan><tspan class="cls-37" x="30.82" y="0">r</tspan><tspan class="cls-18" x="41.45" y="0">vi</tspan><tspan class="cls-34" x="62.4" y="0">c</tspan><tspan x="76.47" y="0">es</tspan></text>
+  <text class="cls-2" transform="translate(88.25 263.78)"><tspan x="0" y="0">Se</tspan><tspan class="cls-38" x="98.56" y="0">r</tspan><tspan class="cls-6" x="132.56" y="0">vi</tspan><tspan class="cls-35" x="199.6" y="0">c</tspan><tspan x="244.64" y="0">es</tspan></text>
+  <text class="cls-1" transform="translate(438.47 263.78)"><tspan x="0" y="0">I </tspan><tspan class="cls-22" x="47.6" y="0">P</tspan><tspan class="cls-30" x="104.48" y="0">r</tspan><tspan class="cls-22" x="137.28" y="0">o</tspan><tspan class="cls-19" x="187.68" y="0">vide</tspan></text>
+  <rect class="cls-9" x="88.25" y="310.17" width="363.25" height="293.33" rx="30" ry="30"/>
+  <circle class="cls-17" cx="136.16" cy="364.68" r="34.44"/>
+  <g>
+    <rect class="cls-13" x="119.86" y="348.39" width="12.67" height="16.3" rx="1" ry="1"/>
+    <rect class="cls-13" x="139.78" y="348.39" width="12.67" height="9.05" rx="1" ry="1"/>
+    <rect class="cls-13" x="139.78" y="364.68" width="12.67" height="16.3" rx="1" ry="1"/>
+    <rect class="cls-13" x="119.86" y="371.93" width="12.67" height="9.05" rx="1" ry="1"/>
+  </g>
+  <text class="cls-3" transform="translate(111.71 443.94)"><tspan x="0" y="0">UI/</tspan><tspan class="cls-31" x="38.58" y="0">U</tspan><tspan x="58.9" y="0">X Design</tspan></text>
+  <text class="cls-4" transform="translate(111.71 576.71)"><tspan class="cls-27" x="0" y="0">L</tspan><tspan class="cls-23" x="10.79" y="0">e</tspan><tspan x="21.81" y="0">a</tspan><tspan class="cls-27" x="32.83" y="0">r</tspan><tspan x="40.36" y="0">n Mo</tspan><tspan class="cls-32" x="86.87" y="0">r</tspan><tspan x="94.31" y="0">e</tspan></text>
+  <text class="cls-21" transform="translate(111.71 487.62)"><tspan class="cls-29" x="0" y="0">L</tspan><tspan x="11.52" y="0">o</tspan><tspan class="cls-26" x="23.92" y="0">r</tspan><tspan x="31.52" y="0">em Ipsum dolor sit a</tspan><tspan class="cls-16" x="234.72" y="0">m</tspan><tspan x="256.02" y="0">e</tspan><tspan class="cls-40" x="267.96" y="0">t</tspan><tspan x="276.12" y="0">, </tspan><tspan class="cls-29" x="0" y="24">c</tspan><tspan x="10.92" y="24">onse</tspan><tspan class="cls-25" x="58.28" y="24">t</tspan><tspan x="65.86" y="24">eur </tspan><tspan class="cls-16" x="104.2" y="24">a</tspan><tspan x="115.88" y="24">di elit sed d</tspan><tspan class="cls-24" x="228.85" y="24">o</tspan><tspan x="240.92" y="24">...</tspan></text>
+  <g>
+    <path class="cls-14" d="M243.12,567.2l4,4-4,4"/>
+    <path class="cls-14" d="M227.12,571.2h20"/>
+  </g>
+  <rect class="cls-9" x="501.37" y="310.17" width="363.25" height="293.33" rx="30" ry="30"/>
+  <circle class="cls-17" cx="549.28" cy="364.68" r="34.44"/>
+  <g>
+    <rect class="cls-13" x="532.98" y="348.39" width="12.67" height="16.3" rx="1" ry="1"/>
+    <rect class="cls-13" x="552.9" y="348.39" width="12.67" height="9.05" rx="1" ry="1"/>
+    <rect class="cls-13" x="552.9" y="364.68" width="12.67" height="16.3" rx="1" ry="1"/>
+    <rect class="cls-13" x="532.98" y="371.93" width="12.67" height="9.05" rx="1" ry="1"/>
+  </g>
+  <text class="cls-3" transform="translate(524.84 443.94)"><tspan x="0" y="0">UI/</tspan><tspan class="cls-31" x="38.58" y="0">U</tspan><tspan x="58.9" y="0">X Design</tspan></text>
+  <text class="cls-4" transform="translate(524.84 576.71)"><tspan class="cls-27" x="0" y="0">L</tspan><tspan class="cls-23" x="10.79" y="0">e</tspan><tspan x="21.81" y="0">a</tspan><tspan class="cls-27" x="32.83" y="0">r</tspan><tspan x="40.36" y="0">n Mo</tspan><tspan class="cls-32" x="86.87" y="0">r</tspan><tspan x="94.31" y="0">e</tspan></text>
+  <text class="cls-21" transform="translate(524.84 487.62)"><tspan class="cls-29" x="0" y="0">L</tspan><tspan x="11.52" y="0">o</tspan><tspan class="cls-26" x="23.92" y="0">r</tspan><tspan x="31.52" y="0">em Ipsum dolor sit a</tspan><tspan class="cls-16" x="234.72" y="0">m</tspan><tspan x="256.02" y="0">e</tspan><tspan class="cls-40" x="267.96" y="0">t</tspan><tspan x="276.12" y="0">, </tspan><tspan class="cls-29" x="0" y="24">c</tspan><tspan x="10.92" y="24">onse</tspan><tspan class="cls-25" x="58.28" y="24">t</tspan><tspan x="65.86" y="24">eur </tspan><tspan class="cls-16" x="104.2" y="24">a</tspan><tspan x="115.88" y="24">di elit sed d</tspan><tspan class="cls-24" x="228.85" y="24">o</tspan><tspan x="240.92" y="24">...</tspan></text>
+  <g>
+    <path class="cls-14" d="M656.24,567.2l4,4-4,4"/>
+    <path class="cls-14" d="M640.24,571.2h20"/>
+  </g>
+  <rect class="cls-9" x="914.5" y="310.17" width="363.25" height="293.33" rx="30" ry="30"/>
+  <circle class="cls-17" cx="962.4" cy="364.68" r="34.44"/>
+  <g>
+    <rect class="cls-13" x="946.11" y="348.39" width="12.67" height="16.3" rx="1" ry="1"/>
+    <rect class="cls-13" x="966.02" y="348.39" width="12.67" height="9.05" rx="1" ry="1"/>
+    <rect class="cls-13" x="966.02" y="364.68" width="12.67" height="16.3" rx="1" ry="1"/>
+    <rect class="cls-13" x="946.11" y="371.93" width="12.67" height="9.05" rx="1" ry="1"/>
+  </g>
+  <text class="cls-3" transform="translate(937.96 443.94)"><tspan x="0" y="0">UI/</tspan><tspan class="cls-31" x="38.58" y="0">U</tspan><tspan x="58.9" y="0">X Design</tspan></text>
+  <text class="cls-4" transform="translate(937.96 576.71)"><tspan class="cls-27" x="0" y="0">L</tspan><tspan class="cls-23" x="10.79" y="0">e</tspan><tspan x="21.81" y="0">a</tspan><tspan class="cls-27" x="32.83" y="0">r</tspan><tspan x="40.36" y="0">n Mo</tspan><tspan class="cls-32" x="86.87" y="0">r</tspan><tspan x="94.31" y="0">e</tspan></text>
+  <text class="cls-21" transform="translate(937.96 487.62)"><tspan class="cls-29" x="0" y="0">L</tspan><tspan x="11.52" y="0">o</tspan><tspan class="cls-26" x="23.92" y="0">r</tspan><tspan x="31.52" y="0">em Ipsum dolor sit a</tspan><tspan class="cls-16" x="234.72" y="0">m</tspan><tspan x="256.02" y="0">e</tspan><tspan class="cls-40" x="267.96" y="0">t</tspan><tspan x="276.12" y="0">, </tspan><tspan class="cls-29" x="0" y="24">c</tspan><tspan x="10.92" y="24">onse</tspan><tspan class="cls-25" x="58.28" y="24">t</tspan><tspan x="65.86" y="24">eur </tspan><tspan class="cls-16" x="104.2" y="24">a</tspan><tspan x="115.88" y="24">di elit sed d</tspan><tspan class="cls-24" x="228.85" y="24">o</tspan><tspan x="240.92" y="24">...</tspan></text>
+  <g>
+    <path class="cls-14" d="M1069.37,567.2l4,4-4,4"/>
+    <path class="cls-14" d="M1053.37,571.2h20"/>
+  </g>
+  <g>
+    <rect class="cls-8" x="1013.32" y="210.35" width="264.43" height="60.02" rx="30.01" ry="30.01"/>
+    <rect class="cls-5" x="1015.41" y="212.55" width="181.94" height="55.63" rx="27.81" ry="27.81"/>
+    <circle class="cls-20" cx="1245.73" cy="240.37" r="27.81" transform="translate(725.59 1397.55) rotate(-76.72)"/>
+    <g>
+      <path d="M1259.16,242h-25.93c-.9,0-1.64-.73-1.64-1.64s.73-1.64,1.64-1.64h25.93c.9,0,1.64.73,1.64,1.64s-.73,1.64-1.64,1.64Z"/>
+      <path d="M1246.2,254.96c-.42,0-.84-.16-1.16-.48-.64-.64-.64-1.68,0-2.32l11.81-11.81-11.81-11.81c-.64-.64-.64-1.68,0-2.32.64-.64,1.68-.64,2.32,0l12.96,12.96c.64.64.64,1.68,0,2.32l-12.96,12.96c-.32.32-.74.48-1.16.48Z"/>
+    </g>
+    <g class="cls-11">
+      <text class="cls-12" transform="translate(1030.97 247.06)"><tspan class="cls-28" x="0" y="0">V</tspan><tspan class="cls-15" x="12.56" y="0">i</tspan><tspan class="cls-33" x="17.67" y="0">e</tspan><tspan x="28.2" y="0">w All Se</tspan><tspan class="cls-39" x="98.38" y="0">r</tspan><tspan x="105.95" y="0">vi</tspan><tspan class="cls-36" x="121.19" y="0">c</tspan><tspan x="131.09" y="0">es</tspan></text>
+    </g>
+  </g>
+</svg>

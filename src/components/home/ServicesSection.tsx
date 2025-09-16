@@ -1,0 +1,226 @@
+"use client";
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Skeleton } from "@/components/ui/skeleton";
+import { PrimaryButton, LinkButton } from "@/components/home/ui/buttons";
+import * as LucideIcons from "lucide-react";
+import { IService } from "@/types/admin/pages/service.types";
+
+interface ServiceModalProps {
+  service: IService | null;
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+function ServiceModal({ service, isOpen, onClose }: ServiceModalProps) {
+  if (!service) return null;
+
+  const IconComponent = (LucideIcons as any)[service.icon.lucideName];
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-3 text-xl">
+            {IconComponent && (
+              <div className="p-2 border-2 border-brand-green rounded-lg">
+                <IconComponent className="w-6 h-6 text-brand-green" />
+              </div>
+            )}
+            {service.name}
+          </DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4">
+          <div>
+            <h4 className="font-semibold mb-2">Description</h4>
+            <p className="text-gray-600 leading-relaxed max-h-40 overflow-y-auto">
+              {service.description}
+            </p>
+          </div>
+          {service.tags && service.tags.length > 0 && (
+            <div>
+              <h4 className="font-semibold mb-2">Tags</h4>
+              <div className="flex flex-wrap gap-2">
+                {service.tags.map((tag, index) => (
+                  <span
+                    key={`${tag.name}-${index}`}
+                    className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
+                  >
+                    {tag.name}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+export default function ServicesSection() {
+  const [services, setServices] = useState<IService[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedService, setSelectedService] = useState<IService | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    async function fetchServices() {
+      try {
+        const response = await fetch("https://mrvedmutha.com/api/v1/admin/services?limit=3");
+        const data = await response.json();
+        if (data.success && data.data?.data) {
+          // Sort by creation date (latest first) and take only 3
+          const sortedServices = data.data.data
+            .sort((a: IService, b: IService) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
+            .slice(0, 3);
+          setServices(sortedServices);
+        }
+      } catch (error) {
+        console.error("Failed to fetch services:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchServices();
+  }, []);
+
+  const handleLearnMore = (service: IService) => {
+    setSelectedService(service);
+    setIsModalOpen(true);
+  };
+
+  const truncateDescription = (text: string, lines: number = 2) => {
+    const words = text.split(" ");
+    const wordsPerLine = 12; // Approximate words per line
+    const maxWords = lines * wordsPerLine;
+
+    if (words.length <= maxWords) return text;
+    return words.slice(0, maxWords).join(" ") + "...";
+  };
+
+  if (loading) {
+    return (
+      <section className="py-16 px-6 max-w-7xl mx-auto">
+        <div className="space-y-8">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-12 gap-6">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <Skeleton className="w-8 h-0.5" />
+                <Skeleton className="h-4 w-16" />
+              </div>
+              <Skeleton className="h-12 w-80" />
+            </div>
+            <Skeleton className="h-12 w-40" />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3].map((i) => (
+              <Card key={i} className="h-full">
+                <CardContent className="p-6 space-y-6">
+                  <Skeleton className="w-14 h-14 rounded-lg" />
+                  <Skeleton className="h-6 w-3/4" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-5/6" />
+                  </div>
+                  <Skeleton className="h-4 w-20" />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <>
+      <section className="py-16 px-6 max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-12 gap-6">
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-8 h-0.5 bg-brand-yellow"></div>
+              <span className="text-gray-600 font-medium">Services</span>
+            </div>
+            <h2 className="text-4xl lg:text-5xl font-bold">
+              <span className="text-brand-yellow italic">Services</span>
+              <span className="text-black"> I Provide</span>
+            </h2>
+          </div>
+
+          <PrimaryButton onClick={() => window.location.href = "/services"}>
+            VIEW ALL SERVICES
+          </PrimaryButton>
+        </div>
+
+        {/* Services Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {services.map((service, index) => {
+            const IconComponent = (LucideIcons as any)[service.icon.lucideName];
+
+            return (
+              <motion.div
+                key={service._id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <Card className="h-full hover:shadow-lg transition-shadow duration-300 border-gray-200">
+                  <CardContent className="p-6 space-y-6">
+                    {/* Service Icon */}
+                    <div className="flex justify-start">
+                      <div className="p-3 border-2 border-brand-green rounded-lg">
+                        {IconComponent && (
+                          <IconComponent className="w-8 h-8 text-brand-green" />
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Service Title */}
+                    <h3 className="text-xl font-bold text-black">
+                      {service.name}
+                    </h3>
+
+                    {/* Service Description (2 lines only) */}
+                    <p className="text-gray-600 leading-relaxed line-clamp-2">
+                      {truncateDescription(service.description)}
+                    </p>
+
+                    {/* Learn More Link */}
+                    <div className="pt-2">
+                      <LinkButton
+                        onClick={() => handleLearnMore(service)}
+                        size="sm"
+                      >
+                        Learn More
+                      </LinkButton>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* No Services State */}
+        {!loading && services.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-gray-500">No services available at the moment.</p>
+          </div>
+        )}
+      </section>
+
+      {/* Service Modal */}
+      <ServiceModal
+        service={selectedService}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+    </>
+  );
+}

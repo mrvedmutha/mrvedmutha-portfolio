@@ -15,6 +15,8 @@ export interface IService {
   icon: IServiceIcon;
   description: string;
   tags: IServiceTag[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export type ServiceFormValues = {

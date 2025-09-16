@@ -8,6 +8,7 @@ import {
 } from "@/components/home";
 import SkillsMarquee from "@/components/home/SkillsMarquee";
 import TechStackMarquee from "@/components/home/TechStackMarquee";
+import ServicesSection from "@/components/home/ServicesSection";
 import type { Metadata } from "next";
 import { PersonStructuredData, WebsiteStructuredData } from "@/components/seo/StructuredData";
 
@@ -54,6 +55,7 @@ export default function Home() {
         <div className="flex flex-col items-center justify-center">
           <Hero />
           <TechStackMarquee />
+          <ServicesSection />
           <SkillsSection />
           <ProjectsSection />
           <ExperienceSection />
