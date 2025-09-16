@@ -13,6 +13,8 @@ export interface IProject {
   demoLink?: string;
   image?: string;
   techstack: IToolTag[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export type ProjectRequest = Omit<IProject, "_id">;
