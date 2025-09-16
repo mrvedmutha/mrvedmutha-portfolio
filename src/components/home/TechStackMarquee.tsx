@@ -22,8 +22,8 @@ export default function TechStackMarquee() {
     <div className="w-full relative overflow-hidden py-8">
       {/* Green Skewed Stripe Background */}
       <div 
-        className="absolute inset-0 bg-brand-green transform -skew-y-2 origin-left"
-        style={{ transformOrigin: 'left center' }}
+        className="absolute inset-0 bg-brand-green transform skew-y-2"
+        style={{ transformOrigin: 'center center' }}
       ></div>
       
       {/* Yellow Stripe for Tech Stack */}
@@ -38,7 +38,7 @@ export default function TechStackMarquee() {
       {/* Tech Stack Content */}
       <div className="relative z-10 py-4">
         <motion.div
-          animate={{ x: [-500, -2000] }}
+          animate={{ x: [-2000, 500] }}
           transition={{
             x: {
               repeat: Infinity,
