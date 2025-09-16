@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import { Star } from "lucide-react";
+import { Asterisk } from "lucide-react";
 import { getHeroSkills } from "@/context/constants/home/hero";
 
 export default function SkillsMarquee() {
@@ -39,12 +39,12 @@ export default function SkillsMarquee() {
           }}
           className="whitespace-nowrap"
         >
-          <span className="text-brand-green font-semibold text-lg inline-flex items-center gap-4">
+          <span className="text-black font-semibold text-lg inline-flex items-center gap-4">
             {marqueeContent.split(' ★ ').map((skill, index) => (
               <React.Fragment key={index}>
                 <span>{skill}</span>
                 {index < marqueeContent.split(' ★ ').length - 1 && (
-                  <Star className="w-4 h-4 text-brand-green fill-current" />
+                  <Asterisk className="w-4 h-4 text-black" />
                 )}
               </React.Fragment>
             ))}

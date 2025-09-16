@@ -72,7 +72,13 @@ export default function AboutMe() {
         >
           <h2 className="text-2xl font-bold mb-5">About Me</h2>
           <div className="text-muted-foreground text-base md:text-lg">
-            {loading && "Loading..."}
+            {loading && (
+              <div className="flex flex-col gap-3">
+                {[1, 2, 3, 4, 5, 6].map((index) => (
+                  <Skeleton key={index} className="h-5 w-full max-w-[80%]" />
+                ))}
+              </div>
+            )}
             {!loading && section && (
               <div className="flex flex-col gap-2">
                 <div>
@@ -108,10 +114,33 @@ export default function AboutMe() {
         >
           <h2 className="text-2xl font-bold mb-2">More About Me</h2>
           <div className="text-muted-foreground text-base md:text-lg">
-            {loading && "Loading..."}
-            {!loading && section && section.about}
-            {!loading && (!section || !section.about) && (
-              <span>No about information available.</span>
+            {loading && (
+              <div className="flex items-center gap-2">
+                <div className="flex gap-1">
+                  {[0, 1, 2].map((index) => (
+                    <motion.div
+                      key={index}
+                      className="w-3 h-3 bg-brand-yellow rounded-full"
+                      animate={{
+                        scale: [1, 1.2, 1],
+                        opacity: [0.5, 1, 0.5],
+                      }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        delay: index * 0.2,
+                        ease: "easeInOut"
+                      }}
+                    />
+                  ))}
+                </div>
+                <span className="text-sm">Loading...</span>
+              </div>
+            )}
+            {!loading && (
+              <p className="leading-relaxed">
+                {section?.about || "No about information available."}
+              </p>
             )}
           </div>
         </motion.div>

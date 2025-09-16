@@ -50,9 +50,9 @@ export default function Hero() {
     <section className="w-full max-w-7xl mx-auto px-4 py-16 flex flex-col lg:flex-row items-center justify-between gap-12 min-h-[80vh]">
       {/* Left Side - Profile Image with Skills */}
       <div className="flex-1 flex items-center justify-center relative">
-        <div className="relative w-96 h-96 flex items-center justify-center">
+        <div className="relative w-80 h-80 lg:w-[500px] lg:h-[500px] flex items-center justify-center">
           {/* Profile Image with Built-in Yellow Circle */}
-          <div className="relative w-96 h-96 shadow-2xl">
+          <div className="relative w-full h-full">
             <Image
               src="/assets/mrvedmutha-image/mrvedmutha-photo-in-circle.png"
               alt="Mr.Vedmutha Profile"
