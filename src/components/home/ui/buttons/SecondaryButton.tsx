@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { motion } from "framer-motion";
 
 interface SecondaryButtonProps {
   children: React.ReactNode;
@@ -48,26 +47,18 @@ export default function SecondaryButton({
   const config = sizeConfig[size];
 
   return (
-    <motion.button
+    <button
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`relative overflow-hidden rounded-full ${config.height} ${config.minWidth} w-fit flex items-center justify-center ${config.borderWidth} border-brand-green bg-transparent cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
-      initial={{ backgroundColor: "transparent" }}
-      whileHover={{
-        backgroundColor: disabled ? "transparent" : "#4A6034"
-      }}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
+      className={`group relative overflow-hidden rounded-full ${config.height} ${config.minWidth} w-fit flex items-center justify-center ${config.borderWidth} border-brand-green bg-transparent cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:bg-brand-green hover:text-white transition-all duration-300 ease-in-out ${className}`}
     >
       {/* Button Text */}
-      <motion.span
-        className={`font-semibold ${config.textSize} ${config.padding} whitespace-nowrap`}
-        initial={{ color: "#4A6034" }}
-        whileHover={{ color: disabled ? "#4A6034" : "#FFFFFF" }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
+      <span
+        className={`font-semibold ${config.textSize} ${config.padding} whitespace-nowrap text-brand-green group-hover:text-white transition-colors duration-300 ease-in-out`}
       >
         {children}
-      </motion.span>
-    </motion.button>
+      </span>
+    </button>
   );
 }
