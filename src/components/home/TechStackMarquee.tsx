@@ -28,9 +28,8 @@ export default function TechStackMarquee() {
       
       {/* Yellow Stripe for Tech Stack */}
       <div 
-        className="absolute inset-0 bg-brand-yellow transform -skew-y-2 origin-left mt-4 mb-4"
+        className="absolute inset-0 bg-brand-yellow mt-4 mb-4"
         style={{ 
-          transformOrigin: 'left center',
           top: '20%',
           bottom: '20%'
         }}
