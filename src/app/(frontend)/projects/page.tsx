@@ -162,7 +162,7 @@ export default function ProjectsPage() {
               {Array.from({ length: 6 }).map((_, i) => (
                 <Card key={i} className="h-full border border-[#cecece] bg-[#f5f5f5]">
                   <CardContent className="p-0">
-                    <Skeleton className="w-full h-48 rounded-t-lg" />
+                    <Skeleton className="w-full aspect-[1080/1350] rounded-t-lg" />
                     <div className="p-6 space-y-4">
                       <Skeleton className="h-6 w-3/4" />
                       <Skeleton className="h-4 w-20" />
@@ -210,13 +210,14 @@ export default function ProjectsPage() {
                 <Card className="h-full hover:shadow-lg transition-shadow duration-300 border border-[#cecece] bg-[#f5f5f5] overflow-hidden">
                   <CardContent className="p-0">
                     {/* Project Image */}
-                    <div className="relative w-full h-48 bg-gray-200">
+                    <div className="relative w-full aspect-[1080/1350] bg-gray-200">
                       {project.image ? (
                         <Image
                           src={project.image}
                           alt={project.title}
                           fill
                           className="object-cover"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-gray-500">
