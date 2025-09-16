@@ -9,6 +9,7 @@ import {
   Book,
   FolderKanban,
   CircleFadingPlus,
+  Settings,
 } from "lucide-react";
 
 export const AdminSidebarNav = [
@@ -26,6 +27,7 @@ export const AdminSidebarNav = [
       },
       { title: "Education", url: "/admin/pages/education", icon: Book },
       { title: "Projects", url: "/admin/pages/projects", icon: FolderKanban },
+      { title: "Services", url: "/admin/pages/services", icon: Settings },
       { title: "Socials", url: "/admin/pages/socials", icon: CircleFadingPlus },
     ],
   },
