@@ -1,7 +1,6 @@
 import type { Config } from "tailwindcss";
 
 export default {
-  darkMode: ["class"],
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,7 +8,21 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'heading': ['Montserrat', 'Poppins', 'sans-serif'],
+        'body': ['Open Sans', 'Lato', 'sans-serif'],
+      },
       colors: {
+        // Brand Colors for Frontend Website
+        brand: {
+          green: "#4A6034", // Dark Olive Green
+          yellow: "#FBB03B", // Bright Gold/Orange
+          white: "#FFFFFF", // Pure White
+          lightGray: "#F0F0F0", // Light Gray
+          darkText: "#333333", // Dark Text
+          mutedText: "#666666", // Muted Text
+        },
+        // Keep existing shadcn/ui colors for backend admin compatibility
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
@@ -50,6 +63,13 @@ export default {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+      },
+      screens: {
+        'sm': '640px',
+        'md': '768px',
+        'lg': '950px', // Custom breakpoint for header layout
+        'xl': '1280px',
+        '2xl': '1536px',
       },
       borderRadius: {
         lg: "var(--radius)",

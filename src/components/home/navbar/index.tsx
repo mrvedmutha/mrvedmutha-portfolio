@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -8,155 +7,142 @@ import {
   SheetContent,
   SheetTrigger,
   SheetTitle,
+  SheetClose,
 } from "@/components/ui/sheet";
-import { Menu, Sun, Moon } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { NavigationLinks } from "@/context/constants/home/navigation";
 import SearchBar from "@/components/home/search/SearchBar";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = React.useState(false);
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
 
   return (
-    <nav className="w-full bg-background/80 backdrop-blur border-b border-border sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between gap-4">
-        {/* Logo */}
-        <Link
-          href="/"
-          className="font-bold text-xl tracking-tight select-none hover:text-primary transition-colors"
-        >
-          Mr.Vedmutha
-        </Link>
-        {/* Search Bar */}
-        <div className="hidden md:flex flex-1 min-w-0 justify-center">
-          <SearchBar />
-        </div>
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-6">
-          {NavigationLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-sm font-medium hover:text-primary transition-colors"
-            >
-              {link.label}
-            </a>
-          ))}
-          <Button
-            aria-label="Toggle dark mode"
-            variant="ghost"
-            size="icon"
-            className="ml-4 p-1 w-12 h-8 flex items-center border border-border rounded-full bg-background relative overflow-hidden justify-end"
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            style={{ minWidth: 48, minHeight: 32 }}
+    <nav className="w-full bg-brand-green border-b border-brand-green sticky top-0 z-50 shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 py-4">
+        {/* Desktop Layout - Capsule Style */}
+        <div className="hidden lg:flex items-center justify-between">
+          {/* Logo */}
+          <Link
+            href="/"
+            className="flex items-center hover:opacity-80 transition-opacity"
           >
-            <span className="sr-only">Toggle dark mode</span>
-            {mounted && (
-              <>
-                <span
-                  className={`absolute inset-0 flex items-center justify-center transition-transform duration-300 ${
-                    theme === "dark" ? "translate-x-0" : "translate-x-full"
-                  }`}
-                >
-                  <Sun className="w-6 h-6 text-black dark:text-white" />
-                </span>
-                <span
-                  className={`absolute inset-0 flex items-center justify-center transition-transform duration-300 ${
-                    theme === "light" ? "translate-x-0" : "-translate-x-full"
-                  }`}
-                >
-                  <Moon className="w-6 h-6 text-black dark:text-white" />
-                </span>
-              </>
-            )}
-          </Button>
-        </div>
-        {/* Mobile Hamburger */}
-        <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-          <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="md:hidden" asChild>
-              <SheetTrigger>
-                <Menu className="w-6 h-6" />
-              </SheetTrigger>
-            </Button>
-          </SheetTrigger>
-          <SheetContent
-            side="right"
-            className="p-0 w-full max-w-full sm:max-w-full"
-          >
-            <SheetTitle className="sr-only">Menu</SheetTitle>
-            <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+            <Image
+              src="/logo/mrvedmutha-logo-final.svg"
+              alt="Mr.Vedmutha Logo"
+              width={180}
+              height={50}
+              className="h-10 w-auto"
+            />
+          </Link>
+          
+          {/* Center Navigation */}
+          <div className="flex items-center bg-white/10 backdrop-blur rounded-full px-6 py-2 gap-8">
+            {NavigationLinks.map((link) => (
               <Link
-                href="/"
-                className="font-bold text-xl hover:text-primary transition-colors"
-                onClick={() => setMobileOpen(false)}
+                key={link.href}
+                href={link.href}
+                className="text-white font-medium hover:text-brand-yellow transition-colors text-sm"
               >
-                Mr.Vedmutha
+                {link.label}
               </Link>
+            ))}
+          </div>
+          
+          {/* Right Side - Search + Contact Button */}
+          <div className="flex items-center gap-4">
+            <div className="w-64">
+              <SearchBar />
             </div>
-            <div className="px-4 py-3 border-b border-border">
-              <Input placeholder="Search..." className="rounded-full w-full" />
-            </div>
-            <div className="flex flex-col items-center justify-center gap-8 mt-8">
-              {NavigationLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="text-lg font-semibold hover:text-primary transition-colors"
+            <Button 
+              className="btn-primary"
+              style={{ backgroundColor: '#FBB03B', color: '#FFFFFF' }}
+            >
+              Contact Me
+            </Button>
+          </div>
+        </div>
+        
+        {/* Mobile Layout - Keep Original Style */}
+        <div className="lg:hidden flex items-center justify-between">
+          {/* Logo */}
+          <Link
+            href="/"
+            className="flex items-center hover:opacity-80 transition-opacity"
+          >
+            <Image
+              src="/logo/mrvedmutha-logo-final.svg"
+              alt="Mr.Vedmutha Logo"
+              width={160}
+              height={44}
+              className="h-10 w-auto"
+            />
+          </Link>
+          {/* Mobile Hamburger */}
+          <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="hover:bg-white/10">
+                <Menu className="w-6 h-6 text-brand-yellow" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent
+              side="right"
+              className="p-0 w-full max-w-full sm:max-w-full"
+              style={{ backgroundColor: '#4A6034' }}
+            >
+              <SheetTitle className="sr-only">Menu</SheetTitle>
+              <div className="flex items-center justify-between px-4 py-3 border-b border-white/20">
+                <Link
+                  href="/"
+                  className="flex items-center hover:opacity-80 transition-opacity"
                   onClick={() => setMobileOpen(false)}
                 >
-                  {link.label}
-                </a>
-              ))}
-              <div className="mt-8 w-full flex justify-center">
-                <div className="flex items-center justify-between gap-2 w-1/2 max-w-xs mx-auto border border-border rounded-full bg-muted px-3 py-1">
-                  <span className="text-base font-medium flex-1">
-                    {theme === "dark" ? "Dark mode" : "Light mode"}
-                  </span>
-                  <Button
-                    aria-label="Toggle dark mode"
-                    variant="ghost"
-                    size="icon"
-                    className="p-1 w-12 h-8 flex items-center border border-border rounded-full bg-background relative overflow-hidden justify-end"
-                    onClick={() =>
-                      setTheme(theme === "dark" ? "light" : "dark")
-                    }
-                    style={{ minWidth: 48, minHeight: 32 }}
+                  <Image
+                    src="/logo/mrvedmutha-logo-final.svg"
+                    alt="Mr.Vedmutha Logo"
+                    width={160}
+                    height={44}
+                    className="h-10 w-auto"
+                  />
+                </Link>
+                <SheetClose asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="hover:bg-white/10 custom-close-btn"
                   >
-                    <span className="sr-only">Toggle dark mode</span>
-                    {mounted && (
-                      <>
-                        <span
-                          className={`absolute inset-0 flex items-center justify-center transition-transform duration-300 ${
-                            theme === "dark"
-                              ? "translate-x-0"
-                              : "translate-x-full"
-                          }`}
-                        >
-                          <Sun className="w-6 h-6 text-black dark:text-white" />
-                        </span>
-                        <span
-                          className={`absolute inset-0 flex items-center justify-center transition-transform duration-300 ${
-                            theme === "light"
-                              ? "translate-x-0"
-                              : "-translate-x-full"
-                          }`}
-                        >
-                          <Moon className="w-6 h-6 text-black dark:text-white" />
-                        </span>
-                      </>
-                    )}
+                    <X className="w-6 h-6 text-brand-yellow custom-close" />
                   </Button>
-                </div>
+                </SheetClose>
               </div>
-            </div>
-          </SheetContent>
-        </Sheet>
+              <div className="px-4 py-3 border-b border-white/20">
+                <Input 
+                  placeholder="Search..." 
+                  className="rounded-full w-full bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:border-brand-yellow" 
+                />
+              </div>
+              <div className="flex flex-col items-center justify-center gap-8 mt-8">
+                {NavigationLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="text-lg font-semibold text-white hover:text-brand-yellow transition-colors"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+                <Button 
+                  className="btn-primary mt-4"
+                  style={{ backgroundColor: '#FBB03B', color: '#FFFFFF' }}
+                >
+                  Contact Me
+                </Button>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
     </nav>
   );

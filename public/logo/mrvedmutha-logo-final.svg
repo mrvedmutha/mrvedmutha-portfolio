@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 874.66 239.92">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: #fbae1c;
+      }
+
+      .cls-3 {
+        fill: #344c35;
+      }
+
+      .cls-4 {
+        letter-spacing: 0em;
+      }
+
+      .cls-4, .cls-5, .cls-6, .cls-7 {
+        fill: #fff;
+      }
+
+      .cls-5 {
+        letter-spacing: -.01em;
+      }
+
+      .cls-6 {
+        letter-spacing: -.01em;
+      }
+
+      .cls-2 {
+        letter-spacing: -.04em;
+      }
+
+      .cls-8 {
+        font-family: Montserrat-SemiBold, Montserrat;
+        font-size: 75.63px;
+        font-weight: 600;
+      }
+    </style>
+  </defs>
+  <circle class="cls-1" cx="119.96" cy="119.96" r="119.96"/>
+  <g id="vvcfN2">
+    <path class="cls-3" d="M71.6,168.44c-23.24.9-45.59-18.61-48.3-41.54-7.22-61.16,81.46-78.5,95.66-16.02.38,1.67-.73,1.88,2.12,1.62,4.05-35.8,48.3-53.49,76.9-31.18,36.86,28.76,16.52,87.18-29.56,87.12v-48.41l-48.02,48.34-48.8-47.26v47.34Z"/>
+  </g>
+  <text class="cls-8" transform="translate(269.64 144.05)"><tspan class="cls-7" x="0" y="0">MR</tspan><tspan class="cls-2" x="127.51" y="0">.</tspan><tspan class="cls-5" x="143.16" y="0">V</tspan><tspan class="cls-4" x="197.16" y="0">EDM</tspan><tspan class="cls-6" x="382.52" y="0">U</tspan><tspan class="cls-7" x="441.21" y="0">THA</tspan></text>
+</svg>

@@ -31,7 +31,7 @@ export default function SearchBar() {
       <Input
         ref={inputRef}
         placeholder="Search..."
-        className="rounded-full w-full min-w-0"
+        className="rounded-full w-full min-w-0 bg-white/10 border-white/20 text-white placeholder:text-white/70 focus:border-brand-yellow"
         value={query}
         onChange={(e) => {
           setQuery(e.target.value);
