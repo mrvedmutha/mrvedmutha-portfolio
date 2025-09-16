@@ -1,6 +1,5 @@
 import {
   Hero,
-  AboutMe,
   SkillsSection,
   ProjectsSection,
   ExperienceSection,
@@ -55,7 +54,6 @@ export default function Home() {
         <div className="flex flex-col items-center justify-center">
           <Hero />
           <TechStackMarquee />
-          <AboutMe />
           <SkillsSection />
           <ProjectsSection />
           <ExperienceSection />
