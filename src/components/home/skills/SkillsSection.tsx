@@ -5,12 +5,6 @@ import { getSkills } from "@/context/constants/home/skills";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PrimaryButton } from "@/components/home/ui/buttons";
 import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
-import {
   Code,
   Database,
   Paintbrush,
@@ -36,11 +30,6 @@ interface SkillsSectionProps {
 export default function SkillsSection({ showAll = false }: SkillsSectionProps) {
   const [skills, setSkills] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [currentSkillIndex, setCurrentSkillIndex] = useState(0);
-
-  const plugin = React.useRef(
-    Autoplay({ delay: 3000, stopOnInteraction: true })
-  );
 
   useEffect(() => {
     async function fetchSkills() {
@@ -236,75 +225,40 @@ export default function SkillsSection({ showAll = false }: SkillsSectionProps) {
           <span className="text-gray-600 font-medium">My Favorite Tools</span>
         </div>
         <h2 className="text-4xl lg:text-5xl font-bold">
-          <span className="text-brand-yellow italic">Exploring the tools</span>
+          <span className="text-brand-yellow italic">Behind my designs</span>
         </h2>
       </div>
 
-      {/* Skills Carousel */}
-      <div className="mb-16 lg:mb-20">
-        <Carousel
-          plugins={[plugin.current]}
-          onMouseEnter={plugin.current.stop}
-          onMouseLeave={plugin.current.reset}
-          opts={{
-            align: "center",
-            loop: true,
-          }}
-          className="w-full"
-          setApi={(api) => {
-            if (api) {
-              api.on("select", () => {
-                setCurrentSkillIndex(api.selectedScrollSnap());
-              });
-            }
-          }}
-        >
-          <CarouselContent className="ml-0">
-            {displaySkills.map((skill, index) => {
-              const iconName = skill.icon?.lucideName || skill.icon || 'Circle';
-              const LucideIcon = lucideIconMap[iconName] || Circle;
-              return (
-                <CarouselItem key={skill.title} className="pl-0 basis-full">
-                  <div className="text-center py-8 lg:py-12 px-4">
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-8">
-                      <div className="flex items-center gap-2 sm:gap-3 text-lg sm:text-xl md:text-2xl lg:text-4xl font-bold">
-                        <LucideIcon className="text-brand-green w-6 h-6 sm:w-8 sm:h-8 lg:w-12 lg:h-12 flex-shrink-0" />
-                        <span className="text-black text-center leading-tight max-w-xs sm:max-w-md lg:max-w-2xl">{skill.title}</span>
-                      </div>
-                    </div>
-                  </div>
-                </CarouselItem>
-              );
-            })}
-          </CarouselContent>
-        </Carousel>
-      </div>
-
-      {/* Tech Stack Capsules */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 md:flex md:justify-center gap-3 sm:gap-4 md:gap-6 lg:gap-8 mb-16 lg:mb-20 px-4 max-w-4xl mx-auto">
-        {displaySkills.length > 0 && displaySkills[currentSkillIndex] && (displaySkills[currentSkillIndex].tags || displaySkills[currentSkillIndex].tools || []).slice(0, 4).map((tool: any, index: number) => (
-          <motion.div
-            key={`${currentSkillIndex}-${tool.name}`}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            viewport={{ once: true }}
-            className="flex flex-col items-center p-3 sm:p-4 lg:p-6 bg-[#f5f5f5] border border-[#cecece] rounded-full min-w-[80px] sm:min-w-[90px] lg:min-w-[120px] max-w-[120px] mx-auto"
-          >
-            <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-white rounded-full flex items-center justify-center mb-2 sm:mb-3">
-              <img
-                src={tool.svg}
-                alt={tool.name}
-                width={24}
-                height={24}
-                className="sm:w-7 sm:h-7 lg:w-8 lg:h-8"
-              />
-            </div>
-            <span className="text-xs sm:text-xs lg:text-sm font-medium text-gray-700 text-center leading-tight px-1">
-              {tool.name.length > 10 ? `${tool.name.substring(0, 10)}...` : tool.name}
-            </span>
-          </motion.div>
-        ))}
+      {/* Tech Stack Grid */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6 mb-16 lg:mb-20 px-4 max-w-6xl mx-auto">
+        {(() => {
+          // Get all tags from all skills and shuffle them randomly
+          const allTags = skills.flatMap(skill => skill.tags || skill.tools || []);
+          const shuffledTags = allTags.sort(() => Math.random() - 0.5);
+          return shuffledTags.slice(0, 6).map((tool: any, index: number) => (
+            <motion.div
+              key={`${tool.name}-${index}`}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className="flex flex-col items-center p-4 lg:p-5 bg-[#f5f5f5] border border-[#cecece] rounded-full aspect-square"
+            >
+              <div className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-white rounded-full flex items-center justify-center mb-2 lg:mb-3">
+                <img
+                  src={tool.svg}
+                  alt={tool.name}
+                  width={28}
+                  height={28}
+                  className="md:w-8 md:h-8 lg:w-9 lg:h-9"
+                />
+              </div>
+              <span className="text-xs md:text-xs lg:text-sm font-medium text-gray-700 text-center leading-tight px-1">
+                {tool.name.length > 12 ? `${tool.name.substring(0, 12)}...` : tool.name}
+              </span>
+            </motion.div>
+          ));
+        })()}
       </div>
 
       {/* Explore All Button */}
