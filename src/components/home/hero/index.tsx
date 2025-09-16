@@ -12,10 +12,30 @@ export default function Hero() {
   const [skillIndex, setSkillIndex] = React.useState(0);
   const [showSkill, setShowSkill] = React.useState("");
   const [typing, setTyping] = React.useState(true);
+  const [aboutData, setAboutData] = React.useState<any>(null);
+  const [loadingAbout, setLoadingAbout] = React.useState(true);
 
   // Fetch skills dynamically
   React.useEffect(() => {
     getHeroSkills().then(setSkills);
+  }, []);
+
+  // Fetch about data
+  React.useEffect(() => {
+    async function fetchAboutData() {
+      setLoadingAbout(true);
+      try {
+        const res = await fetch("https://mrvedmutha.com/api/v1/admin/sections");
+        const data = await res.json();
+        setAboutData(data?.data?.data?.[0]);
+      } catch (error) {
+        console.error("Failed to fetch about data:", error);
+        setAboutData(null);
+      } finally {
+        setLoadingAbout(false);
+      }
+    }
+    fetchAboutData();
   }, []);
 
   // Typing and erasing effect for skills
@@ -75,11 +95,36 @@ export default function Hero() {
           </h1>
         </div>
         
-        <p className="text-brand-mutedText text-lg leading-relaxed max-w-2xl">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim 
-          ad minim veniam, quis nostrud exercitation ullamco.
-        </p>
+        <div className="text-brand-mutedText text-lg leading-relaxed max-w-2xl">
+          {loadingAbout && (
+            <div className="flex items-center gap-2">
+              <div className="flex gap-1">
+                {[0, 1, 2].map((index) => (
+                  <motion.div
+                    key={index}
+                    className="w-3 h-3 bg-brand-yellow rounded-full"
+                    animate={{
+                      scale: [1, 1.2, 1],
+                      opacity: [0.5, 1, 0.5],
+                    }}
+                    transition={{
+                      duration: 1.5,
+                      repeat: Infinity,
+                      delay: index * 0.2,
+                      ease: "easeInOut"
+                    }}
+                  />
+                ))}
+              </div>
+              <span className="text-sm">Loading...</span>
+            </div>
+          )}
+          {!loadingAbout && (
+            <p>
+              {aboutData?.about || "Professional information will be available soon."}
+            </p>
+          )}
+        </div>
         
         {/* Statistics */}
         <div className="flex flex-wrap gap-8 mt-4">
