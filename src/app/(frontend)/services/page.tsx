@@ -119,9 +119,11 @@ export default function ServicesPage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3, 4, 5, 6].map((i) => (
-                <Card key={i} className="h-full">
+                <Card key={i} className="h-full border border-[#cecece] bg-[#f5f5f5]">
                   <CardContent className="p-6 space-y-6">
-                    <Skeleton className="w-14 h-14 rounded-lg" />
+                    <div className="flex justify-start">
+                      <Skeleton className="w-14 h-14 rounded-full" />
+                    </div>
                     <Skeleton className="h-6 w-3/4" />
                     <div className="space-y-2">
                       <Skeleton className="h-4 w-full" />
@@ -176,11 +178,11 @@ export default function ServicesPage() {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: true }}
                 >
-                  <Card className="h-full hover:shadow-lg transition-shadow duration-300 border-gray-200">
+                  <Card className="h-full hover:shadow-lg transition-shadow duration-300 border border-[#cecece] bg-[#f5f5f5]">
                     <CardContent className="p-6 space-y-6">
                       {/* Service Icon */}
                       <div className="flex justify-start">
-                        <div className="p-3 border-2 border-brand-green rounded-lg">
+                        <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center">
                           {IconComponent && (
                             <IconComponent className="w-8 h-8 text-brand-green" />
                           )}

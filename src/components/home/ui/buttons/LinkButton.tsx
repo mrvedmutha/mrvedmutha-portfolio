@@ -78,6 +78,7 @@ export default function LinkButton({
         <motion.div
           className="absolute left-0 bottom-0 h-0.5 bg-brand-green"
           initial={{ width: "0%" }}
+          animate={{ width: "0%" }}
           whileHover={{ width: disabled ? "0%" : "100%" }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
         />
