@@ -99,28 +99,31 @@ export default function SkillsSection({ showAll = false }: SkillsSectionProps) {
         </div>
       );
     } else {
-      // Homepage skeleton - carousel + capsules
+      // Homepage skeleton - grid layout matching new design
       return (
         <section className="py-16 px-6 max-w-7xl mx-auto">
-          <div className="space-y-8">
-            <div className="text-center">
+          <div className="space-y-12">
+            {/* Header skeleton */}
+            <div className="text-center mb-12">
               <div className="flex items-center justify-center gap-2 mb-4">
                 <Skeleton className="w-8 h-0.5" />
                 <Skeleton className="h-4 w-32" />
               </div>
-              <Skeleton className="h-12 w-80 mx-auto" />
+              <Skeleton className="h-12 w-80 mx-auto mb-2" />
+              <Skeleton className="h-8 w-60 mx-auto" />
             </div>
-            <div className="text-center">
-              <Skeleton className="h-16 w-96 mx-auto mb-8" />
-            </div>
-            <div className="flex justify-center gap-6">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="w-20 h-24 bg-[#f5f5f5] border border-[#cecece] rounded-full flex flex-col items-center justify-center p-4">
-                  <Skeleton className="w-10 h-10 rounded-full mb-2" />
-                  <Skeleton className="h-3 w-12" />
+
+            {/* Tech Stack Grid skeleton */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6 mb-16 lg:mb-20 px-4 max-w-6xl mx-auto">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div key={i} className="flex flex-col items-center justify-center p-4 lg:p-5 bg-[#f5f5f5] border border-[#cecece] rounded-2xl min-h-[120px] md:min-h-[140px] lg:min-h-[160px]">
+                  <Skeleton className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded-full mb-3" />
+                  <Skeleton className="h-3 w-16 md:w-20" />
                 </div>
               ))}
             </div>
+
+            {/* Button skeleton */}
             <div className="flex justify-center">
               <Skeleton className="h-12 w-40" />
             </div>
