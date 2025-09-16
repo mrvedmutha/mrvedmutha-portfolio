@@ -130,7 +130,6 @@ export default function SkillsSection({ showAll = false }: SkillsSectionProps) {
     }
   }
 
-  const displaySkills = showAll ? skills : skills.slice(0, 5);
 
   // If showAll is true, render the full page layout
   if (showAll) {
@@ -224,9 +223,12 @@ export default function SkillsSection({ showAll = false }: SkillsSectionProps) {
           <div className="w-8 h-0.5 bg-brand-yellow"></div>
           <span className="text-gray-600 font-medium">My Favorite Tools</span>
         </div>
-        <h2 className="text-4xl lg:text-5xl font-bold">
-          <span className="text-brand-yellow italic">Behind my designs</span>
+        <h2 className="text-4xl lg:text-5xl font-medium">
+          <span className="text-brand-yellow italic">Exploring the tools</span>
         </h2>
+        <h3 className="text-2xl lg:text-3xl font-medium text-black mt-2" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+          Behind my designs
+        </h3>
       </div>
 
       {/* Tech Stack Grid */}
@@ -242,9 +244,9 @@ export default function SkillsSection({ showAll = false }: SkillsSectionProps) {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="flex flex-col items-center p-4 lg:p-5 bg-[#f5f5f5] border border-[#cecece] rounded-full aspect-square"
+              className="flex flex-col items-center justify-center p-4 lg:p-5 bg-[#f5f5f5] border border-[#cecece] rounded-2xl min-h-[120px] md:min-h-[140px] lg:min-h-[160px]"
             >
-              <div className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-white rounded-full flex items-center justify-center mb-2 lg:mb-3">
+              <div className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-white rounded-full flex items-center justify-center mb-3">
                 <img
                   src={tool.svg}
                   alt={tool.name}
@@ -253,7 +255,7 @@ export default function SkillsSection({ showAll = false }: SkillsSectionProps) {
                   className="md:w-8 md:h-8 lg:w-9 lg:h-9"
                 />
               </div>
-              <span className="text-xs md:text-xs lg:text-sm font-medium text-gray-700 text-center leading-tight px-1">
+              <span className="text-xs md:text-xs lg:text-sm font-medium text-gray-700 text-center leading-tight px-2">
                 {tool.name.length > 12 ? `${tool.name.substring(0, 12)}...` : tool.name}
               </span>
             </motion.div>
