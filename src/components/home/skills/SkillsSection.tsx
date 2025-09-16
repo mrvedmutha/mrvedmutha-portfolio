@@ -3,6 +3,13 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { getSkills, Skill } from "@/context/constants/home/skills";
 import { Skeleton } from "@/components/ui/skeleton";
+import { PrimaryButton } from "@/components/home/ui/buttons";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 import {
   Code,
   Database,
@@ -12,7 +19,6 @@ import {
   Check,
   Circle,
 } from "lucide-react";
-import Link from "next/link";
 
 const lucideIconMap: Record<string, React.ElementType> = {
   Code,
@@ -31,6 +37,10 @@ export default function SkillsSection({ showAll = false }: SkillsSectionProps) {
   const [skills, setSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const plugin = React.useRef(
+    Autoplay({ delay: 3000, stopOnInteraction: true })
+  );
+
   useEffect(() => {
     getSkills().then((data) => {
       setSkills(data);
@@ -40,81 +50,192 @@ export default function SkillsSection({ showAll = false }: SkillsSectionProps) {
 
   if (loading) {
     return (
-      <section className="w-full max-w-7xl mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-extrabold mt-16 mb-8 text-center w-full">
-          Skills
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <Skeleton key={i} className="h-[180px] rounded-xl" />
-          ))}
+      <section className="py-16 px-6 max-w-7xl mx-auto">
+        <div className="space-y-8">
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <Skeleton className="w-8 h-0.5" />
+              <Skeleton className="h-4 w-32" />
+            </div>
+            <Skeleton className="h-12 w-80 mx-auto" />
+          </div>
+          <div className="text-center">
+            <Skeleton className="h-16 w-96 mx-auto mb-8" />
+          </div>
+          <div className="flex justify-center gap-6">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="w-20 h-24 bg-[#f5f5f5] border border-[#cecece] rounded-full flex flex-col items-center justify-center p-4">
+                <Skeleton className="w-10 h-10 rounded-full mb-2" />
+                <Skeleton className="h-3 w-12" />
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     );
   }
 
+  const displaySkills = showAll ? skills : skills.slice(0, 5);
+
+  // If showAll is true, render the full page layout
+  if (showAll) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="py-16 px-6 max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <div className="w-8 h-0.5 bg-brand-yellow"></div>
+              <span className="text-gray-600 font-medium">My Favorite Tools</span>
+              <div className="w-8 h-0.5 bg-brand-yellow"></div>
+            </div>
+            <h1 className="text-4xl lg:text-5xl font-bold mb-4">
+              <span className="text-brand-yellow italic">All Skills &</span>
+              <span className="text-black"> Tools</span>
+            </h1>
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+              Explore my complete toolkit and expertise across various technologies and creative disciplines.
+            </p>
+          </div>
+
+          {/* Skills Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {skills.map((skill: Skill, idx: number) => {
+              const LucideIcon = lucideIconMap[skill.icon] || Circle;
+              return (
+                <motion.div
+                  key={skill.title}
+                  initial={{ opacity: 0, y: 60 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{
+                    duration: 0.7,
+                    ease: "easeOut",
+                    delay: 0.1 * idx,
+                  }}
+                  className="bg-[#f5f5f5] border border-[#cecece] rounded-xl shadow p-8 flex flex-col justify-center items-center min-h-[200px] hover:shadow-lg transition-shadow duration-300"
+                >
+                  <div className="flex items-center gap-3 mb-4 justify-center">
+                    {React.createElement(LucideIcon, {
+                      size: 30,
+                      className: "text-brand-green"
+                    })}
+                    <span className="text-xl font-bold">{skill.title}</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2 mt-2 justify-center">
+                    {skill.tools.map((tool) => (
+                      <span
+                        key={tool.name as string}
+                        className="flex items-center gap-1 bg-white px-3 py-1.5 rounded text-sm border border-gray-200 hover:border-brand-green transition-colors duration-200"
+                      >
+                        <img
+                          src={tool.svg}
+                          alt={tool.name}
+                          width={18}
+                          height={18}
+                        />
+                        {tool.name}
+                      </span>
+                    ))}
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* No Skills State */}
+          {skills.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">No skills available at the moment.</p>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // Homepage carousel layout
   return (
     <motion.section
       initial={{ opacity: 0, y: 60 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="w-full max-w-7xl mx-auto px-4"
+      className="py-16 px-6 max-w-7xl mx-auto"
     >
-      <h2 className="text-3xl md:text-4xl font-extrabold mt-16 mb-8 text-center w-full">
-        Skills
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {(showAll ? skills : skills.slice(0, 6)).map(
-          (skill: Skill, idx: number) => {
-            const LucideIcon = lucideIconMap[skill.icon] || Circle;
-            return (
-              <motion.div
-                key={skill.title}
-                initial={{ opacity: 0, y: 60 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{
-                  duration: 0.7,
-                  ease: "easeOut",
-                  delay: 0.1 * idx,
-                }}
-                className="bg-muted rounded-xl shadow p-8 flex flex-col justify-center items-center border border-border min-h-[180px]"
-              >
-                <div className="flex items-center gap-3 mb-2 justify-center">
-                  {React.createElement(LucideIcon, { size: 30 })}
-                  <span className="text-xl font-bold">{skill.title}</span>
-                </div>
-                <div className="flex flex-wrap gap-2 mt-2 justify-center">
-                  {skill.tools.map((tool) => (
-                    <span
-                      key={tool.name as string}
-                      className="flex items-center gap-1 bg-background px-2 py-1 rounded text-xs border border-border"
-                    >
-                      <img
-                        src={tool.svg}
-                        alt={tool.name}
-                        width={18}
-                        height={18}
-                      />
-                      {tool.name}
-                    </span>
-                  ))}
-                </div>
-              </motion.div>
-            );
-          }
-        )}
-      </div>
-      {!showAll && (
-        <div className="flex justify-center mt-8">
-          <Link href="/skills">
-            <button className="px-6 py-2 rounded-md bg-primary text-primary-foreground font-semibold shadow hover:bg-primary/90 transition">
-              Show more...
-            </button>
-          </Link>
+      {/* Header */}
+      <div className="text-center mb-12">
+        <div className="flex items-center justify-center gap-2 mb-4">
+          <div className="w-8 h-0.5 bg-brand-yellow"></div>
+          <span className="text-gray-600 font-medium">My Favorite Tools</span>
         </div>
-      )}
+        <h2 className="text-4xl lg:text-5xl font-bold">
+          <span className="text-brand-yellow italic">Exploring the tools</span>
+        </h2>
+      </div>
+
+      {/* Skills Carousel */}
+      <div className="mb-12">
+        <Carousel
+          plugins={[plugin.current]}
+          onMouseEnter={plugin.current.stop}
+          onMouseLeave={plugin.current.reset}
+          opts={{
+            align: "center",
+            loop: true,
+          }}
+          className="w-full"
+        >
+          <CarouselContent className="ml-0">
+            {displaySkills.map((skill) => {
+              return (
+                <CarouselItem key={skill.title} className="pl-0 basis-full">
+                  <div className="text-center">
+                    <div className="flex items-center justify-center gap-3 mb-8">
+                      <div className="flex items-center gap-2 text-2xl lg:text-3xl font-bold">
+                        <span className="text-gray-400">&lt; /&gt;</span>
+                        <span className="text-black">{skill.title}</span>
+                      </div>
+                    </div>
+                  </div>
+                </CarouselItem>
+              );
+            })}
+          </CarouselContent>
+        </Carousel>
+      </div>
+
+      {/* Tech Stack Capsules */}
+      <div className="flex justify-center gap-6 mb-12 flex-wrap">
+        {skills.length > 0 && skills[0].tools.slice(0, 4).map((tool, index) => (
+          <motion.div
+            key={tool.name}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+            viewport={{ once: true }}
+            className="flex flex-col items-center p-4 bg-[#f5f5f5] border border-[#cecece] rounded-full min-w-[80px]"
+          >
+            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center mb-2">
+              <img
+                src={tool.svg}
+                alt={tool.name}
+                width={24}
+                height={24}
+              />
+            </div>
+            <span className="text-xs font-medium text-gray-700 text-center">
+              {tool.name}
+            </span>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Explore All Button */}
+      <div className="flex justify-center">
+        <PrimaryButton onClick={() => window.location.href = "/skills"}>
+          EXPLORE ALL
+        </PrimaryButton>
+      </div>
     </motion.section>
   );
 }
