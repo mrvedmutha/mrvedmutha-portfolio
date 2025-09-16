@@ -16,7 +16,6 @@ export const serviceZodSchema = z.object({
   tags: z.array(
     z.object({
       name: z.string().min(1, "Tag name is required"),
-      _id: z.string().optional(),
     })
   ).min(1, "At least one tag is required"),
 });

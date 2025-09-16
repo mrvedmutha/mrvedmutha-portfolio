@@ -8,7 +8,9 @@ const ServiceSchema = new Schema(
       lucideName: { type: String, required: true }
     },
     description: { type: String, required: true },
-    tags: { type: [String], default: [] },
+    tags: [{
+      name: { type: String, required: true }
+    }],
   },
   { timestamps: true }
 );

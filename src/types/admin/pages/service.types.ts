@@ -7,7 +7,6 @@ export interface IServiceIcon {
 
 export interface IServiceTag {
   name: string;
-  _id?: string;
 }
 
 export interface IService {
