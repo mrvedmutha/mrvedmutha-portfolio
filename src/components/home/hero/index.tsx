@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import { Github, FileText, ArrowDownRight } from "lucide-react";
+import { Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PrimaryButton } from "@/components/home/ui/buttons";
 import { getHeroSkills } from "@/context/constants/home/hero";
-import TechStackGrid from "./TechStackGrid";
 import Image from "next/image";
 
 export default function Hero() {
@@ -144,13 +144,9 @@ export default function Hero() {
         
         {/* Action Buttons */}
         <div className="flex gap-4 mt-6 justify-center lg:justify-start">
-          <Button 
-            className="btn-secondary gap-2 px-6 py-3"
-            style={{ backgroundColor: '#4A6034', color: '#FFFFFF' }}
-          >
-            Download CV
-            <ArrowDownRight className="w-5 h-5" />
-          </Button>
+          <PrimaryButton>
+            DOWNLOAD CV
+          </PrimaryButton>
           <Button 
             asChild
             variant="outline" 
