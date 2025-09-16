@@ -5,6 +5,7 @@ import { Github, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getHeroSkills } from "@/context/constants/home/hero";
 import TechStackGrid from "./TechStackGrid";
+import Image from "next/image";
 
 export default function Hero() {
   const [skills, setSkills] = React.useState<string[]>([]);
@@ -46,62 +47,98 @@ export default function Hero() {
   }, [showSkill, typing, skillIndex, skills]);
 
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 py-16 flex flex-col md:flex-row items-center justify-between gap-8 min-h-[60vh]">
-      {/* Left Content */}
-      <div className="flex-1 flex flex-col items-start justify-center gap-8">
-        <div className="relative select-none">
-          <div className="flex items-center gap-2 text-3xl md:text-5xl font-bold">
-            <span>Hello</span>
-            <motion.span
-              initial={{ rotate: 0 }}
-              animate={{ rotate: [0, 20, -10, 20, -5, 0] }}
-              transition={{ repeat: Infinity, duration: 1.6, repeatDelay: 2 }}
-              className="inline-block origin-bottom-center"
-              aria-label="wave"
-            >
-              👋
-            </motion.span>
+    <section className="w-full max-w-7xl mx-auto px-4 py-16 flex flex-col lg:flex-row items-center justify-between gap-12 min-h-[80vh]">
+      {/* Left Side - Profile Image with Skills */}
+      <div className="flex-1 flex items-center justify-center relative">
+        <div className="relative w-96 h-96 flex items-center justify-center">
+          {/* Profile Image with Built-in Yellow Circle */}
+          <div className="relative w-96 h-96 shadow-2xl">
+            <Image
+              src="/assets/mrvedmutha-image/mrvedmutha-photo-in-circle.png"
+              alt="Mr.Vedmutha Profile"
+              fill
+              className="object-cover object-center"
+              priority
+            />
           </div>
-          <motion.div
-            initial={{ clipPath: "polygon(0 -10%, 0 110%, 0 110%, 0 -10%)" }}
-            animate={{
-              clipPath: "polygon(0 -10%, 100% -10%, 100% 110%, 0 110%)",
-            }}
-            transition={{ duration: 1, ease: "easeInOut" }}
-            whileHover={{ scale: 1.04, color: "var(--tw-prose-primary)" }}
-            className="text-4xl md:text-6xl font-extrabold text-muted-foreground mt-2 cursor-pointer"
-          >
-            I&apos;m Shreyans
-          </motion.div>
-        </div>
-        {/* Typing effect for skills */}
-        <div className="text-lg md:text-2xl font-mono text-primary bg-muted rounded px-3 py-1 min-h-[2.5rem] shadow-inner border border-border">
-          <span>{showSkill}</span>
-          <span className="animate-pulse">|</span>
-        </div>
-        {/* Buttons */}
-        <div className="flex gap-4 mt-2">
-          <Button asChild size="lg" variant="outline" className="gap-2">
-            <a
-              href="https://github.com/mrvedmutha"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Github className="w-5 h-5" />
-              GitHub
-            </a>
-          </Button>
-          <Button asChild size="lg" className="gap-2">
-            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">
-              <FileText className="w-5 h-5" />
-              Resume
-            </a>
-          </Button>
+          
+          {/* Floating Skill Badges */}
+          {skills.slice(0, 7).map((skill, index) => {
+            const positions = [
+              { top: '10%', left: '15%', rotate: '-15deg' },
+              { top: '25%', right: '5%', rotate: '10deg' },
+              { top: '45%', left: '0%', rotate: '-8deg' },
+              { top: '60%', right: '10%', rotate: '12deg' },
+              { bottom: '20%', left: '20%', rotate: '-10deg' },
+              { bottom: '10%', right: '15%', rotate: '8deg' },
+              { top: '5%', right: '25%', rotate: '-12deg' },
+            ];
+            
+            const position = positions[index] || positions[0];
+            
+            return (
+              <motion.div
+                key={skill}
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: index * 0.2, duration: 0.5 }}
+                whileHover={{ scale: 1.1 }}
+                className="absolute bg-brand-green text-white px-3 py-1.5 rounded-full text-sm font-medium shadow-lg cursor-pointer"
+                style={{
+                  ...position,
+                  transform: `rotate(${position.rotate})`,
+                  maxWidth: '120px'
+                }}
+              >
+                <span className="block truncate">
+                  {skill.length > 12 ? skill.substring(0, 12) + '...' : skill}
+                </span>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
-      {/* Right Tech Stack Logos Grid */}
-      <div className="flex-1 flex items-center justify-center min-h-[300px]">
-        <TechStackGrid />
+      
+      {/* Right Side - Content */}
+      <div className="flex-1 flex flex-col items-start justify-center gap-6">
+        <div className="text-brand-mutedText text-lg font-medium">About Me</div>
+        
+        <div className="relative select-none">
+          <h1 className="text-4xl lg:text-5xl font-bold text-brand-darkText leading-tight">
+            Who is{" "}
+            <span className="text-brand-yellow">Mr.Vedmutha?</span>
+          </h1>
+        </div>
+        
+        <p className="text-brand-mutedText text-lg leading-relaxed max-w-2xl">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim 
+          ad minim veniam, quis nostrud exercitation ullamco.
+        </p>
+        
+        {/* Statistics */}
+        <div className="flex flex-wrap gap-8 mt-4">
+          <div className="text-center">
+            <div className="text-3xl font-bold text-brand-darkText">600+</div>
+            <div className="text-brand-mutedText text-sm">Projects Completed</div>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl font-bold text-brand-darkText">50+</div>
+            <div className="text-brand-mutedText text-sm">Industries Covered</div>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl font-bold text-brand-darkText">10+</div>
+            <div className="text-brand-mutedText text-sm">Years of Experience</div>
+          </div>
+        </div>
+        
+        {/* Download CV Button */}
+        <div className="mt-6">
+          <Button className="btn-secondary gap-2 px-6 py-3">
+            <FileText className="w-5 h-5" />
+            Download CV
+          </Button>
+        </div>
       </div>
     </section>
   );
