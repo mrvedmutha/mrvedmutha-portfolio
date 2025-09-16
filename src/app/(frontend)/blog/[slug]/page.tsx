@@ -71,7 +71,7 @@ export default async function BlogPostPage({ params }: Props) {
         )}
         {/* Description/Post Content */}
         <div
-          className="prose prose-lg max-w-none mb-8 dark:prose-invert"
+          className="prose prose-lg max-w-none mb-8 prose-headings:text-black prose-p:text-gray-700 prose-code:bg-gray-100 prose-code:text-gray-800 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:font-mono"
           dangerouslySetInnerHTML={{ __html: blog?.description || "" }}
         />
         {/* Author */}
