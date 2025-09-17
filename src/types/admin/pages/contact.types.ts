@@ -2,6 +2,11 @@ export interface IContactMessage {
   _id: string;
   name: string;
   email: string;
+  phone: string;
+  interestedIn: string;
+  budgetRange: string;
+  currency: "USD" | "INR";
+  country: string;
   message: string;
   createdAt: string;
 }

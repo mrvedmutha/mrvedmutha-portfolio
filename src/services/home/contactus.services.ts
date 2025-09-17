@@ -10,9 +10,9 @@ export const contactusService = {
     data: Omit<ContactMessageRequest, "recaptchaToken"> | ContactMessageRequest
   ): Promise<ContactMessageResponse> {
     await dbConnect();
-    // Only save name, email, message (ignore recaptchaToken)
-    const { name, email, message } = data;
-    const saved = await ContactMessage.create({ name, email, message });
+    // Save all fields (ignore recaptchaToken if present)
+    const { name, email, phone, interestedIn, budgetRange, currency, country, message } = data;
+    const saved = await ContactMessage.create({ name, email, phone, interestedIn, budgetRange, currency, country, message });
     return saved.toObject();
   },
 
@@ -23,6 +23,11 @@ export const contactusService = {
       _id: msg._id.toString(),
       name: msg.name,
       email: msg.email,
+      phone: msg.phone,
+      interestedIn: msg.interestedIn,
+      budgetRange: msg.budgetRange,
+      currency: msg.currency,
+      country: msg.country,
       message: msg.message,
       createdAt:
         msg.createdAt instanceof Date
@@ -40,6 +45,11 @@ export const contactusService = {
       _id: m._id.toString(),
       name: m.name,
       email: m.email,
+      phone: m.phone,
+      interestedIn: m.interestedIn,
+      budgetRange: m.budgetRange,
+      currency: m.currency,
+      country: m.country,
       message: m.message,
       createdAt:
         m.createdAt instanceof Date ? m.createdAt.toISOString() : m.createdAt,

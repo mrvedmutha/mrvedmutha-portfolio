@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
         parsed.error.errors.map((e) => e.message).join(", ")
       );
     }
-    const { name, email, message, recaptchaToken } = parsed.data;
+    const { name, email, phone, interestedIn, budgetRange, currency, country, message, recaptchaToken } = parsed.data;
 
     // Verify reCAPTCHA with Google
     const recaptchaRes = await axios.post(
@@ -30,8 +30,8 @@ export async function POST(req: NextRequest) {
       return FailureResponse("reCAPTCHA validation failed.", 400);
     }
 
-    // Only pass name, email, message to the service
-    const saved = await contactusService.create({ name, email, message });
+    // Pass all fields to the service
+    const saved = await contactusService.create({ name, email, phone, interestedIn, budgetRange, currency, country, message });
     return SuccessResponse(saved);
   } catch (error: any) {
     return FailureResponse(error.message || "Something went wrong.");

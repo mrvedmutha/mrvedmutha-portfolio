@@ -30,11 +30,11 @@ import {
 } from "@/components/ui/alert-dialog";
 
 function ContactActionsCell({
-  message,
+  contact,
   onDelete,
   id,
 }: {
-  message: string;
+  contact: IContactMessage;
   onDelete?: (id: string) => void;
   id: string;
 }) {
@@ -64,11 +64,47 @@ function ContactActionsCell({
             </DropdownMenuContent>
           </DropdownMenu>
           {/* View Message Dialog */}
-          <DialogContent>
+          <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle>Message</DialogTitle>
-              <DialogDescription>{message}</DialogDescription>
+              <DialogTitle>Contact Message Details</DialogTitle>
+              <DialogDescription>
+                Message received on {new Date(contact.createdAt).toLocaleDateString()}
+              </DialogDescription>
             </DialogHeader>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
+              <div>
+                <label className="text-sm font-medium text-gray-500">Name</label>
+                <p className="text-sm">{contact.name}</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-gray-500">Email</label>
+                <p className="text-sm">{contact.email}</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-gray-500">Phone</label>
+                <p className="text-sm">{contact.phone}</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-gray-500">Interested In</label>
+                <p className="text-sm">{contact.interestedIn}</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-gray-500">Budget Range</label>
+                <p className="text-sm">{contact.budgetRange}</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-gray-500">Currency</label>
+                <p className="text-sm">{contact.currency}</p>
+              </div>
+              <div className="md:col-span-2">
+                <label className="text-sm font-medium text-gray-500">Country</label>
+                <p className="text-sm">{contact.country}</p>
+              </div>
+              <div className="md:col-span-2">
+                <label className="text-sm font-medium text-gray-500">Message</label>
+                <p className="text-sm whitespace-pre-wrap">{contact.message}</p>
+              </div>
+            </div>
           </DialogContent>
           {/* Delete Confirmation Dialog */}
           <AlertDialogContent>
@@ -114,11 +150,36 @@ const getColumns = (
     cell: (cell) => cell.getValue(),
   },
   {
+    accessorKey: "phone",
+    header: "Phone",
+    cell: (cell) => cell.getValue(),
+  },
+  {
+    accessorKey: "interestedIn",
+    header: "Service",
+    cell: (cell) => cell.getValue(),
+  },
+  {
+    accessorKey: "budgetRange",
+    header: "Budget",
+    cell: ({ row }) => `${row.original.budgetRange} ${row.original.currency}`,
+  },
+  {
+    accessorKey: "country",
+    header: "Country",
+    cell: (cell) => cell.getValue(),
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Date",
+    cell: ({ row }) => new Date(row.original.createdAt).toLocaleDateString(),
+  },
+  {
     accessorKey: "actions",
     header: "Actions",
     cell: ({ row }) => (
       <ContactActionsCell
-        message={row.original.message}
+        contact={row.original}
         onDelete={onDelete}
         id={row.original._id}
       />
