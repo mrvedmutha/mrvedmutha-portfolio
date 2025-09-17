@@ -2,10 +2,10 @@ import {
   Hero,
   SkillsSection,
   ProjectsSection,
-  ExperienceSection,
   BlogSection,
   SocialSection,
 } from "@/components/home";
+import EducationExperienceSection from "@/components/home/EducationExperienceSection";
 import SkillsMarquee from "@/components/home/SkillsMarquee";
 import TechStackMarquee from "@/components/home/TechStackMarquee";
 import ServicesSection from "@/components/home/ServicesSection";
@@ -58,7 +58,7 @@ export default function Home() {
           <ServicesSection />
           <SkillsSection />
           <ProjectsSection />
-          <ExperienceSection />
+          <EducationExperienceSection />
           <BlogSection />
           <SocialSection />
         </div>

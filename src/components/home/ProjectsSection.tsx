@@ -159,7 +159,7 @@ export default function ProjectsSection() {
             </div>
             <Skeleton className="h-12 w-40" />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[1, 2, 3, 4].map((i) => (
               <Card key={i} className="h-full border border-[#cecece] bg-[#f5f5f5]">
                 <CardContent className="p-0">
