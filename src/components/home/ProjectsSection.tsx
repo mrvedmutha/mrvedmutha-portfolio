@@ -126,7 +126,11 @@ export default function ProjectsSection() {
         if (data.success && data.data?.data) {
           // Sort by creation date (latest first) and take only 4
           const sortedProjects = data.data.data
-            .sort((a: IProject, b: IProject) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
+            .sort((a: IProject, b: IProject) => {
+              const dateA = new Date(a.createdAt || a._id || 0);
+              const dateB = new Date(b.createdAt || b._id || 0);
+              return dateB.getTime() - dateA.getTime(); // Latest first (descending order)
+            })
             .slice(0, 4);
           setProjects(sortedProjects);
         }
