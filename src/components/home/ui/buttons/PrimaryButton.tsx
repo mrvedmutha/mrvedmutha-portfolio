@@ -55,11 +55,11 @@ export default function PrimaryButton({
 
   // Color configurations based on variant
   const isReversed = variant === "reversed";
-  const bgColor = isReversed ? "bg-brand-green" : "bg-brand-yellow";
+  const bgColor = isReversed ? "bg-white" : "bg-brand-yellow";
   const textBgColor = isReversed ? "bg-brand-yellow" : "bg-brand-green";
   const textColor = isReversed ? "text-brand-green" : "text-white";
-  const arrowBgColor = "bg-white"; // Always white background for arrow circle
-  const arrowColor = "text-brand-green"; // Always green arrow
+  const arrowBgColor = isReversed ? "bg-brand-green" : "bg-white";
+  const arrowColor = isReversed ? "text-brand-yellow" : "text-brand-green";
 
   return (
     <motion.button
