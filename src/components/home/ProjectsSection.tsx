@@ -124,15 +124,11 @@ export default function ProjectsSection() {
         const response = await fetch("https://mrvedmutha.com/api/v1/admin/projects?limit=4");
         const data = await response.json();
         if (data.success && data.data?.data) {
-          // Sort by creation date (latest first) and take only 4
-          const sortedProjects = data.data.data
-            .sort((a: IProject, b: IProject) => {
-              const dateA = new Date(a.createdAt || a._id || 0);
-              const dateB = new Date(b.createdAt || b._id || 0);
-              return dateB.getTime() - dateA.getTime(); // Latest first (descending order)
-            })
+          // Shuffle projects randomly and take only 4
+          const shuffledProjects = data.data.data
+            .sort(() => Math.random() - 0.5) // Random shuffle
             .slice(0, 4);
-          setProjects(sortedProjects);
+          setProjects(shuffledProjects);
         }
       } catch (error) {
         console.error("Failed to fetch projects:", error);
