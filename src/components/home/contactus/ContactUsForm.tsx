@@ -429,6 +429,7 @@ export default function ContactUsForm() {
                   type="submit"
                   disabled={loading}
                   size="md"
+                  variant="reversed"
                 >
                   {loading ? "Sending..." : "Submit"}
                 </PrimaryButton>
