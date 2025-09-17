@@ -94,17 +94,6 @@ export default function SocialSection() {
         ))}
       </div>
 
-      {/* Contact CTA */}
-      <div className="flex flex-col items-center mt-12 gap-4">
-        <span className="text-lg font-medium text-muted-foreground">
-          Reaching out Quick?
-        </span>
-        <Link href="/contact">
-          <button className="px-6 py-2 rounded-md bg-primary text-primary-foreground font-semibold shadow hover:bg-primary/90 transition">
-            Contact Us
-          </button>
-        </Link>
-      </div>
     </section>
   );
 }

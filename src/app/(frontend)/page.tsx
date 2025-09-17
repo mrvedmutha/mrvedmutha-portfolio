@@ -9,6 +9,7 @@ import EducationExperienceSection from "@/components/home/EducationExperienceSec
 import SkillsMarquee from "@/components/home/SkillsMarquee";
 import TechStackMarquee from "@/components/home/TechStackMarquee";
 import ServicesSection from "@/components/home/ServicesSection";
+import ContactUsForm from "@/components/home/contactus/ContactUsForm";
 import type { Metadata } from "next";
 import { PersonStructuredData, WebsiteStructuredData } from "@/components/seo/StructuredData";
 
@@ -61,6 +62,9 @@ export default function Home() {
           <EducationExperienceSection />
           <BlogSection />
           <SocialSection />
+          <div className="w-full max-w-7xl mx-auto px-6 py-16">
+            <ContactUsForm />
+          </div>
         </div>
       </div>
     </>
