@@ -168,7 +168,7 @@ export default function ContactUsForm() {
 
   return (
     <div className="w-full mx-auto">
-      <div className="bg-brand-green p-8 lg:p-12 shadow-xl">
+      <div className="p-8 lg:p-12">
         <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-16">
           {/* Left Side - Content */}
           <div className="lg:w-1/2">

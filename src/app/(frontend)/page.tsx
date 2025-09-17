@@ -62,8 +62,10 @@ export default function Home() {
           <EducationExperienceSection />
           <BlogSection />
           <SocialSection />
-          <div className="w-full max-w-7xl mx-auto px-6 py-16">
-            <ContactUsForm />
+          <div className="w-full bg-brand-green py-16">
+            <div className="max-w-7xl mx-auto px-6">
+              <ContactUsForm />
+            </div>
           </div>
         </div>
       </div>

@@ -23,8 +23,10 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background">
-      <ContactUsForm />
+    <main className="min-h-screen bg-brand-green flex items-center justify-center py-16">
+      <div className="w-full max-w-7xl mx-auto px-6">
+        <ContactUsForm />
+      </div>
     </main>
   );
 }
