@@ -23,7 +23,7 @@ export default function SocialSection() {
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-2 mb-4">
             <div className="w-8 h-0.5 bg-brand-yellow"></div>
-            <span className="text-gray-600 font-medium">Let's Catch Up</span>
+            <span className="text-gray-600 font-medium">Let&apos;s Catch Up</span>
           </div>
           <h2 className="text-4xl lg:text-5xl font-bold">
             <span className="text-brand-yellow italic">Connect</span>
@@ -48,7 +48,7 @@ export default function SocialSection() {
       <div className="text-center mb-12">
         <div className="flex items-center justify-center gap-2 mb-4">
           <div className="w-8 h-0.5 bg-brand-yellow"></div>
-          <span className="text-gray-600 font-medium">Let's Catch Up</span>
+          <span className="text-gray-600 font-medium">Let&apos;s Catch Up</span>
         </div>
         <h2 className="text-4xl lg:text-5xl font-bold">
           <span className="text-brand-yellow italic">Connect</span>
