@@ -72,11 +72,11 @@ export default function ServicesSection() {
         const response = await fetch("https://mrvedmutha.com/api/v1/admin/services?limit=3");
         const data = await response.json();
         if (data.success && data.data?.data) {
-          // Sort by creation date (latest first) and take only 3
-          const sortedServices = data.data.data
-            .sort((a: IService, b: IService) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
+          // Shuffle services randomly and take only 3
+          const shuffledServices = data.data.data
+            .sort(() => Math.random() - 0.5) // Random shuffle
             .slice(0, 3);
-          setServices(sortedServices);
+          setServices(shuffledServices);
         }
       } catch (error) {
         console.error("Failed to fetch services:", error);
