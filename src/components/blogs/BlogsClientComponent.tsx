@@ -1,7 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { Card, CardContent } from "@/components/ui/card";
+import { LinkButton } from "@/components/home/ui/buttons";
 import Link from "next/link";
+import Image from "next/image";
 
 type Blog = {
   _id: string;
@@ -38,46 +41,61 @@ export function BlogsClientComponent({ blogs }: Props) {
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {paginatedBlogs.map((blog, idx) => (
+        {paginatedBlogs.map((blog, index) => (
           <motion.div
             key={blog._id}
-            initial={{ opacity: 0, y: 60 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{
-              duration: 0.7,
-              ease: "easeOut",
-              delay: 0.1 * idx,
-            }}
-            className="bg-muted rounded-xl shadow p-0 flex flex-col justify-start items-stretch border border-border min-h-[260px] overflow-hidden"
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+            viewport={{ once: true }}
           >
-            {/* Blog Image */}
-            {blog.mainImage && (
-              <img
-                src={blog.mainImage}
-                alt={blog.title}
-                className="w-full h-40 object-cover"
-              />
-            )}
-            {/* Blog Title and Date */}
-            <div className="p-6 flex flex-col flex-1 justify-between">
-              <h2 className="text-xl font-bold mb-2 line-clamp-2">
-                {blog.title}
-              </h2>
-              <div className="text-sm text-muted-foreground mb-4">
-                Created on:{" "}
-                {new Date(blog.createdAt).toLocaleDateString(undefined, {
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                })}
-              </div>
-              <Link href={`/blog/${blog.slug}`}>
-                <button className="mt-auto px-4 py-2 rounded bg-primary text-primary-foreground font-semibold shadow hover:bg-primary/90 transition">
-                  Read more
-                </button>
-              </Link>
-            </div>
+            <Card className="h-full hover:shadow-lg transition-shadow duration-300 border border-[#cecece] bg-[#f5f5f5] overflow-hidden">
+              <CardContent className="p-0">
+                {/* Blog Image */}
+                <div className="relative w-full h-40 bg-gray-200">
+                  {blog.mainImage ? (
+                    <Image
+                      src={blog.mainImage}
+                      alt={blog.title}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-500">
+                      No Image
+                    </div>
+                  )}
+                </div>
+
+                {/* Blog Info */}
+                <div className="p-6 space-y-4 flex flex-col h-full">
+                  {/* Blog Title */}
+                  <h3 className="text-xl font-bold text-black leading-tight line-clamp-2">
+                    {blog.title}
+                  </h3>
+
+                  {/* Blog Date */}
+                  <div className="text-sm text-gray-500">
+                    {new Date(blog.createdAt).toLocaleDateString(undefined, {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </div>
+
+                  {/* Read More Link */}
+                  <div className="pt-2 mt-auto">
+                    <LinkButton
+                      onClick={() => window.location.href = `/blog/${blog.slug}`}
+                      size="sm"
+                    >
+                      Read More
+                    </LinkButton>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </motion.div>
         ))}
       </div>

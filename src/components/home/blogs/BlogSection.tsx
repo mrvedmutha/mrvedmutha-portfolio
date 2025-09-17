@@ -1,8 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { PrimaryButton, LinkButton } from "@/components/home/ui/buttons";
 import { getBlogs, Blog } from "@/context/constants/home/blogs";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function BlogSection() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
@@ -20,86 +24,124 @@ export default function BlogSection() {
 
   if (loading) {
     return (
-      <section className="w-full max-w-7xl mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-extrabold mt-16 mb-8 text-center w-full">
-          Blog
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div
-              key={i}
-              className="h-[260px] rounded-xl bg-muted animate-pulse"
-            />
-          ))}
+      <section className="py-16 px-6 max-w-7xl mx-auto">
+        <div className="space-y-8">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-12 gap-6">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <Skeleton className="w-8 h-0.5" />
+                <Skeleton className="h-4 w-32" />
+              </div>
+              <Skeleton className="h-12 w-80" />
+            </div>
+            <Skeleton className="h-12 w-32" />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <Card key={i} className="h-full border border-[#cecece] bg-[#f5f5f5]">
+                <CardContent className="p-0">
+                  <Skeleton className="w-full h-40 rounded-t-lg" />
+                  <div className="p-6 space-y-4">
+                    <Skeleton className="h-6 w-3/4" />
+                    <Skeleton className="h-4 w-20" />
+                    <Skeleton className="h-8 w-24" />
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
     );
   }
 
   return (
-    <motion.section
-      initial={{ opacity: 0, y: 60 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="w-full max-w-7xl mx-auto px-4"
-    >
-      <h2 className="text-3xl md:text-4xl font-extrabold mt-16 mb-8 text-center w-full">
-        Blog
-      </h2>
+    <section className="py-16 px-6 max-w-7xl mx-auto">
+      {/* Header */}
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-12 gap-6">
+        <div>
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-8 h-0.5 bg-brand-yellow"></div>
+            <span className="text-gray-600 font-medium">Sharing My Thoughts</span>
+          </div>
+          <h2 className="text-4xl lg:text-5xl font-bold">
+            <span className="text-black">Latest </span>
+            <span className="text-brand-yellow italic">Blogs</span>
+          </h2>
+        </div>
+
+        <PrimaryButton size="lg" onClick={() => window.location.href = "/blogs"}>
+          Show More
+        </PrimaryButton>
+      </div>
+
+      {/* Blogs Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {showBlogs.map((blog, idx) => (
+        {showBlogs.map((blog, index) => (
           <motion.div
             key={blog._id}
-            initial={{ opacity: 0, y: 60 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{
-              duration: 0.7,
-              ease: "easeOut",
-              delay: 0.1 * idx,
-            }}
-            className="bg-muted rounded-xl shadow p-0 flex flex-col justify-start items-stretch border border-border min-h-[260px] overflow-hidden"
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+            viewport={{ once: true }}
           >
-            {/* Blog Image */}
-            {blog.mainImage && (
-              <img
-                src={blog.mainImage}
-                alt={blog.title}
-                className="w-full h-40 object-cover"
-              />
-            )}
-            {/* Blog Title and Date */}
-            <div className="p-6 flex flex-col flex-1 justify-between">
-              <h2 className="text-xl font-bold mb-2 line-clamp-2">
-                {blog.title}
-              </h2>
-              <div className="text-sm text-muted-foreground mb-4">
-                Created on:{" "}
-                {new Date(blog.createdAt).toLocaleDateString(undefined, {
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                })}
-              </div>
-              <Link href={`/blog/${blog.slug}`}>
-                <button className="mt-auto px-4 py-2 rounded bg-primary text-primary-foreground font-semibold shadow hover:bg-primary/90 transition">
-                  Read more
-                </button>
-              </Link>
-            </div>
+            <Card className="h-full hover:shadow-lg transition-shadow duration-300 border border-[#cecece] bg-[#f5f5f5] overflow-hidden">
+              <CardContent className="p-0">
+                {/* Blog Image */}
+                <div className="relative w-full h-40 bg-gray-200">
+                  {blog.mainImage ? (
+                    <Image
+                      src={blog.mainImage}
+                      alt={blog.title}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-500">
+                      No Image
+                    </div>
+                  )}
+                </div>
+
+                {/* Blog Info */}
+                <div className="p-6 space-y-4 flex flex-col h-full">
+                  {/* Blog Title */}
+                  <h3 className="text-xl font-bold text-black leading-tight line-clamp-2">
+                    {blog.title}
+                  </h3>
+
+                  {/* Blog Date */}
+                  <div className="text-sm text-gray-500">
+                    {new Date(blog.createdAt).toLocaleDateString(undefined, {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </div>
+
+                  {/* Read More Link */}
+                  <div className="pt-2 mt-auto">
+                    <LinkButton
+                      onClick={() => window.location.href = `/blog/${blog.slug}`}
+                      size="sm"
+                    >
+                      Read More
+                    </LinkButton>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </motion.div>
         ))}
       </div>
-      {hasMore && (
-        <div className="flex justify-center mt-8">
-          <Link href="/blogs">
-            <button className="px-6 py-2 rounded-md bg-primary text-primary-foreground font-semibold shadow hover:bg-primary/90 transition">
-              Show more...
-            </button>
-          </Link>
+
+      {/* No Blogs State */}
+      {!loading && blogs.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-gray-500 text-lg">No blogs available at the moment.</p>
         </div>
       )}
-    </motion.section>
+    </section>
   );
 }

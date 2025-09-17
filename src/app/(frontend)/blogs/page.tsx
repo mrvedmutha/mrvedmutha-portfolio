@@ -59,12 +59,19 @@ export default async function BlogsPage() {
   return (
     <main className="w-full min-h-screen bg-background">
       <div className="w-full max-w-7xl mx-auto px-4 mb-16">
-        <h1 className="text-3xl md:text-4xl font-extrabold mt-16 mb-8 text-center w-full">
-          Blog
-        </h1>
-        <p className="text-lg text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
-          Insights on web development, React, Next.js, Amazon PPC, and my journey as a full-stack developer.
-        </p>
+        <div className="text-center mt-16 mb-12">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <div className="w-8 h-0.5 bg-brand-yellow"></div>
+            <span className="text-gray-600 font-medium">Sharing My Thoughts</span>
+          </div>
+          <h1 className="text-4xl lg:text-5xl font-bold mb-6">
+            <span className="text-black">All </span>
+            <span className="text-brand-yellow italic">Blogs</span>
+          </h1>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Insights on web development, React, Next.js, Amazon PPC, and my journey as a full-stack developer.
+          </p>
+        </div>
         <BlogsClientComponent blogs={blogs} />
       </div>
     </main>
