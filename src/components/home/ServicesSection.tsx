@@ -69,7 +69,7 @@ export default function ServicesSection() {
   useEffect(() => {
     async function fetchServices() {
       try {
-        const response = await fetch("https://mrvedmutha.com/api/v1/admin/services?limit=3");
+        const response = await fetch("https://mrvedmutha.com/api/v1/admin/services"); // Fetch all services
         const data = await response.json();
         if (data.success && data.data?.data) {
           // Shuffle services randomly and take only 3

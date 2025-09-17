@@ -121,7 +121,7 @@ export default function ProjectsSection() {
   useEffect(() => {
     async function fetchProjects() {
       try {
-        const response = await fetch("https://mrvedmutha.com/api/v1/admin/projects?limit=4");
+        const response = await fetch("https://mrvedmutha.com/api/v1/admin/projects"); // Fetch all projects
         const data = await response.json();
         if (data.success && data.data?.data) {
           // Shuffle projects randomly and take only 4
