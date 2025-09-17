@@ -32,7 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Check, ChevronsUpDown, Phone, Mail, MessageSquare } from "lucide-react";
+import { Check, ChevronsUpDown, Phone, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { sendContactMessage } from "@/context/constants/home/contact";
 import { useToast } from "@/hooks/use-toast";
@@ -122,8 +122,8 @@ export default function ContactUsForm() {
         const data = await response.json();
         if (data.success && data.data.data) {
           const serviceOptions = data.data.data.map((service: any) => ({
-            value: service.title,
-            label: service.title
+            value: service.name,
+            label: service.name
           }));
           serviceOptions.push({ value: "Other", label: "Other" });
           setServices(serviceOptions);
@@ -268,18 +268,49 @@ export default function ContactUsForm() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-white">I&apos;m Interested In *</FormLabel>
-                        <Select onValueChange={field.onChange} value={field.value}>
-                          <SelectTrigger className="bg-transparent border-white/30 text-white focus:border-brand-yellow focus:ring-brand-yellow">
-                            <SelectValue placeholder="Select" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {services.map((service) => (
-                              <SelectItem key={service.value} value={service.value}>
-                                {service.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                        <Popover open={serviceOpen} onOpenChange={setServiceOpen}>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              aria-expanded={serviceOpen}
+                              className="w-full justify-between bg-transparent border-white/30 text-white hover:bg-white/10 hover:text-white focus:border-brand-yellow focus:ring-brand-yellow"
+                            >
+                              {field.value
+                                ? services.find((service) => service.value === field.value)?.label
+                                : "Select"}
+                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-full p-0">
+                            <Command>
+                              <CommandInput placeholder="Search service..." />
+                              <CommandEmpty>No service found.</CommandEmpty>
+                              <CommandGroup>
+                                <CommandList>
+                                  {services.map((service) => (
+                                    <CommandItem
+                                      key={service.value}
+                                      value={service.value}
+                                      onSelect={() => {
+                                        field.onChange(service.value);
+                                        setServiceOpen(false);
+                                      }}
+                                    >
+                                      <Check
+                                        className={cn(
+                                          "mr-2 h-4 w-4",
+                                          field.value === service.value ? "opacity-100" : "opacity-0"
+                                        )}
+                                      />
+                                      {service.label}
+                                    </CommandItem>
+                                  ))}
+                                </CommandList>
+                              </CommandGroup>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
                         <FormMessage />
                       </FormItem>
                     )}
