@@ -19,15 +19,22 @@ export default function SocialSection() {
 
   if (loading) {
     return (
-      <section className="w-full max-w-7xl mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-extrabold mt-16 mb-8 text-center w-full">
-          Connect with me
-        </h2>
+      <section className="py-16 px-6 max-w-7xl mx-auto">
+        <div className="text-center mb-12">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <div className="w-8 h-0.5 bg-brand-yellow"></div>
+            <span className="text-gray-600 font-medium">Let's Catch Up</span>
+          </div>
+          <h2 className="text-4xl lg:text-5xl font-bold">
+            <span className="text-brand-yellow italic">Connect</span>
+            <span className="text-black"> with Me</span>
+          </h2>
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 justify-items-center">
           {Array.from({ length: 5 }).map((_, i) => (
             <div
               key={i}
-              className="h-[160px] rounded-xl bg-muted animate-pulse"
+              className="h-[160px] w-full max-w-xs rounded-xl bg-muted animate-pulse"
             />
           ))}
         </div>
@@ -36,24 +43,28 @@ export default function SocialSection() {
   }
 
   return (
-    <motion.section
-      initial={{ opacity: 0, y: 60 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="w-full max-w-7xl mx-auto px-4 pb-8"
-    >
-      <h2 className="text-3xl md:text-4xl font-extrabold mt-16 mb-8 text-center w-full">
-        Connect with me
-      </h2>
+    <section className="py-16 px-6 max-w-7xl mx-auto">
+      {/* Header */}
+      <div className="text-center mb-12">
+        <div className="flex items-center justify-center gap-2 mb-4">
+          <div className="w-8 h-0.5 bg-brand-yellow"></div>
+          <span className="text-gray-600 font-medium">Let's Catch Up</span>
+        </div>
+        <h2 className="text-4xl lg:text-5xl font-bold">
+          <span className="text-brand-yellow italic">Connect</span>
+          <span className="text-black"> with Me</span>
+        </h2>
+      </div>
+
+      {/* Social Links Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 justify-items-center">
         {socials.map((social, idx) => (
           <motion.div
             key={social._id}
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 * idx }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: idx * 0.1 }}
             className="w-full max-w-xs bg-muted rounded-xl shadow p-8 flex flex-col items-start border border-border min-h-[160px] hover:scale-105 hover:shadow-lg transition-transform cursor-pointer group"
           >
             <Link
@@ -82,6 +93,8 @@ export default function SocialSection() {
           </motion.div>
         ))}
       </div>
+
+      {/* Contact CTA */}
       <div className="flex flex-col items-center mt-12 gap-4">
         <span className="text-lg font-medium text-muted-foreground">
           Reaching out Quick?
@@ -92,6 +105,6 @@ export default function SocialSection() {
           </button>
         </Link>
       </div>
-    </motion.section>
+    </section>
   );
 }
