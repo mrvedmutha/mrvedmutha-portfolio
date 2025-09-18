@@ -247,7 +247,7 @@ export default function Navbar() {
               />
             </div>
             {searchQuery.trim() && (
-              <CommandList className="px-2 border-t max-h-[60vh] overflow-y-auto">
+              <CommandList className="px-2 border-t max-h-[60vh] overflow-y-auto scrollbar-thin scrollbar-track-brand-green scrollbar-thumb-brand-yellow hover:scrollbar-thumb-brand-yellow/80">
                 {serviceResults.length === 0 && blogResults.length === 0 && (
                   <CommandEmpty className="py-8">No results found.</CommandEmpty>
                 )}

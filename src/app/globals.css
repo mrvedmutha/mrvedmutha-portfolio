@@ -65,6 +65,17 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Custom text selection colors */
+  ::selection {
+    background-color: #4A6034; /* brand-green */
+    color: #FBB03B; /* brand-yellow */
+  }
+
+  ::-moz-selection {
+    background-color: #4A6034; /* brand-green */
+    color: #FBB03B; /* brand-yellow */
+  }
 }
 
 /* Add this to your global CSS file, NOT inside the component */
