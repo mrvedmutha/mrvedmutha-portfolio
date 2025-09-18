@@ -234,19 +234,11 @@ export default function Navbar() {
 
       {/* Mobile Search Dialog */}
       <Dialog open={mobileSearchOpen} onOpenChange={setMobileSearchOpen}>
-        <DialogContent className={`sm:max-w-[90vw] max-w-[90vw] w-[90vw] p-0 ${
-          searchQuery.trim() && (serviceResults.length > 0 || blogResults.length > 0)
-            ? 'max-h-[80vh] h-[80vh]'
-            : 'h-auto'
-        }`}>
+        <DialogContent className="sm:max-w-[90vw] max-w-[90vw] w-[90vw] max-h-[80vh] h-auto p-0">
           <DialogHeader className="sr-only">
             <DialogTitle>Search</DialogTitle>
           </DialogHeader>
-          <Command className={`rounded-lg border-0 shadow-none ${
-            searchQuery.trim() && (serviceResults.length > 0 || blogResults.length > 0)
-              ? 'h-full flex flex-col'
-              : 'h-auto'
-          }`} shouldFilter={false}>
+          <Command className="rounded-lg border-0 shadow-none" shouldFilter={false}>
             <div className="px-4 py-3">
               <CommandInput
                 placeholder="Search services and blogs..."
@@ -255,11 +247,7 @@ export default function Navbar() {
               />
             </div>
             {searchQuery.trim() && (
-              <CommandList className={`${
-                serviceResults.length > 0 || blogResults.length > 0
-                  ? 'flex-1 overflow-y-auto px-2 border-t'
-                  : 'px-2'
-              }`}>
+              <CommandList className="px-2 border-t max-h-[60vh] overflow-y-auto">
                 {serviceResults.length === 0 && blogResults.length === 0 && (
                   <CommandEmpty className="py-8">No results found.</CommandEmpty>
                 )}
