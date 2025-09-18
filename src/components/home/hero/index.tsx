@@ -128,15 +128,15 @@ export default function Hero() {
         {/* Statistics */}
         <div className="flex flex-wrap gap-8 mt-4">
           <div className="text-center">
-            <div className="text-3xl font-bold text-brand-darkText">600+</div>
+            <div className="text-3xl font-bold text-brand-darkText">50+</div>
             <div className="text-brand-mutedText text-sm">Projects Completed</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-brand-darkText">50+</div>
+            <div className="text-3xl font-bold text-brand-darkText">5+</div>
             <div className="text-brand-mutedText text-sm">Industries Covered</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-brand-darkText">10+</div>
+            <div className="text-3xl font-bold text-brand-darkText">6+</div>
             <div className="text-brand-mutedText text-sm">Years of Experience</div>
           </div>
         </div>

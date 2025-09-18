@@ -176,7 +176,7 @@ export default function ContactUsForm() {
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-8 h-0.5 bg-brand-yellow"></div>
-                <span className="text-white font-medium">Services</span>
+                <span className="text-white font-medium">Contact Me</span>
               </div>
               <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
                 Let&apos;s Talk for <span className="text-brand-yellow italic">Your</span>
@@ -200,7 +200,7 @@ export default function ContactUsForm() {
                 <div className="w-8 h-8 bg-brand-yellow rounded-full flex items-center justify-center">
                   <Mail className="w-4 h-4 text-brand-green" />
                 </div>
-                <span>coolshreyan501@gmail.com</span>
+                <span>coolshreyans01@gmail.com</span>
               </div>
             </div>
           </div>
