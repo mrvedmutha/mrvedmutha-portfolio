@@ -234,23 +234,26 @@ export default function Navbar() {
 
       {/* Mobile Search Dialog */}
       <Dialog open={mobileSearchOpen} onOpenChange={setMobileSearchOpen}>
-        <DialogContent className="sm:max-w-[425px] p-0">
+        <DialogContent className="sm:max-w-[90vw] max-w-[90vw] w-[90vw] max-h-[80vh] h-[80vh] p-0">
           <DialogHeader className="sr-only">
             <DialogTitle>Search</DialogTitle>
           </DialogHeader>
-          <Command className="rounded-lg border-0 shadow-none" shouldFilter={false}>
-            <CommandInput
-              placeholder="Search services and blogs..."
-              onValueChange={setSearchQuery}
-            />
-            <CommandList className="max-h-[300px]">
+          <Command className="rounded-lg border-0 shadow-none h-full flex flex-col" shouldFilter={false}>
+            <div className="px-4 py-3 border-b">
+              <CommandInput
+                placeholder="Search services and blogs..."
+                onValueChange={setSearchQuery}
+                className="border-0 focus:ring-0 text-base"
+              />
+            </div>
+            <CommandList className="flex-1 overflow-y-auto px-2">
               {searchQuery.trim() && serviceResults.length === 0 && blogResults.length === 0 && (
-                <CommandEmpty>No results found.</CommandEmpty>
+                <CommandEmpty className="py-8">No results found.</CommandEmpty>
               )}
 
               {/* Services Results */}
               {serviceResults.length > 0 && (
-                <CommandGroup heading="Services">
+                <CommandGroup heading="Services" className="py-2">
                   {serviceResults.map((service) => {
                     const IconComponent = LucideIcons[service.icon.lucideName as keyof typeof LucideIcons] as React.ComponentType<any>;
                     return (
@@ -261,15 +264,15 @@ export default function Navbar() {
                           setServiceModalOpen(true);
                           setMobileSearchOpen(false);
                         }}
-                        className="flex items-center gap-3 p-3"
+                        className="flex items-start gap-3 p-4 mx-2 my-1 rounded-lg cursor-pointer hover:bg-accent"
                       >
                         {IconComponent && (
-                          <IconComponent className="w-8 h-8 text-primary flex-shrink-0" />
+                          <IconComponent className="w-10 h-10 text-primary flex-shrink-0 mt-1" />
                         )}
                         <div className="flex-1 min-w-0">
-                          <div className="font-medium truncate">{service.name}</div>
-                          <div className="text-sm text-muted-foreground truncate">
-                            {service.description.slice(0, 60)}...
+                          <div className="font-semibold text-base mb-1">{service.name}</div>
+                          <div className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+                            {service.description.slice(0, 100)}...
                           </div>
                         </div>
                       </CommandItem>
@@ -280,7 +283,7 @@ export default function Navbar() {
 
               {/* Blogs Results */}
               {blogResults.length > 0 && (
-                <CommandGroup heading="Blogs">
+                <CommandGroup heading="Blogs" className="py-2">
                   {blogResults.map((blog) => (
                     <CommandItem
                       key={blog._id}
@@ -288,16 +291,16 @@ export default function Navbar() {
                         setMobileSearchOpen(false);
                         window.location.href = `/blog/${blog.slug}`;
                       }}
-                      className="flex items-center gap-3 p-3"
+                      className="flex items-center gap-3 p-4 mx-2 my-1 rounded-lg cursor-pointer hover:bg-accent"
                     >
                       {blog.mainImage && (
                         <img
                           src={blog.mainImage}
                           alt={blog.title}
-                          className="w-10 h-10 object-cover rounded flex-shrink-0"
+                          className="w-12 h-12 object-cover rounded-lg flex-shrink-0"
                         />
                       )}
-                      <span className="truncate font-medium">{blog.title}</span>
+                      <span className="font-semibold text-base flex-1">{blog.title}</span>
                     </CommandItem>
                   ))}
                 </CommandGroup>
