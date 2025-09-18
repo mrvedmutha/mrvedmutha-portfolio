@@ -234,22 +234,35 @@ export default function Navbar() {
 
       {/* Mobile Search Dialog */}
       <Dialog open={mobileSearchOpen} onOpenChange={setMobileSearchOpen}>
-        <DialogContent className="sm:max-w-[90vw] max-w-[90vw] w-[90vw] max-h-[80vh] h-[80vh] p-0">
+        <DialogContent className={`sm:max-w-[90vw] max-w-[90vw] w-[90vw] p-0 ${
+          searchQuery.trim() && (serviceResults.length > 0 || blogResults.length > 0)
+            ? 'max-h-[80vh] h-[80vh]'
+            : 'h-auto'
+        }`}>
           <DialogHeader className="sr-only">
             <DialogTitle>Search</DialogTitle>
           </DialogHeader>
-          <Command className="rounded-lg border-0 shadow-none h-full flex flex-col" shouldFilter={false}>
-            <div className="px-4 py-3 border-b">
+          <Command className={`rounded-lg border-0 shadow-none ${
+            searchQuery.trim() && (serviceResults.length > 0 || blogResults.length > 0)
+              ? 'h-full flex flex-col'
+              : 'h-auto'
+          }`} shouldFilter={false}>
+            <div className="px-4 py-3">
               <CommandInput
                 placeholder="Search services and blogs..."
                 onValueChange={setSearchQuery}
                 className="border-0 focus:ring-0 text-base"
               />
             </div>
-            <CommandList className="flex-1 overflow-y-auto px-2">
-              {searchQuery.trim() && serviceResults.length === 0 && blogResults.length === 0 && (
-                <CommandEmpty className="py-8">No results found.</CommandEmpty>
-              )}
+            {searchQuery.trim() && (
+              <CommandList className={`${
+                serviceResults.length > 0 || blogResults.length > 0
+                  ? 'flex-1 overflow-y-auto px-2 border-t'
+                  : 'px-2'
+              }`}>
+                {serviceResults.length === 0 && blogResults.length === 0 && (
+                  <CommandEmpty className="py-8">No results found.</CommandEmpty>
+                )}
 
               {/* Services Results */}
               {serviceResults.length > 0 && (
@@ -306,6 +319,7 @@ export default function Navbar() {
                 </CommandGroup>
               )}
             </CommandList>
+            )}
           </Command>
         </DialogContent>
       </Dialog>
