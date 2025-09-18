@@ -238,10 +238,9 @@ export default function Navbar() {
           <DialogHeader className="sr-only">
             <DialogTitle>Search</DialogTitle>
           </DialogHeader>
-          <Command className="rounded-lg border-0 shadow-none">
+          <Command className="rounded-lg border-0 shadow-none" shouldFilter={false}>
             <CommandInput
               placeholder="Search services and blogs..."
-              value={searchQuery}
               onValueChange={setSearchQuery}
             />
             <CommandList className="max-h-[300px]">
