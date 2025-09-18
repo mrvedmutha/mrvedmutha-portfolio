@@ -8,7 +8,7 @@ import { useSocials } from "@/hooks/admin/pages/social.hooks";
 import { ISocial } from "@/types/admin/pages/social.types";
 
 export default function AdminSocialsPage() {
-  const { socials, loading, handleDelete, router } = useSocials();
+  const { socials, loading, handleDelete, router, page, pageSize, totalItems, handlePageChange } = useSocials();
 
   return (
     <div className="p-6">
@@ -33,10 +33,10 @@ export default function AdminSocialsPage() {
           columns={getColumns(router, handleDelete)}
           data={socials}
           model="social"
-          page={1}
-          pageSize={25}
-          total={socials.length}
-          onPageChange={() => {}}
+          page={page}
+          pageSize={pageSize}
+          total={totalItems}
+          onPageChange={handlePageChange}
         />
       )}
     </div>

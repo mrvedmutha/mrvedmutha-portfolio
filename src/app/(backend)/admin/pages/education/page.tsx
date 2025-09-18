@@ -8,7 +8,7 @@ import { TableSkeletonRows } from "@/components/common/TableSkletonRows";
 import { Table, TableBody } from "@/components/ui/table";
 
 export default function AdminEducationPage() {
-  const { educations, loading, handleDelete, router } = useEducations();
+  const { educations, loading, handleDelete, router, page, pageSize, totalItems, handlePageChange } = useEducations();
 
   return (
     <div className="p-6">
@@ -33,11 +33,10 @@ export default function AdminEducationPage() {
           columns={getColumns(router, handleDelete)}
           data={educations}
           model="education"
-          // fetchUrl="/api/v1/admin/education"
-          page={1}
-          pageSize={25}
-          total={educations.length}
-          onPageChange={() => {}}
+          page={page}
+          pageSize={pageSize}
+          total={totalItems}
+          onPageChange={handlePageChange}
         />
       )}
     </div>

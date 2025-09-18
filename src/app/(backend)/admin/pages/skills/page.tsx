@@ -8,7 +8,7 @@ import { useSkills } from "@/hooks/admin/pages/skill.hooks";
 import { Table, TableBody } from "@/components/ui/table";
 import { TableSkeletonRows } from "@/components/common/TableSkletonRows";
 export default function AdminSkillsPage() {
-  const { skills, loading, handleDelete, router } = useSkills();
+  const { skills, loading, handleDelete, router, page, pageSize, totalItems, handlePageChange } = useSkills();
 
   return (
     <div className="p-6">
@@ -29,10 +29,10 @@ export default function AdminSkillsPage() {
           columns={getColumns(router, handleDelete)}
           data={skills}
           model="skill"
-          page={1}
-          pageSize={25}
-          total={skills.length}
-          onPageChange={() => {}}
+          page={page}
+          pageSize={pageSize}
+          total={totalItems}
+          onPageChange={handlePageChange}
         />
       )}
     </div>

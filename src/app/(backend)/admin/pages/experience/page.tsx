@@ -8,7 +8,7 @@ import { Table, TableBody } from "@/components/ui/table";
 import { TableSkeletonRows } from "@/components/common/TableSkletonRows";
 
 export default function AdminExperiencePage() {
-  const { experiences, loading, handleDelete, router } = useExperiences();
+  const { experiences, loading, handleDelete, router, page, pageSize, totalItems, handlePageChange } = useExperiences();
 
   return (
     <div className="p-6">
@@ -33,11 +33,10 @@ export default function AdminExperiencePage() {
           columns={getColumns(router, handleDelete)}
           data={experiences}
           model="experience"
-          // fetchUrl="/api/v1/admin/experience"
-          page={1}
-          pageSize={25}
-          total={experiences.length}
-          onPageChange={() => {}}
+          page={page}
+          pageSize={pageSize}
+          total={totalItems}
+          onPageChange={handlePageChange}
         />
       )}
     </div>

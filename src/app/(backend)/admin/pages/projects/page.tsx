@@ -8,7 +8,7 @@ import { Table, TableBody } from "@/components/ui/table";
 import { TableSkeletonRows } from "@/components/common/TableSkletonRows";
 
 export default function AdminProjectsPage() {
-  const { projects, loading, handleDelete, router } = useProjects();
+  const { projects, loading, handleDelete, router, page, pageSize, totalItems, handlePageChange } = useProjects();
 
   return (
     <div className="p-6">
@@ -33,10 +33,10 @@ export default function AdminProjectsPage() {
           columns={getColumns(router, handleDelete)}
           data={projects}
           model="project"
-          page={1}
-          pageSize={25}
-          total={projects.length}
-          onPageChange={() => {}}
+          page={page}
+          pageSize={pageSize}
+          total={totalItems}
+          onPageChange={handlePageChange}
         />
       )}
     </div>

@@ -8,7 +8,7 @@ import { useServices } from "@/hooks/admin/pages/service.hooks";
 import { Table, TableBody } from "@/components/ui/table";
 import { TableSkeletonRows } from "@/components/common/TableSkletonRows";
 export default function AdminServicesPage() {
-  const { services, loading, handleDelete, router } = useServices();
+  const { services, loading, handleDelete, router, page, pageSize, totalItems, handlePageChange } = useServices();
 
   return (
     <div className="p-6">
@@ -29,10 +29,10 @@ export default function AdminServicesPage() {
           columns={getColumns(router, handleDelete)}
           data={services}
           model="service"
-          page={1}
-          pageSize={25}
-          total={services.length}
-          onPageChange={() => {}}
+          page={page}
+          pageSize={pageSize}
+          total={totalItems}
+          onPageChange={handlePageChange}
         />
       )}
     </div>

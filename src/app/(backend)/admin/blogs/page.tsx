@@ -10,7 +10,7 @@ import { useBlogs } from "@/hooks/admin/pages/blog.hooks";
 import getColumns from "@/helpers/admin/pages/blog.helpers";
 
 export default function AdminBlogsPage() {
-  const { blogs, loading, handleDelete, router } = useBlogs();
+  const { blogs, loading, handleDelete, router, page, pageSize, totalItems, handlePageChange } = useBlogs();
 
   return (
     <div className="p-6">
@@ -31,10 +31,10 @@ export default function AdminBlogsPage() {
           columns={getColumns(router, handleDelete)}
           data={blogs}
           model="blog"
-          page={1}
-          pageSize={25}
-          total={blogs.length}
-          onPageChange={() => {}}
+          page={page}
+          pageSize={pageSize}
+          total={totalItems}
+          onPageChange={handlePageChange}
         />
       )}
     </div>
