@@ -14,9 +14,11 @@ import { NavigationLinks } from "@/context/constants/home/navigation";
 import SearchBar from "@/components/home/search/SearchBar";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const pathname = usePathname();
 
   return (
     <nav className="w-full bg-brand-green border-b border-brand-green sticky top-0 z-50 shadow-sm">
@@ -39,15 +41,25 @@ export default function Navbar() {
           
           {/* Center Navigation */}
           <div className="flex items-center bg-white/10 backdrop-blur rounded-full px-6 py-2 gap-8">
-            {NavigationLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-white font-medium hover:text-brand-yellow transition-colors text-sm"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {NavigationLinks.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`font-medium transition-colors text-sm relative ${
+                    isActive
+                      ? "text-brand-yellow"
+                      : "text-white hover:text-brand-yellow"
+                  }`}
+                >
+                  {link.label}
+                  {isActive && (
+                    <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-brand-yellow rounded-full"></div>
+                  )}
+                </Link>
+              );
+            })}
           </div>
           
           {/* Right Side - Search + Contact Button */}
@@ -55,12 +67,11 @@ export default function Navbar() {
             <div className="w-64">
               <SearchBar />
             </div>
-            <Button 
-              className="btn-primary"
-              style={{ backgroundColor: '#FBB03B', color: '#FFFFFF' }}
-            >
-              Contact Me
-            </Button>
+            <Link href="/contact">
+              <Button className="bg-brand-yellow text-brand-green hover:bg-brand-yellow/90 font-semibold rounded-full px-6 py-2 transition-colors">
+                Contact Me
+              </Button>
+            </Link>
           </div>
         </div>
         
@@ -123,22 +134,31 @@ export default function Navbar() {
                 />
               </div>
               <div className="flex flex-col items-center justify-center gap-8 mt-8">
-                {NavigationLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="text-lg font-semibold text-white hover:text-brand-yellow transition-colors"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-                <Button 
-                  className="btn-primary mt-4"
-                  style={{ backgroundColor: '#FBB03B', color: '#FFFFFF' }}
-                >
-                  Contact Me
-                </Button>
+                {NavigationLinks.map((link) => {
+                  const isActive = pathname === link.href;
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className={`text-lg font-semibold transition-colors relative ${
+                        isActive
+                          ? "text-brand-yellow"
+                          : "text-white hover:text-brand-yellow"
+                      }`}
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {link.label}
+                      {isActive && (
+                        <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-brand-yellow rounded-full"></div>
+                      )}
+                    </Link>
+                  );
+                })}
+                <Link href="/contact" onClick={() => setMobileOpen(false)}>
+                  <Button className="bg-brand-yellow text-brand-green hover:bg-brand-yellow/90 font-semibold rounded-full px-6 py-2 transition-colors mt-4">
+                    Contact Me
+                  </Button>
+                </Link>
               </div>
             </SheetContent>
           </Sheet>
