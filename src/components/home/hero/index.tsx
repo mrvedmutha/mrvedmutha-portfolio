@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Github } from "lucide-react";
 import { PrimaryButton, SecondaryButton } from "@/components/home/ui/buttons";
 import { getHeroSkills } from "@/context/constants/home/hero";
-import Image from "next/image";
+import OptimizedImage from "@/components/common/OptimizedImage";
 
 export default function Hero() {
   const [skills, setSkills] = React.useState<string[]>([]);
@@ -72,12 +72,14 @@ export default function Hero() {
         <div className="relative w-80 h-80 lg:w-[500px] lg:h-[500px] flex items-center justify-center">
           {/* Profile Image with Built-in Yellow Circle */}
           <div className="relative w-full h-full">
-            <Image
+            <OptimizedImage
               src="/assets/mrvedmutha-image/mrvedmutha-photo-in-circle.png"
               alt="Mr.Vedmutha Profile"
               fill
               className="object-cover object-center"
               priority
+              quality={85}
+              sizes="(max-width: 768px) 320px, 500px"
             />
           </div>
         </div>
