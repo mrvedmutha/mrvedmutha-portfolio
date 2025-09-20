@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/toaster";
+import FontLoader from "@/components/common/FontLoader";
 import type { Metadata } from "next";
 
 const geistSans = Geist({
@@ -72,23 +73,12 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
-        <link
-          rel="preload"
-          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&family=Poppins:wght@400;500;600;700&family=Lato:wght@400;500;600&display=swap"
-          as="style"
-          onLoad={(e: any) => e.target.rel = 'stylesheet'}
-        />
-        <noscript>
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&family=Poppins:wght@400;500;600;700&family=Lato:wght@400;500;600&display=swap"
-          />
-        </noscript>
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <FontLoader />
           {children}
           <Toaster />
         </ThemeProvider>
