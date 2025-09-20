@@ -96,6 +96,7 @@ export default function OptimizedImage({
       <Image
         {...imageProps}
         fill
+        alt={alt}
         style={{ objectFit, objectPosition }}
       />
     );
@@ -106,6 +107,7 @@ export default function OptimizedImage({
       {...imageProps}
       width={width}
       height={height}
+      alt={alt}
     />
   );
 }
